@@ -1,0 +1,529 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>FMO BUS Výkazy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+/* Vzhled: klasický web z roku 2012. Texturované pozadí, lesklá modrá hlavička, rámečky s legendami,
+   vložená pole se záře při označení, lesklá tlačítka. Jedna světlá varianta, záměrně bez tmavého režimu. */
+:root {
+  --bg: #d8dde4;
+  --paper: #ffffff;
+  --ink: #2b3440;
+  --muted: #6b7684;
+  --line: #b9c1cc;
+  --blue-top: #4a82c4;
+  --blue-bot: #1f4f8e;
+  --blue-dark: #153a6b;
+  --link: #1f5aa6;
+  --amber: #f5b11a;
+  --led-bg: #ffffff;
+  --led-fg: #153a6b;
+  --led-dim: #6b7684;
+  --err: #b3261e;
+  --ok: #2c7a3f;
+  --font: "Montserrat", Verdana, Arial, sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  background-color: var(--bg);
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.28) 0, rgba(255,255,255,0.28) 2px, transparent 2px, transparent 5px);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  padding-inline: 16px;
+  padding-block: 28px 40px;
+}
+.wrap { max-width: 740px; margin-inline: auto; }
+
+.head {
+  background: linear-gradient(to bottom, var(--blue-top) 0%, #2f66aa 50%, var(--blue-bot) 100%);
+  border: 1px solid var(--blue-dark);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+  padding: 18px 22px 16px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px;
+}
+.logo {
+  display: flex; align-items: center; gap: 8px;
+  color: #fff; font-weight: 800; font-size: 2rem; line-height: 1; letter-spacing: 0.01em;
+  text-shadow: 0 2px 2px rgba(0,0,0,0.45);
+}
+.logo .tag {
+  font-size: 1.2rem; color: #4a3200; text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  background: linear-gradient(to bottom, #ffd35e, var(--amber) 55%, #e09a00);
+  border: 1px solid #b67800; border-radius: 4px;
+  padding: 3px 9px 2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(0,0,0,0.4);
+}
+.head-title { color: #e6eefa; text-shadow: 0 1px 1px rgba(0,0,0,0.5); text-align: right; min-width: 0; }
+.head-title b { display: block; font-size: 1rem; font-weight: 700; }
+.head-title span { font-size: 0.8rem; opacity: 0.9; }
+
+.bar {
+  background: linear-gradient(to bottom, #f6f8fb, #dfe5ed);
+  border: 1px solid var(--blue-dark);
+  border-top: 1px solid #0f2d55;
+  border-bottom: 1px solid var(--line);
+  padding: 7px 22px;
+  font-size: 0.78rem; font-weight: 600; color: #4a5766;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.box {
+  background: var(--paper);
+  border: 1px solid var(--blue-dark);
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  padding: 22px;
+}
+form { display: grid; gap: 20px; }
+
+fieldset {
+  margin: 0; min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: linear-gradient(to bottom, #fbfcfd, #eef1f5);
+  padding: 8px 18px 18px;
+  box-shadow: inset 0 1px 0 #fff;
+}
+legend {
+  padding: 0 8px;
+  font-size: 0.95rem; font-weight: 700; color: var(--blue-dark);
+  text-shadow: 0 1px 0 #fff;
+}
+.grid3, .grid2 { display: grid; gap: 14px; grid-template-columns: 1fr; padding-top: 6px; }
+@media (min-width: 580px) {
+  .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.field { display: grid; gap: 5px; min-width: 0; align-content: start; }
+.field label { font-size: 0.8rem; font-weight: 700; color: #3c4756; }
+.input-wrap { position: relative; }
+.input-wrap input { width: 100%; }
+input[type="text"], input[type="url"], textarea {
+  font-family: var(--font);
+  font-size: 1rem; font-weight: 500; color: var(--ink);
+  background: linear-gradient(to bottom, #f1f3f6, #ffffff 30%);
+  border: 1px solid #8f9bab;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.12);
+  height: 42px; padding: 0 11px; min-width: 0;
+}
+input:focus, textarea:focus {
+  outline: 0;
+  border-color: #52a8ec;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.1), 0 0 6px rgba(82,168,236,0.7);
+}
+button:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px dotted #1f5aa6; outline-offset: 2px; }
+.unit {
+  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+  font-size: 0.8rem; font-weight: 700; color: var(--muted); pointer-events: none;
+}
+.has-unit input { padding-right: 42px; font-variant-numeric: tabular-nums; }
+
+.led {
+  background-color: var(--led-bg);
+  border: 1px solid #8f9bab;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.12);
+  padding: 14px 20px 16px;
+}
+.led-top { color: var(--led-dim); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.led-main { display: flex; align-items: baseline; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.led-formula { margin-right: auto; color: var(--led-dim); font-size: 0.82rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.led-num {
+  color: var(--led-fg); font-size: clamp(2.3rem, 11vw, 3.4rem); font-weight: 800; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.led-unit { color: var(--led-fg); font-size: 1.15rem; font-weight: 700; }
+.err {
+  color: var(--err); font-size: 0.85rem; font-weight: 700;
+  background: #fdeceb; border: 1px solid #e3a8a4; border-radius: 4px; padding: 8px 12px;
+  margin-top: -6px;
+}
+
+.preview { display: grid; gap: 5px; padding-top: 6px; }
+.preview label { font-size: 0.8rem; font-weight: 700; color: #3c4756; }
+textarea { height: auto; min-height: 168px; padding: 10px 12px; resize: vertical; font-size: 0.85rem; line-height: 1.55; width: 100%; }
+
+.actions { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 14px; }
+@media (min-width: 580px) { .actions { grid-template-columns: 1fr 1fr; } }
+.btn {
+  font-family: var(--font); font-size: 0.95rem; font-weight: 700;
+  min-height: 46px; padding: 0 18px;
+  border: 1px solid; border-radius: 5px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  cursor: pointer; color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,0.35);
+}
+.btn svg { width: 18px; height: 18px; flex: none; filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.35)); }
+.btn.pdf {
+  background: linear-gradient(to bottom, #5a96d6, #2c68b0 50%, #1f5aa6 51%, #2a6dba);
+  border-color: #123d73;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 2px rgba(0,0,0,0.3);
+}
+.btn.discord {
+  background: linear-gradient(to bottom, #8b95f7, #5865f2 50%, #4651d6 51%, #5560e6);
+  border-color: #2f3aa8;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 1px 2px rgba(0,0,0,0.3);
+}
+.btn.ghost {
+  background: linear-gradient(to bottom, #ffffff, #e4e8ee);
+  border-color: #98a3b2; color: #3c4756; text-shadow: 0 1px 0 #fff;
+  box-shadow: inset 0 1px 0 #fff, 0 1px 1px rgba(0,0,0,0.15);
+  min-height: 38px; font-size: 0.82rem; font-weight: 600;
+}
+.btn:hover:not(:disabled) { filter: brightness(1.07); }
+.btn:active:not(:disabled) { box-shadow: inset 0 2px 5px rgba(0,0,0,0.35); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.4); }
+
+.status { min-height: 1.4em; margin-top: 10px; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.status[data-type="ok"] { color: var(--ok); }
+.status[data-type="err"] { color: var(--err); }
+.help { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
+
+.extra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+details.link summary { cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--link); }
+details.link .body { display: grid; gap: 10px; margin-top: 10px; }
+.open-link { font-size: 0.85rem; font-weight: 700; color: var(--link); }
+
+.foot { text-align: center; color: #5d6876; font-size: 0.75rem; margin-top: 18px; text-shadow: 0 1px 0 rgba(255,255,255,0.7); }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div class="logo" aria-label="FMO BUS">FMO <span class="tag">BUS</span></div>
+    <div class="head-title"><b>Výkaz po směně</b><span id="today"></span></div>
+  </header>
+  <div class="bar">Interní výkazy řidičů</div>
+
+  <div class="box">
+    <form id="form" autocomplete="off" novalidate>
+      <fieldset>
+        <legend>Řidič a vůz</legend>
+        <div class="grid3">
+          <div class="field">
+            <label for="nick">Přezdívka</label>
+            <input id="nick" type="text" autocomplete="nickname" maxlength="40">
+          </div>
+          <div class="field">
+            <label for="site">Provozovna</label>
+            <input id="site" type="text" maxlength="60">
+          </div>
+          <div class="field">
+            <label for="bus">Autobus ev. č.</label>
+            <input id="bus" type="text" maxlength="20">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Stav tachometru</legend>
+        <div class="grid2">
+          <div class="field">
+            <label for="start">Tachometr na začátku směny</label>
+            <div class="input-wrap has-unit">
+              <input id="start" type="text" inputmode="decimal">
+              <span class="unit">km</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="end">Tachometr na konci směny</label>
+            <div class="input-wrap has-unit">
+              <input id="end" type="text" inputmode="decimal">
+              <span class="unit">km</span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="led" role="status" aria-live="polite">
+        <div class="led-top">Ujeto za směnu</div>
+        <div class="led-main">
+          <span class="led-formula" id="formula"></span>
+          <span class="led-num" id="km">—</span>
+          <span class="led-unit">km</span>
+        </div>
+      </div>
+      <div class="err" id="err" hidden></div>
+
+      <fieldset>
+        <legend>Odeslání</legend>
+        <div class="preview">
+          <label for="preview">Zpráva pro Discord</label>
+          <textarea id="preview" readonly placeholder="Zpráva se objeví, jakmile vyplníš všechna pole."></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn pdf" id="pdfBtn" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Export do PDF
+          </button>
+          <button type="button" class="btn discord" id="dcBtn" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            Poslat do #výkazy
+          </button>
+        </div>
+        <p class="help">Tlačítko Discord zkopíruje výkaz. Stačí ho vložit do kanálu #výkazy.</p>
+        <div class="status" id="status" aria-live="polite"></div>
+        <div id="hint" class="help"></div>
+      </fieldset>
+
+      <div class="extra">
+        <a class="open-link" id="openLink" href="https://discord.com/channels/1487734232154509344/1558475791598092308" target="_blank" rel="noopener noreferrer">Otevřít kanál #výkazy v Discordu</a>
+        <button type="button" class="btn ghost" id="newBtn">Nová směna (smazat vůz a tachometr)</button>
+      </div>
+    </form>
+  </div>
+  <div class="foot">© FMO BUS · Všechna práva vyhrazena</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var el = { nick: $('nick'), site: $('site'), bus: $('bus'), start: $('start'), end: $('end') };
+  var pdfBtn = $('pdfBtn'), dcBtn = $('dcBtn'), statusEl = $('status');
+  var KEY = 'fmobus.vykaz.v2';
+  var dl = null;
+  var dlChecked = false;
+
+  function loadStore() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function saveStore() {
+    var o = {};
+    Object.keys(el).forEach(function (k) { o[k] = el[k].value; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {}
+  }
+
+  function num(v) {
+    var s = String(v).replace(/[\s ]/g, '').replace(',', '.');
+    if (s === '' || !/^\d+(\.\d+)?$/.test(s)) return null;
+    return parseFloat(s);
+  }
+  function fmt(n) { return n.toLocaleString('cs-CZ', { maximumFractionDigits: 1 }); }
+  function nowParts() {
+    var d = new Date();
+    return {
+      date: d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }),
+      time: d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }),
+      iso: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
+    };
+  }
+
+  function compute() {
+    var s = num(el.start.value), e = num(el.end.value);
+    var miss = [];
+    if (!el.nick.value.trim()) miss.push('Přezdívka');
+    if (!el.site.value.trim()) miss.push('Provozovna');
+    if (!el.bus.value.trim()) miss.push('Autobus ev. č.');
+    if (s === null) miss.push('Tachometr na začátku');
+    if (e === null) miss.push('Tachometr na konci');
+    var km = null, err = '';
+    var badS = el.start.value.trim() !== '' && s === null;
+    var badE = el.end.value.trim() !== '' && e === null;
+    if (badS || badE) err = 'Tachometr: zadej pouze číslo.';
+    else if (s !== null && e !== null) {
+      if (e < s) err = 'Konečný stav tachometru je nižší než počáteční. Zkontroluj čísla.';
+      else km = Math.round((e - s) * 10) / 10;
+    }
+    return {
+      nick: el.nick.value.trim(), site: el.site.value.trim(), bus: el.bus.value.trim(),
+      s: s, e: e, km: km, err: err, miss: miss, ok: miss.length === 0 && km !== null
+    };
+  }
+
+  function message(c) {
+    var t = nowParts();
+    return [
+      '**Výkaz po směně · FMO BUS**',
+      '**Přezdívka:** ' + c.nick,
+      '**Provozovna:** ' + c.site,
+      '**Autobus ev. č.:** ' + c.bus,
+      '**Tachometr na začátku:** ' + fmt(c.s) + ' km',
+      '**Tachometr na konci:** ' + fmt(c.e) + ' km',
+      '**Ujeto:** ' + fmt(c.km) + ' km',
+      '*' + t.date + ' v ' + t.time + '*'
+    ].join('\n');
+  }
+
+  function setStatus(msg, type) {
+    statusEl.textContent = msg || '';
+    if (type) statusEl.setAttribute('data-type', type); else statusEl.removeAttribute('data-type');
+  }
+
+  function render() {
+    var c = compute();
+    $('km').textContent = c.km === null ? '—' : fmt(c.km);
+    $('formula').textContent = (c.s !== null && c.e !== null && c.km !== null) ? fmt(c.e) + ' − ' + fmt(c.s) : '';
+    $('err').textContent = c.err;
+    $('err').hidden = !c.err;
+    $('hint').textContent = c.ok ? '' : (c.miss.length ? 'Chybí: ' + c.miss.join(', ') + '.' : '');
+    $('preview').value = c.ok ? message(c) : '';
+    dcBtn.disabled = !c.ok;
+    pdfBtn.disabled = !c.ok || !dl;
+    if (dlChecked && !dl) $('hint').textContent += ' Export do PDF není v tomto zobrazení dostupný.';
+  }
+
+  async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch (e) {
+      var ta = $('preview');
+      ta.focus(); ta.select();
+      try { return document.execCommand('copy'); } catch (_) { return false; }
+    }
+  }
+
+  dcBtn.addEventListener('click', async function () {
+    var c = compute();
+    if (!c.ok) return;
+    var ok = await copyText(message(c));
+    if (ok) setStatus('Výkaz je zkopírovaný. Vlož ho do kanálu #výkazy.', 'ok');
+    else setStatus('Kopírování se nepovedlo. Text je označený, zkopíruj ho ručně (Ctrl+C).', 'err');
+  });
+
+  function slug(s) {
+    var r = String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
+    return r || 'ridic';
+  }
+
+  function rr(x, px, py, w, h, r) {
+    x.beginPath();
+    x.moveTo(px + r, py);
+    x.arcTo(px + w, py, px + w, py + h, r);
+    x.arcTo(px + w, py + h, px, py + h, r);
+    x.arcTo(px, py + h, px, py, r);
+    x.arcTo(px, py, px + w, py, r);
+    x.closePath();
+  }
+
+  async function buildPdf(c) {
+    if (!window.jspdf) throw new Error('jspdf');
+    await Promise.all(['500', '600', '700', '800'].map(function (w) { return document.fonts.load(w + ' 40px Montserrat'); }));
+    var W = 1240, H = 1754, M = 100;
+    var cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    var x = cv.getContext('2d');
+    var FF = 'Montserrat, system-ui, sans-serif';
+    var font = function (w, s) { return w + ' ' + s + 'px ' + FF; };
+    var ls = function (v) { if ('letterSpacing' in x) x.letterSpacing = v; };
+    var t = nowParts();
+
+    x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H);
+    var g = x.createLinearGradient(0, 0, 0, 250);
+    g.addColorStop(0, '#4A82C4'); g.addColorStop(1, '#1F4F8E');
+    x.fillStyle = g; x.fillRect(0, 0, W, 250);
+
+    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+    x.font = font(800, 72); ls('1px'); x.fillStyle = '#FFFFFF';
+    x.fillText('FMO', M, 150);
+    var fw = x.measureText('FMO').width;
+    var bw = x.measureText('BUS').width;
+    var px = M + fw + 24;
+    x.fillStyle = '#F5B11A'; rr(x, px, 78, bw + 48, 96, 14); x.fill();
+    x.fillStyle = '#4A3200'; x.fillText('BUS', px + 24, 150);
+
+    x.textAlign = 'right'; x.fillStyle = '#FFFFFF';
+    x.font = font(700, 26); ls('4px'); x.fillText('VÝKAZ PO SMĚNĚ', W - M, 126);
+    x.font = font(500, 26); ls('0px'); x.globalAlpha = 0.85; x.fillText(t.date, W - M, 168); x.globalAlpha = 1;
+
+    x.textAlign = 'left'; ls('0px');
+    x.fillStyle = '#153A6B'; x.font = font(800, 60); x.fillText('Výkaz po směně', M, 400);
+    x.fillStyle = '#6B7684'; x.font = font(500, 26); x.fillText(t.date + ' v ' + t.time, M, 448);
+
+    function fitText(text, maxW, maxS, minS, wt) {
+      var s = maxS; x.font = font(wt, s);
+      while (x.measureText(text).width > maxW && s > minS) { s -= 2; x.font = font(wt, s); }
+      while (x.measureText(text).width > maxW && text.length > 1) { text = text.slice(0, -2) + '…'; }
+      return text;
+    }
+    function row(label, value, x0, y0, w) {
+      x.fillStyle = '#6B7684'; x.font = font(700, 20); ls('3px');
+      x.fillText(label.toUpperCase(), x0, y0);
+      ls('0px'); x.fillStyle = '#2B3440';
+      var v = fitText(value, w, 44, 24, 700);
+      x.fillText(v, x0, y0 + 58);
+      x.fillStyle = '#B9C1CC'; x.fillRect(x0, y0 + 84, w, 2);
+    }
+    var fullW = W - 2 * M;
+    row('Přezdívka', c.nick, M, 540, fullW);
+    row('Provozovna', c.site, M, 690, fullW);
+    row('Autobus ev. č.', c.bus, M, 840, fullW);
+    var half = (fullW - 60) / 2;
+    row('Tachometr na začátku', fmt(c.s) + ' km', M, 1010, half);
+    row('Tachometr na konci', fmt(c.e) + ' km', M + half + 60, 1010, half);
+
+    var by = 1190, bh = 300;
+    x.fillStyle = '#FFFFFF'; rr(x, M, by, fullW, bh, 14); x.fill();
+    x.strokeStyle = '#8F9BAB'; x.lineWidth = 2; x.stroke();
+    x.fillStyle = '#6B7684'; x.font = font(700, 24); ls('5px');
+    x.fillText('UJETO ZA SMĚNU', M + 52, by + 84);
+    ls('0px'); x.font = font(500, 28);
+    x.fillText(fmt(c.e) + ' − ' + fmt(c.s), M + 52, by + 140);
+    x.textAlign = 'right'; x.fillStyle = '#153A6B';
+    x.font = font(700, 56);
+    var kmW = x.measureText('km').width;
+    x.fillText('km', W - M - 52, by + 248);
+    x.font = font(800, 130);
+    x.fillText(fmt(c.km), W - M - 52 - kmW - 22, by + 248);
+
+    x.textAlign = 'left';
+    x.fillStyle = '#B9C1CC'; x.fillRect(M, 1620, fullW, 2);
+    x.fillStyle = '#6B7684'; x.font = font(500, 22);
+    x.fillText('FMO BUS · výkaz vygenerován ' + t.date + ' v ' + t.time, M, 1668);
+
+    var JsPDF = window.jspdf.jsPDF;
+    var pdf = new JsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
+    return pdf.output('arraybuffer');
+  }
+
+  pdfBtn.addEventListener('click', async function () {
+    var c = compute();
+    if (!c.ok || !dl) return;
+    pdfBtn.disabled = true;
+    setStatus('Připravuji PDF…');
+    try {
+      var buf = await buildPdf(c);
+      await dl.save({ filename: 'vykaz-' + slug(c.nick) + '-' + nowParts().iso + '.pdf', data: buf });
+      setStatus('PDF je uložené.', 'ok');
+    } catch (e) {
+      if (e && e.code === 'declined') setStatus('Ukládání jsi zrušil.');
+      else if (e && e.code === 'rate_limited') setStatus('Chvíli počkej a zkus to znovu.', 'err');
+      else setStatus('PDF se nepodařilo vytvořit. Zkus to znovu.', 'err');
+    } finally {
+      render();
+    }
+  });
+
+  $('newBtn').addEventListener('click', function () {
+    el.bus.value = ''; el.start.value = ''; el.end.value = '';
+    setStatus('');
+    saveStore();
+    render();
+    el.bus.focus();
+  });
+
+  Object.keys(el).forEach(function (k) {
+    el[k].addEventListener('input', function () { setStatus(''); saveStore(); render(); });
+  });
+  window.addEventListener('pagehide', saveStore);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) saveStore(); });
+  $('form').addEventListener('submit', function (ev) { ev.preventDefault(); });
+
+  var st = loadStore();
+  Object.keys(el).forEach(function (k) { if (typeof st[k] === 'string') el[k].value = st[k]; });
+  $('today').textContent = nowParts().date;
+  render();
+
+  var cl = window.claude;
+  if (cl && cl.use) {
+    cl.use('downloads').then(function (d) { dl = d || null; dlChecked = true; render(); },
+                             function () { dl = null; dlChecked = true; render(); });
+  } else { dlChecked = true; render(); }
+})();
+</script>
+
+</body></html>
