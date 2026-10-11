@@ -1,9 +1,11 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>FMO BUS Výkazy</title>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FMO BUS Výkazy a Systém</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
 <style>
-/* Vzhled: klasický web z roku 2012. Texturované pozadí, lesklá modrá hlavička, rámečky s legendami,
-   vložená pole se záře při označení, lesklá tlačítka. Jedna světlá varianta, záměrně bez tmavého režimu. */
 :root {
   --bg: #d8dde4;
   --paper: #ffffff;
@@ -15,9 +17,6 @@
   --blue-dark: #153a6b;
   --link: #1f5aa6;
   --amber: #f5b11a;
-  --led-bg: #ffffff;
-  --led-fg: #153a6b;
-  --led-dim: #6b7684;
   --err: #b3261e;
   --ok: #2c7a3f;
   --font: "Montserrat", Verdana, Arial, sans-serif;
@@ -35,495 +34,1438 @@ body {
   padding-inline: 16px;
   padding-block: 28px 40px;
 }
-.wrap { max-width: 740px; margin-inline: auto; }
+.wrap { max-width: 980px; margin-inline: auto; }
 
 .head {
   background: linear-gradient(to bottom, var(--blue-top) 0%, #2f66aa 50%, var(--blue-bot) 100%);
   border: 1px solid var(--blue-dark);
   border-bottom: 0;
-  border-radius: 8px 8px 0 0;
+  border-radius: 10px 10px 0 0;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
-  padding: 18px 22px 16px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px;
+  padding: 18px 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
 }
 .logo {
   display: flex; align-items: center; gap: 8px;
-  color: #fff; font-weight: 800; font-size: 2rem; line-height: 1; letter-spacing: 0.01em;
-  text-shadow: 0 2px 2px rgba(0,0,0,0.45);
+  color: #fff; font-weight: 800; font-size: 2.2rem; line-height: 1; letter-spacing: 0.02em;
+  text-shadow: 0 2px 3px rgba(0,0,0,0.45);
 }
 .logo .tag {
-  font-size: 1.2rem; color: #4a3200; text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  font-size: 1.3rem; color: #4a3200; text-shadow: 0 1px 0 rgba(255,255,255,0.5);
   background: linear-gradient(to bottom, #ffd35e, var(--amber) 55%, #e09a00);
-  border: 1px solid #b67800; border-radius: 4px;
-  padding: 3px 9px 2px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(0,0,0,0.4);
+  border: 1px solid #b67800; border-radius: 5px;
+  padding: 3px 10px 2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 2px 4px rgba(0,0,0,0.3);
+}
+.head-right {
+  display: flex; align-items: center; gap: 16px; margin-left: auto; flex-wrap: wrap;
 }
 .head-title { color: #e6eefa; text-shadow: 0 1px 1px rgba(0,0,0,0.5); text-align: right; min-width: 0; }
-.head-title b { display: block; font-size: 1rem; font-weight: 700; }
-.head-title span { font-size: 0.8rem; opacity: 0.9; }
+.head-title b { display: block; font-size: 1.05rem; font-weight: 700; }
 
 .bar {
   background: linear-gradient(to bottom, #f6f8fb, #dfe5ed);
   border: 1px solid var(--blue-dark);
   border-top: 1px solid #0f2d55;
   border-bottom: 1px solid var(--line);
-  padding: 7px 22px;
-  font-size: 0.78rem; font-weight: 600; color: #4a5766;
+  padding: 9px 22px;
+  font-size: 0.8rem; font-weight: 600; color: #4a5766;
   text-shadow: 0 1px 0 #fff;
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
 }
+.bar a { color: var(--link); text-decoration: none; cursor: pointer; transition: 0.15s; }
+.bar a:hover { color: var(--blue-dark); text-decoration: underline; }
 
 .box {
   background: var(--paper);
   border: 1px solid var(--blue-dark);
   border-top: 0;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  padding: 22px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  padding: 26px;
 }
-form { display: grid; gap: 20px; }
 
 fieldset {
-  margin: 0; min-width: 0;
+  margin: 0 0 22px 0; min-width: 0;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 8px;
   background: linear-gradient(to bottom, #fbfcfd, #eef1f5);
-  padding: 8px 18px 18px;
+  padding: 12px 20px 20px;
   box-shadow: inset 0 1px 0 #fff;
 }
 legend {
   padding: 0 8px;
-  font-size: 0.95rem; font-weight: 700; color: var(--blue-dark);
+  font-size: 1rem; font-weight: 700; color: var(--blue-dark);
   text-shadow: 0 1px 0 #fff;
 }
-.grid3, .grid2 { display: grid; gap: 14px; grid-template-columns: 1fr; padding-top: 6px; }
+.grid3, .grid2 { display: grid; gap: 16px; grid-template-columns: 1fr; padding-top: 8px; }
 @media (min-width: 580px) {
   .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.field { display: grid; gap: 5px; min-width: 0; align-content: start; }
-.field label { font-size: 0.8rem; font-weight: 700; color: #3c4756; }
-.input-wrap { position: relative; }
-.input-wrap input { width: 100%; }
-input[type="text"], input[type="url"], textarea {
+.field { display: grid; gap: 6px; min-width: 0; align-content: start; }
+.field label { font-size: 0.82rem; font-weight: 700; color: #3c4756; }
+input[type="text"], input[type="password"], input[type="url"], select {
   font-family: var(--font);
   font-size: 1rem; font-weight: 500; color: var(--ink);
   background: linear-gradient(to bottom, #f1f3f6, #ffffff 30%);
   border: 1px solid #8f9bab;
-  border-radius: 4px;
-  box-shadow: inset 0 2px 3px rgba(0,0,0,0.12);
-  height: 42px; padding: 0 11px; min-width: 0;
-}
-input:focus, textarea:focus {
-  outline: 0;
-  border-color: #52a8ec;
-  box-shadow: inset 0 2px 3px rgba(0,0,0,0.1), 0 0 6px rgba(82,168,236,0.7);
-}
-button:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px dotted #1f5aa6; outline-offset: 2px; }
-.unit {
-  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
-  font-size: 0.8rem; font-weight: 700; color: var(--muted); pointer-events: none;
-}
-.has-unit input { padding-right: 42px; font-variant-numeric: tabular-nums; }
-
-.led {
-  background-color: var(--led-bg);
-  border: 1px solid #8f9bab;
   border-radius: 6px;
-  box-shadow: inset 0 2px 3px rgba(0,0,0,0.12);
-  padding: 14px 20px 16px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+  height: 44px; padding: 6px 12px; min-width: 0; width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.led-top { color: var(--led-dim); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-.led-main { display: flex; align-items: baseline; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
-.led-formula { margin-right: auto; color: var(--led-dim); font-size: 0.82rem; font-weight: 500; font-variant-numeric: tabular-nums; }
-.led-num {
-  color: var(--led-fg); font-size: clamp(2.3rem, 11vw, 3.4rem); font-weight: 800; line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.led-unit { color: var(--led-fg); font-size: 1.15rem; font-weight: 700; }
-.err {
-  color: var(--err); font-size: 0.85rem; font-weight: 700;
-  background: #fdeceb; border: 1px solid #e3a8a4; border-radius: 4px; padding: 8px 12px;
-  margin-top: -6px;
+input:focus, select:focus {
+  border-color: var(--blue-top);
+  box-shadow: 0 0 0 3px rgba(74, 130, 196, 0.25);
+  outline: none;
 }
 
-.preview { display: grid; gap: 5px; padding-top: 6px; }
-.preview label { font-size: 0.8rem; font-weight: 700; color: #3c4756; }
-textarea { height: auto; min-height: 168px; padding: 10px 12px; resize: vertical; font-size: 0.85rem; line-height: 1.55; width: 100%; }
+.tutorial-box {
+  background: #eef7ff;
+  border: 1px solid #9ec5fe;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 0.83rem;
+  color: #084298;
+}
+.tutorial-box ol { margin: 6px 0 0 18px; padding: 0; }
+.tutorial-box li { margin-bottom: 3px; }
+.tutorial-box a { color: #0a58ca; font-weight: bold; text-decoration: underline; }
 
-.actions { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 14px; }
-@media (min-width: 580px) { .actions { grid-template-columns: 1fr 1fr; } }
+.editor-toolbar {
+  display: flex; gap: 4px; background: #e2e7ed; padding: 5px; border: 1px solid #8f9bab; border-bottom: 0; border-radius: 6px 6px 0 0;
+}
+.editor-btn {
+  background: #fff; border: 1px solid #8f9bab; border-radius: 4px; padding: 3px 10px; font-weight: bold; cursor: pointer; font-size: 0.85rem;
+}
+.editor-btn:hover { background: #d0d7e0; }
+.editor-content {
+  border: 1px solid #8f9bab; border-radius: 0 0 6px 6px; background: #fff; min-height: 100px; padding: 10px 12px; outline: none; font-family: var(--font);
+}
+
 .btn {
   font-family: var(--font); font-size: 0.95rem; font-weight: 700;
-  min-height: 46px; padding: 0 18px;
-  border: 1px solid; border-radius: 5px;
+  min-height: 46px; padding: 0 20px;
+  border: 1px solid; border-radius: 6px;
   display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   cursor: pointer; color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,0.35);
-}
-.btn svg { width: 18px; height: 18px; flex: none; filter: drop-shadow(0 -1px 0 rgba(0,0,0,0.35)); }
-.btn.pdf {
   background: linear-gradient(to bottom, #5a96d6, #2c68b0 50%, #1f5aa6 51%, #2a6dba);
   border-color: #123d73;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.2);
+  transition: filter 0.15s, transform 0.1s;
 }
-.btn.discord {
-  background: linear-gradient(to bottom, #8b95f7, #5865f2 50%, #4651d6 51%, #5560e6);
-  border-color: #2f3aa8;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 1px 2px rgba(0,0,0,0.3);
-}
-.btn.ghost {
-  background: linear-gradient(to bottom, #ffffff, #e4e8ee);
-  border-color: #98a3b2; color: #3c4756; text-shadow: 0 1px 0 #fff;
-  box-shadow: inset 0 1px 0 #fff, 0 1px 1px rgba(0,0,0,0.15);
-  min-height: 38px; font-size: 0.82rem; font-weight: 600;
-}
-.btn:hover:not(:disabled) { filter: brightness(1.07); }
-.btn:active:not(:disabled) { box-shadow: inset 0 2px 5px rgba(0,0,0,0.35); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.4); }
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: translateY(1px); }
+.btn.admin-btn { background: linear-gradient(to bottom, #f5b11a, #d08c00); border-color: #9a6600; color: #231900; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+.btn.secondary { background: linear-gradient(to bottom, #7f8c8d, #636e72); border-color: #2d3436; }
+.btn.danger-btn { background: linear-gradient(to bottom, #e74c3c, #c0392b); border-color: #962d22; }
 
 .status { min-height: 1.4em; margin-top: 10px; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
 .status[data-type="ok"] { color: var(--ok); }
 .status[data-type="err"] { color: var(--err); }
-.help { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
 
-.extra { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
-details.link summary { cursor: pointer; font-size: 0.82rem; font-weight: 600; color: var(--link); }
-details.link .body { display: grid; gap: 10px; margin-top: 10px; }
-.open-link { font-size: 0.85rem; font-weight: 700; color: var(--link); }
+.section { display: none; }
+.section.active { display: block; }
 
-.foot { text-align: center; color: #5d6876; font-size: 0.75rem; margin-top: 18px; text-shadow: 0 1px 0 rgba(255,255,255,0.7); }
+table.leaderboard {
+  width: 100%; border-collapse: collapse; margin-top: 12px; background: #fff;
+  border: 1px solid var(--line); border-radius: 6px; overflow: hidden; font-size: 0.9rem;
+}
+table.leaderboard th, table.leaderboard td {
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line);
+}
+table.leaderboard th { background: #eef1f5; color: var(--blue-dark); font-weight: 700; }
+table.leaderboard tbody tr { cursor: pointer; transition: background 0.15s; }
+table.leaderboard tbody tr:hover { background: #f0f4f9; }
+
+.avatar {
+  width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue-dark); background: #eee;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+.avatar-lg {
+  width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid var(--blue-dark); background: #eee;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.avatar-sm {
+  width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--blue-dark); background: #eee;
+}
+
+.profile-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.profile-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.profile-card:hover { border-color: var(--blue-top); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+.chat-box { height: 280px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 12px; overflow-y: auto; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+.chat-msg { padding: 9px 14px; border-radius: 8px; max-width: 75%; font-size: 0.9rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.chat-msg.mine { background: #d1e7dd; align-self: flex-end; color: #0f5132; }
+.chat-msg.theirs { background: #f8f9fa; border: 1px solid var(--line); align-self: flex-start; }
+
+.employee-card {
+  background: linear-gradient(to bottom, #fffdf0, #fef2c7);
+  border: 1px solid #e0b034; border-radius: 8px; padding: 18px; margin-bottom: 22px;
+  text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+.employee-card h3 { margin: 0 0 6px 0; color: #7a5200; font-size: 1.15rem; }
+.employee-card .name { font-size: 1.5rem; font-weight: 800; color: var(--blue-dark); }
+
+.version-badge {
+  background: #1f5aa6; color: #fff; font-size: 0.75rem; padding: 3px 9px; border-radius: 5px; font-weight: 700; margin-left: 8px;
+}
+.admin-badge {
+  background: #f5b11a; color: #3a2500; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; font-weight: 800; vertical-align: middle;
+}
+
+/* Modal */
+.modal {
+  display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65);
+  align-items: center; justify-content: center; padding: 16px;
+}
+.modal-content {
+  background: #fff; border-radius: 10px; max-width: 600px; width: 100%; padding: 24px; box-shadow: 0 8px 25px rgba(0,0,0,0.35); max-height: 90vh; overflow-y: auto;
+}
+
+.foot { text-align: center; color: #5d6876; font-size: 0.78rem; margin-top: 22px; text-shadow: 0 1px 0 rgba(255,255,255,0.7); }
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header class="head">
     <div class="logo" aria-label="FMO BUS">FMO <span class="tag">BUS</span></div>
-    <div class="head-title"><b>Výkaz po směně</b><span id="today"></span></div>
+    <div class="head-right">
+      <div class="head-title"><b>Informační systém & Výkazy</b><span id="currentUserDisplay">Nepřihlášen</span></div>
+    </div>
   </header>
-  <div class="bar">Interní výkazy řidičů</div>
+  
+  <div class="bar">
+    <a id="nav-auth" onclick="switchTab('auth')">🔐 Přihlášení / Registrace</a>
+    <a id="nav-form" onclick="switchTab('form')" style="display:none;">📝 Odeslat výkaz</a>
+    <a id="nav-profile" onclick="switchTab('profile')" style="display:none;">👤 Můj Profil</a>
+    <a onclick="switchTab('profiles-list')">👥 Profily & Chat</a>
+    <a onclick="switchTab('fleet')">🚌 Vozový park</a>
+    <a onclick="switchTab('repaints')">🎨 Repainty</a>
+    <a onclick="switchTab('stats')">🏆 Žebříčky</a>
+    <a onclick="switchTab('disruptions')">⚠️ Výluky</a>
+    <a onclick="switchTab('docs')">📄 Dokumenty</a>
+    <a id="adminTabLink" onclick="switchTab('admin')" style="display:none; color: #b3261e; font-weight: bold;">👑 Admin</a>
+    <a id="logoutLink" onclick="logout()" style="display:none; margin-left:auto; color:var(--err);">🚪 Odhlásit se</a>
+  </div>
 
   <div class="box">
-    <form id="form" autocomplete="off" novalidate>
-      <fieldset>
-        <legend>Řidič a vůz</legend>
-        <div class="grid3">
-          <div class="field">
-            <label for="nick">Přezdívka</label>
-            <input id="nick" type="text" autocomplete="nickname" maxlength="40">
-          </div>
-          <div class="field">
-            <label for="site">Provozovna</label>
-            <input id="site" type="text" maxlength="60">
-          </div>
-          <div class="field">
-            <label for="bus">Autobus ev. č.</label>
-            <input id="bus" type="text" maxlength="20">
+    
+    <!-- 0. REGISTRACE A PŘIHLÁŠENÍ -->
+    <div id="tab-auth" class="section active">
+      <div class="grid2">
+        <fieldset>
+          <legend>Přihlášení řidiče</legend>
+          <form id="loginForm">
+            <div class="field" style="margin-bottom:10px;">
+              <label for="loginNick">Přezdívka</label>
+              <input id="loginNick" type="text" placeholder="Zadej přezdívku" required>
+            </div>
+            <div class="field" style="margin-bottom:16px;">
+              <label for="loginPass">Heslo</label>
+              <input id="loginPass" type="password" placeholder="Zadej heslo" required>
+            </div>
+            <button type="submit" class="btn">Přihlásit se</button>
+            <div class="status" id="loginStatus"></div>
+          </form>
+        </fieldset>
+
+        <fieldset>
+          <legend>Registrace nového řidiče</legend>
+          <form id="registerForm">
+            <div class="field" style="margin-bottom:10px;">
+              <label for="regNick">Přezdívka</label>
+              <input id="regNick" type="text" placeholder="Vyber si přezdívku" required>
+            </div>
+            <div class="field" style="margin-bottom:10px;">
+              <label for="regDriverId">Osobní číslo řidiče</label>
+              <input id="regDriverId" type="text" placeholder="např. 105">
+            </div>
+            <div class="field" style="margin-bottom:16px;">
+              <label for="regPass">Heslo</label>
+              <input id="regPass" type="password" placeholder="Zvol si heslo" required>
+            </div>
+            <button type="submit" class="btn secondary">Vytvořit účet</button>
+            <div class="status" id="regStatus"></div>
+          </form>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- MŮJ PROFIL -->
+    <div id="tab-profile" class="section">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h2 style="margin:0;">Můj Profil řidiče</h2>
+        <button type="button" class="btn admin-btn" style="min-height:36px; font-size:0.85rem;" onclick="viewMyPublicProfile()">👁️ Zobrazit náhled mého profilu pro ostatní</button>
+      </div>
+
+      <fieldset style="margin-top: 15px;">
+        <legend>Údaje a profilová fotka</legend>
+        <div style="display: flex; gap: 18px; align-items: center; margin-bottom: 18px;">
+          <img id="profileAvatarImg" src="" class="avatar" alt="Profilovka" onerror="this.src='https://via.placeholder.com/75?text=BUS'">
+          <div>
+            <h3 id="profileNick" style="margin:0; font-size: 1.3rem; color:var(--blue-dark);">-</h3>
+            <p style="margin:3px 0 0 0; color:var(--muted); font-size:0.85rem;" id="profileRole">Řidič FMO BUS</p>
           </div>
         </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Stav tachometru</legend>
+        
         <div class="grid2">
           <div class="field">
-            <label for="start">Tachometr na začátku směny</label>
-            <div class="input-wrap has-unit">
-              <input id="start" type="text" inputmode="decimal">
-              <span class="unit">km</span>
-            </div>
+            <label for="updateDriverId">Osobní číslo řidiče</label>
+            <input id="updateDriverId" type="text" placeholder="Zadej osobní číslo">
           </div>
           <div class="field">
-            <label for="end">Tachometr na konci směny</label>
-            <div class="input-wrap has-unit">
-              <input id="end" type="text" inputmode="decimal">
-              <span class="unit">km</span>
-            </div>
+            <label for="updateAvatarUrl">URL adresa profilovky</label>
+            <input id="updateAvatarUrl" type="url" placeholder="https://files.catbox.moe/...">
           </div>
         </div>
-      </fieldset>
 
-      <div class="led" role="status" aria-live="polite">
-        <div class="led-top">Ujeto za směnu</div>
-        <div class="led-main">
-          <span class="led-formula" id="formula"></span>
-          <span class="led-num" id="km">—</span>
-          <span class="led-unit">km</span>
+        <div class="tutorial-box">
+          <b>🐱 Jak snadno nahrát svou profilovku přes Catbox.moe:</b>
+          <ol>
+            <li>Otevři stránku <a href="https://catbox.moe/" target="_blank">Catbox.moe</a></li>
+            <li>Klikni na <b>Select or drop files</b> a vyber fotku ze svého počítače/mobilu.</li>
+            <li>Klikni na <b>Upload Files</b>.</li>
+            <li>Zkopíruj vygenerovaný odkaz (např. <code>https://files.catbox.moe/abc123.jpg</code>) a vlož ho do políčka výše.</li>
+          </ol>
         </div>
-      </div>
-      <div class="err" id="err" hidden></div>
+
+        <button type="button" class="btn secondary" style="margin-top: 14px;" onclick="saveProfileChanges()">Uložit změny profilu</button>
+        <div class="status" id="profileStatus"></div>
+      </fieldset>
 
       <fieldset>
-        <legend>Odeslání</legend>
-        <div class="preview">
-          <label for="preview">Zpráva pro Discord</label>
-          <textarea id="preview" readonly placeholder="Zpráva se objeví, jakmile vyplníš všechna pole."></textarea>
+        <legend>Přidělené autobusy</legend>
+        <div id="myAssignedBuses" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+          <p style="color:var(--muted);">Zatím nemáš přiřazené žádné vozidlo.</p>
         </div>
+        
+        <hr style="border:0; border-top:1px solid var(--line); margin: 18px 0;">
+        
+        <legend style="margin-bottom: 12px;">Žádost o přidělení vozu (přidělenku)</legend>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="busSelectRequest">Vyber vůz</label>
+          <select id="busSelectRequest">
+            <option value="">Načítám vozy...</option>
+          </select>
+        </div>
+        <button type="button" class="btn" onclick="sendBusRequest()">Odeslat žádost majiteli</button>
+        <div class="status" id="requestStatus"></div>
+      </fieldset>
+    </div>
 
-        <div class="actions">
-          <button type="button" class="btn pdf" id="pdfBtn" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-            Export do PDF
-          </button>
-          <button type="button" class="btn discord" id="dcBtn" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-            Poslat do #výkazy
-          </button>
+    <!-- SEZNAM PROFILŮ A CHAT -->
+    <div id="tab-profiles-list" class="section">
+      <h2>Seznam profilů řidičů & Chat</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:18px;">Kliknutím na kartičku si otevřeš detailní profil řidiče.</p>
+      <div id="profilesDirectory" class="profile-grid">
+        <p style="color:var(--muted);">Načítám profily...</p>
+      </div>
+
+      <div id="chatBoxContainer" style="margin-top: 25px; display: none;">
+        <fieldset>
+          <legend id="chatTitle">Chat s řidičem</legend>
+          <div id="chatMessages" class="chat-box"></div>
+          <div style="display: flex; gap: 10px;">
+            <input id="chatInputText" type="text" placeholder="Napište zprávu..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <button type="button" class="btn" style="width: 120px; min-height: 44px;" onclick="sendChatMessage()">Odeslat</button>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+
+    <!-- VOZOVÝ PARK (IFRAME) -->
+    <div id="tab-fleet" class="section">
+      <h2>Aktuální vozový park FMO BUS</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:15px;">Živé zobrazení oficiální Google tabulky vozového parku.</p>
+      <div style="width: 100%; height: 600px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff;">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBKvpbVn0JAMD-hLFDCHooHerYtIVuHviaGE0EKLBQI806mdV5VUe6fmLqx_9g_BYY5bLMnC6ymfh_/pubhtml?widget=true&amp;headers=false" style="width: 100%; height: 100%; border: 0;"></iframe>
+      </div>
+    </div>
+
+    <!-- REPAINTY -->
+    <div id="tab-repaints" class="section">
+      <h2>Stahování repaintů</h2>
+      <p style="color:var(--muted); font-size:0.88rem; margin-bottom:18px;">Oficiální firemní balíčky repaintů s přehledem změn a verzí.</p>
+      <div id="repaintsList" style="display: grid; gap: 16px;">
+        <p style="color: var(--muted);">Načítám repainty...</p>
+      </div>
+    </div>
+
+    <!-- 1. FORMULÁŘ PRO VÝKAZ -->
+    <div id="tab-form" class="section">
+      <form id="shiftForm">
+        <fieldset>
+          <legend>Údaje o směně</legend>
+          <div class="grid3">
+            <div class="field">
+              <label for="siteSelect">Provozovna</label>
+              <select id="siteSelect" required>
+                <option value="">Vyber provozovnu...</option>
+                <option value="Bukovec">Bukovec</option>
+                <option value="Zájezdová">Zájezdová</option>
+                <option value="Nový Bor">Nový Bor</option>
+                <option value="Česká Lípa">Česká Lípa</option>
+                <option value="Kameniště">Kameniště</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="busSelect">Autobus ev. č. / Vůz</label>
+              <select id="busSelect" required>
+                <option value="">Vyber vůz...</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="kmDriven">Najeté kilometry</label>
+              <input id="kmDriven" type="text" inputmode="decimal" placeholder="např. 142.5" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn">Odeslat výkaz směny</button>
+        <div class="status" id="formStatus"></div>
+      </form>
+    </div>
+
+    <!-- 2. STATISTIKY A ŽEBŘÍČKY -->
+    <div id="tab-stats" class="section">
+      <div class="employee-card" id="employeeOfWeekCard">
+        <h3>🏆 Pracovník týdne</h3>
+        <div class="name" id="eowName">Načítá se...</div>
+        <p style="margin:6px 0 0 0; font-size:0.88rem; color:#6b7684;" id="eowReason">Skvělý výkon a spolehlivost na linkách.</p>
+      </div>
+
+      <h2>Žebříček řidičů</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:12px;">Kliknutím na kteréhokoliv řidiče v tabulce zobrazíš jeho kompletní profil.</p>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button class="btn" style="min-height:38px; font-size:0.85rem;" onclick="setLeaderboardPeriod('today')">Dnes</button>
+        <button class="btn" style="min-height:38px; font-size:0.85rem;" onclick="setLeaderboardPeriod('month')">Tento měsíc</button>
+        <button class="btn" style="min-height:38px; font-size:0.85rem;" onclick="setLeaderboardPeriod('all')">All-Time</button>
+      </div>
+
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Řidič</th>
+            <th>Najeto celkem</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="3" style="text-align:center;">Načítám data z databáze...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. VÝLUKY A AKCE -->
+    <div id="tab-disruptions" class="section">
+      <h2>Výluky, mimořádnosti a akce</h2>
+      <div id="disruptionsList" style="display: grid; gap: 14px;">
+        <p style="color: var(--muted);">Načítám výluky...</p>
+      </div>
+    </div>
+
+    <!-- 4. DOKUMENTACE -->
+    <div id="tab-docs" class="section">
+      <h2>Firemní dokumentace a soubory</h2>
+      <p style="color: var(--muted); font-size: 0.88rem;">Zde najdeš provozní řády, textová oznámení a soubory.</p>
+      <div id="docsList" style="display: grid; gap: 14px; margin-top: 16px;">
+        <p style="color: var(--muted);">Načítám dokumenty...</p>
+      </div>
+    </div>
+
+    <!-- 5. ADMIN PANEL (Pouze pro fifo1280) -->
+    <div id="tab-admin" class="section">
+      <h2 style="color: var(--err);">⚠️ Administrace majitele (fifo1280)</h2>
+
+      <fieldset>
+        <legend>Žádosti řidičů o přidělenky</legend>
+        <div id="adminRequestsList" style="display: grid; gap: 10px; margin-bottom: 10px;">
+          <p style="color:var(--muted);">Žádné čekající žádosti.</p>
         </div>
-        <p class="help">Tlačítko Discord zkopíruje výkaz. Stačí ho vložit do kanálu #výkazy.</p>
-        <div class="status" id="status" aria-live="polite"></div>
-        <div id="hint" class="help"></div>
       </fieldset>
 
-      <div class="extra">
-        <a class="open-link" id="openLink" href="https://discord.com/channels/1487734232154509344/1558475791598092308" target="_blank" rel="noopener noreferrer">Otevřít kanál #výkazy v Discordu</a>
-        <button type="button" class="btn ghost" id="newBtn">Nová směna (smazat vůz a tachometr)</button>
-      </div>
-    </form>
+      <fieldset>
+        <legend>Správa přidělených vozů řidičům</legend>
+        <p style="color:var(--muted); font-size:0.85rem; margin-bottom:12px;">Seznam všech řidičů a jejich vozů s možností odebrání přidělenky.</p>
+        <div id="adminAssignedBusesList" style="display: grid; gap: 10px;">
+          <p style="color:var(--muted);">Načítám přidělené vozy...</p>
+        </div>
+      </fieldset>
+
+      <fieldset style="margin-top:20px;">
+        <legend>Přiřadit vůz řidiči manuálně</legend>
+        <div class="grid2">
+          <div class="field">
+            <label for="adminAssignNickSelect">Výběr řidiče</label>
+            <select id="adminAssignNickSelect">
+              <option value="">Načítám řidiče...</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="adminAssignBusSelect">Vyber vůz</label>
+            <select id="adminAssignBusSelect">
+              <option value="">Načítám vozy...</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn admin-btn" style="margin-top: 14px;" onclick="assignBusToDriver()">Přiřadit vůz</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Zvolit pracovníka týdne</legend>
+        <div class="grid2">
+          <div class="field">
+            <label for="adminEowNameSelect">Výběr řidiče</label>
+            <select id="adminEowNameSelect" onchange="document.getElementById('adminEowName').value = this.value;">
+              <option value="">Načítám řidiče...</option>
+            </select>
+          </div>
+          <div class="field" style="display:none;">
+            <input id="adminEowName" type="text">
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label for="adminEowReason">Důvod / Poznámka</label>
+            <input id="adminEowReason" type="text" placeholder="Za nejvíce ujetých km">
+          </div>
+        </div>
+        <button type="button" class="btn admin-btn" style="margin-top: 14px;" onclick="saveEmployeeOfWeek()">Uložit pracovníka týdne</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Přidat výluku / akci</legend>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="adminDisruptTitle">Název akce / výluky</label>
+          <input id="adminDisruptTitle" type="text" placeholder="např. Uzávěrka mostu v centru">
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="adminDisruptDesc">Podrobnosti</label>
+          <textarea id="adminDisruptDesc" style="height: 80px; width:100%; border-radius:6px; border:1px solid #8f9bab; padding:8px;" placeholder="Objízdná trasa vedena přes..."></textarea>
+        </div>
+        <button type="button" class="btn admin-btn" onclick="saveDisruption()">Zveřejnit výluku</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Nahrát dokument / oznámení</legend>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="adminDocTitle">Název dokumentu / oznámení</label>
+          <input id="adminDocTitle" type="text" placeholder="např. Pokyny pro zimní provoz">
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label>Text / Popis (s formátováním)</label>
+          <div class="editor-toolbar">
+            <button type="button" class="editor-btn" onclick="execCmd('docEditor', 'bold')"><b>B</b></button>
+            <button type="button" class="editor-btn" onclick="execCmd('docEditor', 'italic')"><i>I</i></button>
+            <button type="button" class="editor-btn" onclick="execCmd('docEditor', 'underline')"><u>U</u></button>
+            <button type="button" class="editor-btn" onclick="execCmd('docEditor', 'insertUnorderedList')">• Seznam</button>
+          </div>
+          <div id="docEditor" class="editor-content" contenteditable="true" placeholder="Napište text..."></div>
+        </div>
+        <div class="field" style="margin-bottom: 6px;">
+          <label for="adminDocUrl">Odkaz na soubor / přílohu (URL - např. z Catbox.moe)</label>
+          <input id="adminDocUrl" type="url" placeholder="https://files.catbox.moe/...">
+        </div>
+        <div class="tutorial-box" style="margin-bottom:12px;">
+          Pro nahrání souboru použijte <a href="https://catbox.moe/" target="_blank">Catbox.moe</a> a vložte vygenerovaný odkaz.
+        </div>
+        <button type="button" class="btn admin-btn" onclick="uploadDocument()">Nahrát dokument</button>
+        <div class="status" id="docUploadStatus"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Nahrát balíček repaintu</legend>
+        <div class="grid2" style="margin-bottom: 12px;">
+          <div class="field">
+            <label for="adminRepaintTitle">Název balíčku / autobusu</label>
+            <input id="adminRepaintTitle" type="text" placeholder="např. SOR CN 12 - FMO BUS">
+          </div>
+          <div class="field">
+            <label for="adminRepaintVersion">Verze</label>
+            <input id="adminRepaintVersion" type="text" placeholder="např. v1.0 nebo v2.1">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label>Co je nového / Popis (s formátováním)</label>
+          <div class="editor-toolbar">
+            <button type="button" class="editor-btn" onclick="execCmd('repaintEditor', 'bold')"><b>B</b></button>
+            <button type="button" class="editor-btn" onclick="execCmd('repaintEditor', 'italic')"><i>I</i></button>
+            <button type="button" class="editor-btn" onclick="execCmd('repaintEditor', 'underline')"><u>U</u></button>
+            <button type="button" class="editor-btn" onclick="execCmd('repaintEditor', 'insertUnorderedList')">• Seznam</button>
+          </div>
+          <div id="repaintEditor" class="editor-content" contenteditable="true" placeholder="Napište co je nového..."></div>
+        </div>
+        <div class="field" style="margin-bottom: 6px;">
+          <label for="adminRepaintUrl">Přímý odkaz na stažení balíčku (URL)</label>
+          <input id="adminRepaintUrl" type="url" placeholder="https://files.catbox.moe/..." required>
+        </div>
+        <div class="tutorial-box" style="margin-bottom:12px;">
+          Pro nahrání zip/rar balíčku použijte <a href="https://catbox.moe/" target="_blank">Catbox.moe</a> a vložte odkaz ke stažení.
+        </div>
+        <button type="button" class="btn admin-btn" onclick="uploadRepaint()">Zveřejnit repaint</button>
+        <div class="status" id="repaintUploadStatus"></div>
+      </fieldset>
+    </div>
+
   </div>
   <div class="foot">© FMO BUS · Všechna práva vyhrazena</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-(function () {
-  var $ = function (id) { return document.getElementById(id); };
-  var el = { nick: $('nick'), site: $('site'), bus: $('bus'), start: $('start'), end: $('end') };
-  var pdfBtn = $('pdfBtn'), dcBtn = $('dcBtn'), statusEl = $('status');
-  var KEY = 'fmobus.vykaz.v2';
-  var dl = null;
-  var dlChecked = false;
+<!-- MODAL PRO PROHLÍŽENÍ PROFILU -->
+<div id="profileModal" class="modal">
+  <div class="modal-content" style="max-width:480px; text-align:center;">
+    <img id="viewAvatar" src="" class="avatar-lg" alt="Profilovka" style="margin-bottom:12px;" onerror="this.src='https://via.placeholder.com/90?text=BUS'">
+    <h2 id="viewNick" style="margin:0; color:var(--blue-dark); font-size:1.5rem;">-</h2>
+    <div id="viewRole" style="margin-top:4px;"></div>
+    
+    <div style="background:#f8fafc; border:1px solid var(--line); border-radius:8px; padding:15px; margin:18px 0; text-align:left;">
+      <div style="margin-bottom:8px;">🆔 <b>Osobní číslo:</b> <span id="viewDriverId">-</span></div>
+      <div style="margin-bottom:8px;">📊 <b>Celkem najeto:</b> <span id="viewTotalKm" style="font-weight:bold; color:var(--ok);">0 km</span></div>
+      <div>🚌 <b>Přidělené autobusy:</b></div>
+      <div id="viewBuses" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">-</div>
+    </div>
 
-  function loadStore() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
-  function saveStore() {
-    var o = {};
-    Object.keys(el).forEach(function (k) { o[k] = el[k].value; });
-    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {}
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button type="button" class="btn secondary" style="min-height:40px;" onclick="closeProfileModal()">Zavřít</button>
+      <button type="button" id="viewChatBtn" class="btn" style="min-height:40px;">💬 Napsat zprávu</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRO ÚPRAVU PŘÍSPĚVKŮ -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle" style="margin-top:0; color:var(--blue-dark);">✏️ Úprava příspěvku</h3>
+    <input type="hidden" id="editCategory">
+    <input type="hidden" id="editKey">
+    
+    <div class="field" style="margin-bottom: 12px;">
+      <label for="editFieldTitle">Název</label>
+      <input id="editFieldTitle" type="text">
+    </div>
+
+    <div id="editVersionContainer" class="field" style="margin-bottom: 12px; display:none;">
+      <label for="editFieldVersion">Verze</label>
+      <input id="editFieldVersion" type="text">
+    </div>
+
+    <div class="field" style="margin-bottom: 12px;">
+      <label>Popis / Text / Changelog</label>
+      <div class="editor-toolbar">
+        <button type="button" class="editor-btn" onclick="execCmd('editEditor', 'bold')"><b>B</b></button>
+        <button type="button" class="editor-btn" onclick="execCmd('editEditor', 'italic')"><i>I</i></button>
+        <button type="button" class="editor-btn" onclick="execCmd('editEditor', 'underline')"><u>U</u></button>
+        <button type="button" class="editor-btn" onclick="execCmd('editEditor', 'insertUnorderedList')">• Seznam</button>
+      </div>
+      <div id="editEditor" class="editor-content" contenteditable="true"></div>
+    </div>
+
+    <div id="editUrlContainer" class="field" style="margin-bottom: 18px;">
+      <label for="editFieldUrl">Odkaz na stažení (URL)</label>
+      <input id="editFieldUrl" type="url">
+    </div>
+
+    <div style="display:flex; gap:12px; justify-content:flex-end;">
+      <button type="button" class="btn secondary" style="width:auto;" onclick="closeEditModal()">Zrušit</button>
+      <button type="button" class="btn admin-btn" style="width:auto;" onclick="saveEditedItem()">Uložit změny</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK & Logika -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, push, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCE7ZcSY73vlpwqepoSvj-aWsrsRHe_acM",
+    authDomain: "vykazy-13df3.firebaseapp.com",
+    databaseURL: "https://vykazy-13df3-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "vykazy-13df3",
+    storageBucket: "vykazy-13df3.appspot.com",
+    messagingSenderId: "814172121825",
+    appId: "1:814172121825:web:d334ca11a4b69186da25a0",
+    measurementId: "G-X8F6FG8G00"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let currentUser = localStorage.getItem('fmo_user') || null;
+  let globalData = { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {} };
+  let currentPeriod = 'all';
+  let activeChatTarget = null;
+
+  const fleetBuses = [
+    { ev: "1201", desc: "1201 - SOR CN 12 (Bukovec)" },
+    { ev: "1202", desc: "1202 - SOR CN 8.5 (Bukovec)" },
+    { ev: "1203", desc: "1203 - IVECO URBANWAY 12M (Bukovec)" },
+    { ev: "1204", desc: "1204 - IVECO URBANWAY 12M (Bukovec)" },
+    { ev: "1205", desc: "1205 - Irisbus Axer 12M (Zájezdový)" },
+    { ev: "1206", desc: "1206 - Irisbus Axer 12M (Nový Bor)" },
+    { ev: "1207", desc: "1207 - IVECO URBANWAY 12M (Česká Lípa)" },
+    { ev: "1208", desc: "1208 - SOR CN 12 (Kameniště)" },
+    { ev: "1209", desc: "1209 - SOR CN 12 (Nový Bor)" },
+    { ev: "1210", desc: "1210 - SOR CN 12 (Kameniště)" },
+    { ev: "1211", desc: "1211 - Solaris Urbino 9 Electric (Kameniště)" },
+    { ev: "1212", desc: "1212 - Solaris Urbino 9 Electric (Bukovec)" },
+    { ev: "1213", desc: "1213 - Solaris Urbino 9 Electric (Kameniště)" },
+    { ev: "1214", desc: "1214 - Solaris Urbino 18 Hydrogen (Kameniště)" },
+    { ev: "1215", desc: "1215 - Irisbus Crossway LE 12M (Nový Bor)" },
+    { ev: "1216", desc: "1216 - Irisbus Crossway LE 12M (Nový Bor)" }
+  ];
+
+  window.execCmd = function(editorId, command) {
+    document.getElementById(editorId).focus();
+    document.execCommand(command, false, null);
   }
 
-  function num(v) {
-    var s = String(v).replace(/[\s ]/g, '').replace(',', '.');
-    if (s === '' || !/^\d+(\.\d+)?$/.test(s)) return null;
-    return parseFloat(s);
-  }
-  function fmt(n) { return n.toLocaleString('cs-CZ', { maximumFractionDigits: 1 }); }
-  function nowParts() {
-    var d = new Date();
-    return {
-      date: d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' }),
-      time: d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' }),
-      iso: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
-    };
+  function populateBusSelects() {
+    const selectForm = document.getElementById('busSelect');
+    const selectReq = document.getElementById('busSelectRequest');
+    const selectAdmin = document.getElementById('adminAssignBusSelect');
+
+    let opts = '<option value="">Vyber vůz...</option>';
+    fleetBuses.forEach(b => {
+      opts += `<option value="${b.ev}">${b.desc}</option>`;
+    });
+
+    if(selectForm) selectForm.innerHTML = opts;
+    if(selectReq) selectReq.innerHTML = opts;
+    if(selectAdmin) selectAdmin.innerHTML = opts;
   }
 
-  function compute() {
-    var s = num(el.start.value), e = num(el.end.value);
-    var miss = [];
-    if (!el.nick.value.trim()) miss.push('Přezdívka');
-    if (!el.site.value.trim()) miss.push('Provozovna');
-    if (!el.bus.value.trim()) miss.push('Autobus ev. č.');
-    if (s === null) miss.push('Tachometr na začátku');
-    if (e === null) miss.push('Tachometr na konci');
-    var km = null, err = '';
-    var badS = el.start.value.trim() !== '' && s === null;
-    var badE = el.end.value.trim() !== '' && e === null;
-    if (badS || badE) err = 'Tachometr: zadej pouze číslo.';
-    else if (s !== null && e !== null) {
-      if (e < s) err = 'Konečný stav tachometru je nižší než počáteční. Zkontroluj čísla.';
-      else km = Math.round((e - s) * 10) / 10;
-    }
-    return {
-      nick: el.nick.value.trim(), site: el.site.value.trim(), bus: el.bus.value.trim(),
-      s: s, e: e, km: km, err: err, miss: miss, ok: miss.length === 0 && km !== null
-    };
+  function populateDriverSelects() {
+    const selectAdminNick = document.getElementById('adminAssignNickSelect');
+    const selectEowNick = document.getElementById('adminEowNameSelect');
+    const users = globalData.users || {};
+    const keys = Object.keys(users);
+
+    let opts = '<option value="">Vyber řidiče...</option>';
+    keys.forEach(k => {
+      const u = users[k];
+      opts += `<option value="${u.nick}">${u.nick} ${u.driverId ? '(' + u.driverId + ')' : ''}</option>`;
+    });
+
+    if(selectAdminNick) selectAdminNick.innerHTML = opts;
+    if(selectEowNick) selectEowNick.innerHTML = opts;
   }
 
-  function message(c) {
-    var t = nowParts();
-    return [
-      '**Výkaz po směně · FMO BUS**',
-      '**Přezdívka:** ' + c.nick,
-      '**Provozovna:** ' + c.site,
-      '**Autobus ev. č.:** ' + c.bus,
-      '**Tachometr na začátku:** ' + fmt(c.s) + ' km',
-      '**Tachometr na konci:** ' + fmt(c.e) + ' km',
-      '**Ujeto:** ' + fmt(c.km) + ' km',
-      '*' + t.date + ' v ' + t.time + '*'
-    ].join('\n');
-  }
+  populateBusSelects();
 
-  function setStatus(msg, type) {
-    statusEl.textContent = msg || '';
-    if (type) statusEl.setAttribute('data-type', type); else statusEl.removeAttribute('data-type');
-  }
-
-  function render() {
-    var c = compute();
-    $('km').textContent = c.km === null ? '—' : fmt(c.km);
-    $('formula').textContent = (c.s !== null && c.e !== null && c.km !== null) ? fmt(c.e) + ' − ' + fmt(c.s) : '';
-    $('err').textContent = c.err;
-    $('err').hidden = !c.err;
-    $('hint').textContent = c.ok ? '' : (c.miss.length ? 'Chybí: ' + c.miss.join(', ') + '.' : '');
-    $('preview').value = c.ok ? message(c) : '';
-    dcBtn.disabled = !c.ok;
-    pdfBtn.disabled = !c.ok || !dl;
-    if (dlChecked && !dl) $('hint').textContent += ' Export do PDF není v tomto zobrazení dostupný.';
-  }
-
-  async function copyText(t) {
-    try { await navigator.clipboard.writeText(t); return true; }
-    catch (e) {
-      var ta = $('preview');
-      ta.focus(); ta.select();
-      try { return document.execCommand('copy'); } catch (_) { return false; }
-    }
-  }
-
-  dcBtn.addEventListener('click', async function () {
-    var c = compute();
-    if (!c.ok) return;
-    var ok = await copyText(message(c));
-    if (ok) setStatus('Výkaz je zkopírovaný. Vlož ho do kanálu #výkazy.', 'ok');
-    else setStatus('Kopírování se nepovedlo. Text je označený, zkopíruj ho ručně (Ctrl+C).', 'err');
+  onValue(ref(db), (snapshot) => {
+    const val = snapshot.val();
+    globalData = val || { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {} };
+    populateDriverSelects();
+    updateUI();
   });
 
-  function slug(s) {
-    var r = String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
-    return r || 'ridic';
+  window.switchTab = function(tabId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    if(tabId === 'profile') loadProfileData();
+    if(tabId === 'profiles-list') renderProfilesDirectory();
+    if(tabId === 'admin') {
+      loadAdminRequests();
+      loadAdminAssignedBuses();
+      populateDriverSelects();
+    }
   }
 
-  function rr(x, px, py, w, h, r) {
-    x.beginPath();
-    x.moveTo(px + r, py);
-    x.arcTo(px + w, py, px + w, py + h, r);
-    x.arcTo(px + w, py + h, px, py + h, r);
-    x.arcTo(px, py + h, px, py, r);
-    x.arcTo(px, py, px + w, py, r);
-    x.closePath();
+  window.setLeaderboardPeriod = function(period) {
+    currentPeriod = period;
+    updateLeaderboard();
   }
 
-  async function buildPdf(c) {
-    if (!window.jspdf) throw new Error('jspdf');
-    await Promise.all(['500', '600', '700', '800'].map(function (w) { return document.fonts.load(w + ' 40px Montserrat'); }));
-    var W = 1240, H = 1754, M = 100;
-    var cv = document.createElement('canvas');
-    cv.width = W; cv.height = H;
-    var x = cv.getContext('2d');
-    var FF = 'Montserrat, system-ui, sans-serif';
-    var font = function (w, s) { return w + ' ' + s + 'px ' + FF; };
-    var ls = function (v) { if ('letterSpacing' in x) x.letterSpacing = v; };
-    var t = nowParts();
-
-    x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H);
-    var g = x.createLinearGradient(0, 0, 0, 250);
-    g.addColorStop(0, '#4A82C4'); g.addColorStop(1, '#1F4F8E');
-    x.fillStyle = g; x.fillRect(0, 0, W, 250);
-
-    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
-    x.font = font(800, 72); ls('1px'); x.fillStyle = '#FFFFFF';
-    x.fillText('FMO', M, 150);
-    var fw = x.measureText('FMO').width;
-    var bw = x.measureText('BUS').width;
-    var px = M + fw + 24;
-    x.fillStyle = '#F5B11A'; rr(x, px, 78, bw + 48, 96, 14); x.fill();
-    x.fillStyle = '#4A3200'; x.fillText('BUS', px + 24, 150);
-
-    x.textAlign = 'right'; x.fillStyle = '#FFFFFF';
-    x.font = font(700, 26); ls('4px'); x.fillText('VÝKAZ PO SMĚNĚ', W - M, 126);
-    x.font = font(500, 26); ls('0px'); x.globalAlpha = 0.85; x.fillText(t.date, W - M, 168); x.globalAlpha = 1;
-
-    x.textAlign = 'left'; ls('0px');
-    x.fillStyle = '#153A6B'; x.font = font(800, 60); x.fillText('Výkaz po směně', M, 400);
-    x.fillStyle = '#6B7684'; x.font = font(500, 26); x.fillText(t.date + ' v ' + t.time, M, 448);
-
-    function fitText(text, maxW, maxS, minS, wt) {
-      var s = maxS; x.font = font(wt, s);
-      while (x.measureText(text).width > maxW && s > minS) { s -= 2; x.font = font(wt, s); }
-      while (x.measureText(text).width > maxW && text.length > 1) { text = text.slice(0, -2) + '…'; }
-      return text;
-    }
-    function row(label, value, x0, y0, w) {
-      x.fillStyle = '#6B7684'; x.font = font(700, 20); ls('3px');
-      x.fillText(label.toUpperCase(), x0, y0);
-      ls('0px'); x.fillStyle = '#2B3440';
-      var v = fitText(value, w, 44, 24, 700);
-      x.fillText(v, x0, y0 + 58);
-      x.fillStyle = '#B9C1CC'; x.fillRect(x0, y0 + 84, w, 2);
-    }
-    var fullW = W - 2 * M;
-    row('Přezdívka', c.nick, M, 540, fullW);
-    row('Provozovna', c.site, M, 690, fullW);
-    row('Autobus ev. č.', c.bus, M, 840, fullW);
-    var half = (fullW - 60) / 2;
-    row('Tachometr na začátku', fmt(c.s) + ' km', M, 1010, half);
-    row('Tachometr na konci', fmt(c.e) + ' km', M + half + 60, 1010, half);
-
-    var by = 1190, bh = 300;
-    x.fillStyle = '#FFFFFF'; rr(x, M, by, fullW, bh, 14); x.fill();
-    x.strokeStyle = '#8F9BAB'; x.lineWidth = 2; x.stroke();
-    x.fillStyle = '#6B7684'; x.font = font(700, 24); ls('5px');
-    x.fillText('UJETO ZA SMĚNU', M + 52, by + 84);
-    ls('0px'); x.font = font(500, 28);
-    x.fillText(fmt(c.e) + ' − ' + fmt(c.s), M + 52, by + 140);
-    x.textAlign = 'right'; x.fillStyle = '#153A6B';
-    x.font = font(700, 56);
-    var kmW = x.measureText('km').width;
-    x.fillText('km', W - M - 52, by + 248);
-    x.font = font(800, 130);
-    x.fillText(fmt(c.km), W - M - 52 - kmW - 22, by + 248);
-
-    x.textAlign = 'left';
-    x.fillStyle = '#B9C1CC'; x.fillRect(M, 1620, fullW, 2);
-    x.fillStyle = '#6B7684'; x.font = font(500, 22);
-    x.fillText('FMO BUS · výkaz vygenerován ' + t.date + ' v ' + t.time, M, 1668);
-
-    var JsPDF = window.jspdf.jsPDF;
-    var pdf = new JsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
-    pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
-    return pdf.output('arraybuffer');
+  window.logout = function() {
+    currentUser = null;
+    localStorage.removeItem('fmo_user');
+    checkUserSession();
+    switchTab('auth');
   }
 
-  pdfBtn.addEventListener('click', async function () {
-    var c = compute();
-    if (!c.ok || !dl) return;
-    pdfBtn.disabled = true;
-    setStatus('Připravuji PDF…');
-    try {
-      var buf = await buildPdf(c);
-      await dl.save({ filename: 'vykaz-' + slug(c.nick) + '-' + nowParts().iso + '.pdf', data: buf });
-      setStatus('PDF je uložené.', 'ok');
-    } catch (e) {
-      if (e && e.code === 'declined') setStatus('Ukládání jsi zrušil.');
-      else if (e && e.code === 'rate_limited') setStatus('Chvíli počkej a zkus to znovu.', 'err');
-      else setStatus('PDF se nepodařilo vytvořit. Zkus to znovu.', 'err');
-    } finally {
-      render();
+  function checkUserSession() {
+    const navAuth = document.getElementById('nav-auth');
+    const navForm = document.getElementById('nav-form');
+    const navProfile = document.getElementById('nav-profile');
+    const adminLink = document.getElementById('adminTabLink');
+    const logoutLink = document.getElementById('logoutLink');
+    const display = document.getElementById('currentUserDisplay');
+
+    if (currentUser) {
+      navAuth.style.display = 'none';
+      navForm.style.display = 'inline';
+      navProfile.style.display = 'inline';
+      logoutLink.style.display = 'inline';
+
+      if (currentUser.toLowerCase() === 'fifo1280') {
+        adminLink.style.display = 'inline';
+        display.innerHTML = `<b>${currentUser}</b> <span class='admin-badge'>MAJITEL</span>`;
+      } else {
+        adminLink.style.display = 'none';
+        display.textContent = `Řidič: ${currentUser}`;
+      }
+    } else {
+      navAuth.style.display = 'inline';
+      navForm.style.display = 'none';
+      navProfile.style.display = 'none';
+      adminLink.style.display = 'none';
+      logoutLink.style.display = 'none';
+      display.textContent = 'Nepřihlášen';
+    }
+  }
+
+  // Registrace
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nick = document.getElementById('regNick').value.trim();
+    const driverId = document.getElementById('regDriverId').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    const status = document.getElementById('regStatus');
+
+    if (!nick || !pass) return;
+
+    const userRef = ref(db, 'users/' + nick.toLowerCase());
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        status.textContent = 'Tato přezdívka je již zabraná!';
+        status.setAttribute('data-type', 'err');
+      } else {
+        set(userRef, { nick: nick, driverId: driverId || '', pass: pass, avatar: '', buses: [] }).then(() => {
+          status.textContent = 'Účet vytvořen! Nyní se můžeš přihlásit.';
+          status.setAttribute('data-type', 'ok');
+          document.getElementById('regNick').value = '';
+          document.getElementById('regDriverId').value = '';
+          document.getElementById('regPass').value = '';
+        });
+      }
+    });
+  });
+
+  // Přihlášení
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nick = document.getElementById('loginNick').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    const status = document.getElementById('loginStatus');
+
+    if (!nick || !pass) return;
+
+    const userRef = ref(db, 'users/' + nick.toLowerCase());
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists() && snapshot.val().pass === pass) {
+        currentUser = snapshot.val().nick;
+        localStorage.setItem('fmo_user', currentUser);
+        checkUserSession();
+        status.textContent = '';
+        switchTab('form');
+      } else {
+        status.textContent = 'Nesprávné jméno nebo heslo!';
+        status.setAttribute('data-type', 'err');
+      }
+    });
+  });
+
+  // Profil
+  function loadProfileData() {
+    if (!currentUser) return;
+    const users = globalData.users || {};
+    const userObj = users[currentUser.toLowerCase()] || {};
+    
+    document.getElementById('profileNick').textContent = currentUser;
+    document.getElementById('updateDriverId').value = userObj.driverId || '';
+    document.getElementById('updateAvatarUrl').value = userObj.avatar || '';
+    document.getElementById('profileAvatarImg').src = userObj.avatar || 'https://via.placeholder.com/75?text=BUS';
+
+    const busesEl = document.getElementById('myAssignedBuses');
+    const buses = userObj.buses || [];
+    if (buses.length === 0) {
+      busesEl.innerHTML = '<p style="color:var(--muted);">Zatím nemáš přiřazené žádné vozidlo.</p>';
+    } else {
+      busesEl.innerHTML = buses.map(b => `<span style="background:var(--blue-top); color:#fff; padding:6px 12px; border-radius:6px; font-weight:700;">Autobus ev. č. ${b}</span>`).join('');
+    }
+  }
+
+  window.saveProfileChanges = function() {
+    if (!currentUser) return;
+    const newId = document.getElementById('updateDriverId').value.trim();
+    const newAvatar = document.getElementById('updateAvatarUrl').value.trim();
+    const statusEl = document.getElementById('profileStatus');
+
+    const userRef = ref(db, 'users/' + currentUser.toLowerCase());
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        let userData = snapshot.val();
+        userData.driverId = newId;
+        userData.avatar = newAvatar;
+        set(userRef, userData).then(() => {
+          statusEl.textContent = 'Profil byl úspěšně aktualizován!';
+          statusEl.setAttribute('data-type', 'ok');
+          loadProfileData();
+        });
+      }
+    });
+  }
+
+  window.viewMyPublicProfile = function() {
+    if(!currentUser) return;
+    openUserProfileModal(currentUser);
+  }
+
+  window.sendBusRequest = function() {
+    if (!currentUser) return;
+    const busNum = document.getElementById('busSelectRequest').value;
+    const statusEl = document.getElementById('requestStatus');
+    if (!busNum) {
+      statusEl.textContent = 'Vyber vůz z nabídky.';
+      statusEl.setAttribute('data-type', 'err');
+      return;
+    }
+
+    push(ref(db, 'requests'), {
+      nick: currentUser,
+      bus: busNum,
+      date: new Date().toISOString()
+    }).then(() => {
+      statusEl.textContent = 'Žádost o přidělení vozu byla odeslána majiteli!';
+      statusEl.setAttribute('data-type', 'ok');
+    });
+  }
+
+  function renderProfilesDirectory() {
+    const dir = document.getElementById('profilesDirectory');
+    const users = globalData.users || {};
+    const keys = Object.keys(users);
+
+    if (keys.length === 0) {
+      dir.innerHTML = '<p style="color:var(--muted);">Žádní registrovaní uživatelé.</p>';
+      return;
+    }
+
+    dir.innerHTML = keys.map(k => {
+      const u = users[k];
+      return `
+        <div class="profile-card" onclick="openUserProfileModal('${u.nick}')">
+          <img src="${u.avatar || 'https://via.placeholder.com/75?text=BUS'}" class="avatar-sm" style="margin-bottom:10px;" alt="Avatar">
+          <div style="font-weight:700; color:var(--blue-dark);">${u.nick} ${u.nick.toLowerCase()==='fifo1280'?'<span class="admin-badge">MAJITEL</span>':''}</div>
+          <div style="font-size:0.78rem; color:var(--muted);">Osobní číslo: ${u.driverId || 'Neuvedeno'}</div>
+          <div style="font-size:0.78rem; color:var(--link); margin-top:8px; font-weight:600;">👁️ Zobrazit profil</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // OTAVÍRÁNÍ DETAILNÍHO PROFILU V MODALU
+  window.openUserProfileModal = function(targetNick) {
+    const users = globalData.users || {};
+    const u = users[targetNick.toLowerCase()] || { nick: targetNick, driverId: 'Neuvedeno', avatar: '', buses: [] };
+    
+    let totalKm = 0;
+    const shiftsObj = globalData.shifts || {};
+    Object.values(shiftsObj).forEach(s => {
+      if (s.nick && s.nick.toLowerCase() === targetNick.toLowerCase()) {
+        totalKm += (parseFloat(s.km) || 0);
+      }
+    });
+
+    document.getElementById('viewNick').textContent = u.nick;
+    document.getElementById('viewRole').innerHTML = u.nick.toLowerCase() === 'fifo1280' ? '<span class="admin-badge">MAJITEL</span>' : '<span style="color:var(--muted); font-size:0.85rem;">Řidič FMO BUS</span>';
+    document.getElementById('viewAvatar').src = u.avatar || 'https://via.placeholder.com/90?text=BUS';
+    document.getElementById('viewDriverId').textContent = u.driverId || 'Neuvedeno';
+    document.getElementById('viewTotalKm').textContent = totalKm.toLocaleString('cs-CZ') + ' km';
+
+    const busesContainer = document.getElementById('viewBuses');
+    const buses = u.buses || [];
+    if (buses.length === 0) {
+      busesContainer.innerHTML = '<span style="color:var(--muted); font-size:0.85rem;">Žádný přidělený vůz</span>';
+    } else {
+      busesContainer.innerHTML = buses.map(b => `<span style="background:var(--blue-top); color:#fff; padding:3px 8px; border-radius:4px; font-weight:700; font-size:0.8rem;">ev. č. ${b}</span>`).join('');
+    }
+
+    const chatBtn = document.getElementById('viewChatBtn');
+    if (currentUser && currentUser.toLowerCase() !== targetNick.toLowerCase()) {
+      chatBtn.style.display = 'inline-flex';
+      chatBtn.onclick = function() {
+        closeProfileModal();
+        switchTab('profiles-list');
+        openChat(targetNick);
+      };
+    } else {
+      chatBtn.style.display = 'none';
+    }
+
+    document.getElementById('profileModal').style.display = 'flex';
+  }
+
+  window.closeProfileModal = function() {
+    document.getElementById('profileModal').style.display = 'none';
+  }
+
+  window.openChat = function(targetNick) {
+    if (!currentUser) return alert('Musíš být přihlášen.');
+    if (currentUser.toLowerCase() === targetNick.toLowerCase()) return alert('Nemůžeš psát sám sobě.');
+
+    activeChatTarget = targetNick;
+    document.getElementById('chatBoxContainer').style.display = 'block';
+    document.getElementById('chatTitle').textContent = 'Chat s řidičem: ' + targetNick;
+    loadChatMessages();
+  }
+
+  function getChatId(userA, userB) {
+    return [userA.toLowerCase(), userB.toLowerCase()].sort().join('_');
+  }
+
+  function loadChatMessages() {
+    if (!activeChatTarget || !currentUser) return;
+    const chatId = getChatId(currentUser, activeChatTarget);
+    const box = document.getElementById('chatMessages');
+    
+    const chatRef = ref(db, 'chats/' + chatId);
+    onValue(chatRef, (snapshot) => {
+      const val = snapshot.val() || {};
+      const msgs = Object.values(val);
+      if (msgs.length === 0) {
+        box.innerHTML = '<p style="color:var(--muted); text-align:center;">Zatím žádné zprávy. Začněte konverzaci!</p>';
+        return;
+      }
+      box.innerHTML = msgs.map(m => {
+        const isMine = m.sender.toLowerCase() === currentUser.toLowerCase();
+        return `<div class="chat-msg ${isMine ? 'mine' : 'theirs'}"><b>${m.sender}:</b> ${m.text}</div>`;
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    }, { onlyOnce: true });
+  }
+
+  window.sendChatMessage = function() {
+    if (!activeChatTarget || !currentUser) return;
+    const txt = document.getElementById('chatInputText').value.trim();
+    if (!txt) return;
+
+    const chatId = getChatId(currentUser, activeChatTarget);
+    push(ref(db, 'chats/' + chatId), {
+      sender: currentUser,
+      text: txt,
+      date: new Date().toISOString()
+    }).then(() => {
+      document.getElementById('chatInputText').value = '';
+      loadChatMessages();
+    });
+  }
+
+  document.getElementById('shiftForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!currentUser) return alert('Nejprve se přihlas!');
+
+    const site = document.getElementById('siteSelect').value;
+    const bus = document.getElementById('busSelect').value;
+    const kmStr = document.getElementById('kmDriven').value.replace(',', '.');
+    const km = parseFloat(kmStr);
+
+    if (!site || !bus || isNaN(km)) {
+      document.getElementById('formStatus').textContent = 'Vyber provozovnu, vůz z nabídky a vyplň kilometry správně.';
+      document.getElementById('formStatus').setAttribute('data-type', 'err');
+      return;
+    }
+
+    push(ref(db, 'shifts'), {
+      nick: currentUser,
+      site: site,
+      bus: bus,
+      km: km,
+      date: new Date().toISOString()
+    }).then(() => {
+      document.getElementById('formStatus').textContent = 'Výkaz byl úspěšně zaznamenán a kilometry přičteny!';
+      document.getElementById('formStatus').setAttribute('data-type', 'ok');
+      document.getElementById('kmDriven').value = '';
+    });
+  });
+
+  function updateUI() {
+    updateLeaderboard();
+    updateEmployeeOfWeek();
+    updateDisruptions();
+    updateDocs();
+    updateRepaints();
+    checkUserSession();
+    if(document.getElementById('tab-profile').classList.contains('active')) {
+      loadProfileData();
+    }
+    if(document.getElementById('tab-admin').classList.contains('active')) {
+      loadAdminAssignedBuses();
+    }
+  }
+
+  function updateLeaderboard() {
+    let stats = {};
+    const shiftsObj = globalData.shifts || {};
+    const now = new Date();
+
+    Object.values(shiftsObj).forEach(s => {
+      const shiftDate = new Date(s.date);
+      if (currentPeriod === 'today') {
+        if (shiftDate.toDateString() !== now.toDateString()) return;
+      } else if (currentPeriod === 'month') {
+        if (shiftDate.getMonth() !== now.getMonth() || shiftDate.getFullYear() !== now.getFullYear()) return;
+      }
+
+      if (!stats[s.nick]) stats[s.nick] = 0;
+      stats[s.nick] += s.km;
+    });
+
+    let sorted = Object.keys(stats).map(nick => ({ nick, km: stats[nick] })).sort((a,b) => b.km - a.km);
+
+    let html = '';
+    if (sorted.length === 0) {
+      html = '<tr><td colspan="3" style="text-align:center; color:var(--muted);">Zatím žádné záznamy v tomto období.</td></tr>';
+    } else {
+      sorted.forEach((item, index) => {
+        html += `<tr onclick="openUserProfileModal('${item.nick}')" title="Kliknutím otevřeš profil řidiče ${item.nick}">
+          <td><b>#${index + 1}</b></td>
+          <td><b>${item.nick}</b> ${item.nick.toLowerCase() === 'fifo1280' ? '<span class=\'admin-badge\'>MAJITEL</span>' : ''}</td>
+          <td><b style="color:var(--ok);">${item.km.toLocaleString('cs-CZ')} km</b></td>
+        </tr>`;
+      });
+    }
+    document.getElementById('leaderboardBody').innerHTML = html;
+  }
+
+  function updateEmployeeOfWeek() {
+    const eow = globalData.employeeOfWeek || { name: 'Zatím nezvolen', reason: 'Čeká se na volbu majitele.' };
+    document.getElementById('eowName').textContent = eow.name || 'Zatím nezvolen';
+    document.getElementById('eowReason').textContent = eow.reason || 'Skvělý výkon.';
+  }
+
+  function updateDisruptions() {
+    const el = document.getElementById('disruptionsList');
+    const list = globalData.disruptions || {};
+    const keys = Object.keys(list);
+    const isAdmin = currentUser?.toLowerCase() === 'fifo1280';
+
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádné aktuální výluky nebo hlášení.</p>';
+      return;
+    }
+    el.innerHTML = keys.map(k => {
+      const d = list[k];
+      return `
+        <fieldset style="background:#fff; margin:0; position:relative;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <legend style="color:var(--err); font-weight:700;">${d.title}</legend>
+            ${isAdmin ? `<button type="button" class="btn danger-btn" style="min-height:30px; font-size:0.75rem; width:auto; padding:0 10px;" onclick="deleteItem('disruptions', '${k}')">🗑️ Smazat</button>` : ''}
+          </div>
+          <p style="margin:6px 0 0 0; white-space: pre-line;">${d.desc}</p>
+        </fieldset>
+      `;
+    }).join('');
+  }
+
+  function updateDocs() {
+    const el = document.getElementById('docsList');
+    const list = globalData.docs || {};
+    const keys = Object.keys(list);
+    const isAdmin = currentUser?.toLowerCase() === 'fifo1280';
+
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádné nahrané dokumenty nebo oznámení.</p>';
+      return;
+    }
+    el.innerHTML = keys.map(k => {
+      const doc = list[k];
+      return `
+        <div style="background:#f1f3f6; padding:16px; border-radius:8px; border:1px solid var(--line);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <b style="font-size:1.1rem; color:var(--blue-dark);">${doc.title}</b>
+            ${isAdmin ? `
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn admin-btn" style="min-height:32px; font-size:0.8rem; width:auto; padding:0 12px;" onclick="openEditModal('docs', '${k}')">✏️ Upravit</button>
+                <button type="button" class="btn danger-btn" style="min-height:32px; font-size:0.8rem; width:auto; padding:0 12px;" onclick="deleteItem('docs', '${k}')">🗑️ Smazat</button>
+              </div>` : ''}
+          </div>
+          ${doc.htmlText ? `<div style="margin:8px 0 14px 0;">${doc.htmlText}</div>` : ''}
+          ${doc.fileUrl ? `<a href="${doc.fileUrl}" target="_blank" class="btn" style="min-height:36px; font-size:0.85rem; width:auto; padding:0 16px;">📥 Stáhnout přílohu</a>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateRepaints() {
+    const el = document.getElementById('repaintsList');
+    const list = globalData.repaints || {};
+    const keys = Object.keys(list);
+    const isAdmin = currentUser?.toLowerCase() === 'fifo1280';
+
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Zatím nejsou k dispozici žádné repainty.</p>';
+      return;
+    }
+    el.innerHTML = keys.map(k => {
+      const r = list[k];
+      return `
+        <div style="background:#fff; padding:18px; border:1px solid var(--line); border-radius:8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <b style="font-size:1.15rem; color:var(--blue-dark);">${r.title}</b>
+              <span class="version-badge">${r.version || 'v1.0'}</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <a href="${r.fileUrl}" target="_blank" class="btn" style="min-height:38px; font-size:0.85rem; width:auto; padding:0 18px;">📥 Stáhnout repaint</a>
+              ${isAdmin ? `
+                <button type="button" class="btn admin-btn" style="min-height:38px; font-size:0.85rem; width:auto; padding:0 12px;" onclick="openEditModal('repaints', '${k}')">✏️ Upravit</button>
+                <button type="button" class="btn danger-btn" style="min-height:38px; font-size:0.85rem; width:auto; padding:0 12px;" onclick="deleteItem('repaints', '${k}')">🗑️ Smazat</button>
+              ` : ''}
+            </div>
+          </div>
+          ${r.changelog ? `<div style="background:#f8fafc; padding:12px 14px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.9rem;"><b>Co je nového:</b><br>${r.changelog}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // MODAL LOGIKA ÚPRAV
+  window.openEditModal = function(category, key) {
+    if (!currentUser || currentUser.toLowerCase() !== 'fifo1280') return;
+    const item = globalData[category][key];
+    if (!item) return;
+
+    document.getElementById('editCategory').value = category;
+    document.getElementById('editKey').value = key;
+    document.getElementById('editFieldTitle').value = item.title || '';
+    document.getElementById('editFieldUrl').value = item.fileUrl || '';
+
+    const verContainer = document.getElementById('editVersionContainer');
+    if (category === 'repaints') {
+      verContainer.style.display = 'block';
+      document.getElementById('editFieldVersion').value = item.version || 'v1.0';
+      document.getElementById('editEditor').innerHTML = item.changelog || '';
+    } else {
+      verContainer.style.display = 'none';
+      document.getElementById('editEditor').innerHTML = item.htmlText || '';
+    }
+
+    document.getElementById('editModal').style.display = 'flex';
+  }
+
+  window.closeEditModal = function() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  window.saveEditedItem = function() {
+    const category = document.getElementById('editCategory').value;
+    const key = document.getElementById('editKey').value;
+    const title = document.getElementById('editFieldTitle').value.trim();
+    const fileUrl = document.getElementById('editFieldUrl').value.trim();
+
+    if (!title) return alert('Název nesmí být prázdný.');
+
+    let updatedObj = { title, fileUrl };
+
+    if (category === 'repaints') {
+      updatedObj.version = document.getElementById('editFieldVersion').value.trim() || 'v1.0';
+      updatedObj.changelog = document.getElementById('editEditor').innerHTML.trim();
+    } else {
+      updatedObj.htmlText = document.getElementById('editEditor').innerHTML.trim();
+    }
+
+    set(ref(db, category + '/' + key), updatedObj).then(() => {
+      alert('Příspěvek byl úspěšně upraven!');
+      closeEditModal();
+    });
+  }
+
+  window.deleteItem = function(category, key) {
+    if (!currentUser || currentUser.toLowerCase() !== 'fifo1280') return;
+    if (confirm('Opravdu chceš tuto položku trvale smazat?')) {
+      remove(ref(db, category + '/' + key)).then(() => {
+        alert('Položka byla úspěšně smazána.');
+      });
+    }
+  }
+
+  function loadAdminRequests() {
+    const el = document.getElementById('adminRequestsList');
+    const reqs = globalData.requests || {};
+    const keys = Object.keys(reqs);
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádné čekající žádosti.</p>';
+      return;
+    }
+    el.innerHTML = keys.map(k => {
+      const r = reqs[k];
+      return `
+        <div style="background:#fff; padding:12px; border:1px solid var(--line); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${r.nick}</b> žádá o vůz ev. č. <b>${r.bus}</b></div>
+          <button type="button" class="btn admin-btn" style="min-height:34px; font-size:0.8rem; width:auto; padding:0 12px;" onclick="approveRequest('${k}', '${r.nick}', '${r.bus}')">Schválit a přidělit</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function loadAdminAssignedBuses() {
+    const el = document.getElementById('adminAssignedBusesList');
+    const users = globalData.users || {};
+    const keys = Object.keys(users);
+    
+    let html = '';
+    let foundAny = false;
+
+    keys.forEach(k => {
+      const u = users[k];
+      const buses = u.buses || [];
+      if (buses.length > 0) {
+        foundAny = true;
+        buses.forEach(b => {
+          html += `
+            <div style="background:#fff; padding:10px 14px; border:1px solid var(--line); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+              <div><b>${u.nick}</b> — Vůz ev. č. <b>${b}</b></div>
+              <button type="button" class="btn danger-btn" style="min-height:32px; font-size:0.75rem; width:auto; padding:0 12px;" onclick="removeBusFromDriver('${u.nick.toLowerCase()}', '${b}')">🗑️ Odebrat vůz</button>
+            </div>
+          `;
+        });
+      }
+    });
+
+    if (!foundAny) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádní řidiči nemají momentálně přidělené vozy.</p>';
+    } else {
+      el.innerHTML = html;
+    }
+  }
+
+  window.removeBusFromDriver = function(nickLower, busNum) {
+    if (!currentUser || currentUser.toLowerCase() !== 'fifo1280') return;
+    if (!confirm(`Opravdu chceš odebrat vůz ev. č. ${busNum} řidiči ${nickLower}?`)) return;
+
+    const userRef = ref(db, 'users/' + nickLower);
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        let userData = snapshot.val();
+        if (userData.buses) {
+          userData.buses = userData.buses.filter(b => b !== busNum);
+          set(userRef, userData).then(() => {
+            alert('Vůz byl řidiči úspěšně odebrán.');
+            loadAdminAssignedBuses();
+          });
+        }
+      }
+    });
+  }
+
+  window.approveRequest = function(reqKey, nick, bus) {
+    const userRef = ref(db, 'users/' + nick.toLowerCase());
+    get(userRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        let userData = snapshot.val();
+        if (!userData.buses) userData.buses = [];
+        if (!userData.buses.includes(bus)) userData.buses.push(bus);
+        
+        set(userRef, userData).then(() => {
+          remove(ref(db, 'requests/' + reqKey)).then(() => {
+            alert('Žádost schválena, vůz ' + bus + ' byl přidělen řidiči ' + nick + '!');
+            loadAdminRequests();
+            loadAdminAssignedBuses();
+          });
+        });
+      }
+    });
+  }
+
+  window.assignBusToDriver = function() {
+    const nick = document.getElementById('adminAssignNickSelect').value.trim().toLowerCase();
+    const bus = document.getElementById('adminAssignBusSelect').value;
+    if (!nick || !bus) return alert('Vyber řidiče a vůz.');
+
+    const userRef = ref(db, 'users/' + nick);
+    get(userRef).then((snapshot) => {
+      if (!snapshot.exists()) {
+        alert('Tento uživatel nebyl v databázi nalezen.');
+        return;
+      }
+      let userData = snapshot.val();
+      if (!userData.buses) userData.buses = [];
+      if (!userData.buses.includes(bus)) userData.buses.push(bus);
+      
+      set(userRef, userData).then(() => {
+        alert('Vůz ' + bus + ' byl úspěšně přiřazen řidiči ' + snapshot.val().nick + '!');
+        document.getElementById('adminAssignNickSelect').value = '';
+        loadAdminAssignedBuses();
+      });
+    });
+  }
+
+  window.saveEmployeeOfWeek = function() {
+    const name = document.getElementById('adminEowName').value.trim();
+    const reason = document.getElementById('adminEowReason').value.trim();
+    if (!name) return alert('Zadej jméno řidiče.');
+
+    set(ref(db, 'employeeOfWeek'), { name, reason: reason || 'Skvělý přínos pro firmu.' })
+      .then(() => alert('Pracovník týdne byl aktualizován!'));
+  }
+
+  window.saveDisruption = function() {
+    const title = document.getElementById('adminDisruptTitle').value.trim();
+    const desc = document.getElementById('adminDisruptDesc').value.trim();
+    if (!title || !desc) return alert('Vyplň název i popis výluky.');
+
+    push(ref(db, 'disruptions'), { title, desc })
+      .then(() => {
+        document.getElementById('adminDisruptTitle').value = '';
+        document.getElementById('adminDisruptDesc').value = '';
+        alert('Výluka byla zveřejněna!');
+      });
+  }
+
+  window.uploadDocument = function() {
+    const title = document.getElementById('adminDocTitle').value.trim();
+    const htmlText = document.getElementById('docEditor').innerHTML.trim();
+    const fileUrl = document.getElementById('adminDocUrl').value.trim();
+    const statusEl = document.getElementById('docUploadStatus');
+
+    if (!title) {
+      alert('Zadej název dokumentu / oznámení.');
+      return;
+    }
+
+    push(ref(db, 'docs'), { title, htmlText, fileUrl }).then(() => {
+      statusEl.textContent = 'Dokument / oznámení bylo úspěšně zveřejněno!';
+      statusEl.setAttribute('data-type', 'ok');
+      document.getElementById('adminDocTitle').value = '';
+      document.getElementById('docEditor').innerHTML = '';
+      document.getElementById('adminDocUrl').value = '';
+    });
+  }
+
+  window.uploadRepaint = function() {
+    const title = document.getElementById('adminRepaintTitle').value.trim();
+    const version = document.getElementById('adminRepaintVersion').value.trim() || 'v1.0';
+    const changelog = document.getElementById('repaintEditor').innerHTML.trim();
+    const fileUrl = document.getElementById('adminRepaintUrl').value.trim();
+    const statusEl = document.getElementById('repaintUploadStatus');
+
+    if (!title || !fileUrl) {
+      alert('Zadej název a odkaz na stažení balíčku repaintu.');
+      return;
+    }
+
+    push(ref(db, 'repaints'), { title, version, changelog, fileUrl }).then(() => {
+      statusEl.textContent = 'Balíček repaintu byl úspěšně zveřejněn!';
+      statusEl.setAttribute('data-type', 'ok');
+      document.getElementById('adminRepaintTitle').value = '';
+      document.getElementById('adminRepaintVersion').value = '';
+      document.getElementById('repaintEditor').innerHTML = '';
+      document.getElementById('adminRepaintUrl').value = '';
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    checkUserSession();
+    if (currentUser) {
+      switchTab('form');
     }
   });
-
-  $('newBtn').addEventListener('click', function () {
-    el.bus.value = ''; el.start.value = ''; el.end.value = '';
-    setStatus('');
-    saveStore();
-    render();
-    el.bus.focus();
-  });
-
-  Object.keys(el).forEach(function (k) {
-    el[k].addEventListener('input', function () { setStatus(''); saveStore(); render(); });
-  });
-  window.addEventListener('pagehide', saveStore);
-  document.addEventListener('visibilitychange', function () { if (document.hidden) saveStore(); });
-  $('form').addEventListener('submit', function (ev) { ev.preventDefault(); });
-
-  var st = loadStore();
-  Object.keys(el).forEach(function (k) { if (typeof st[k] === 'string') el[k].value = st[k]; });
-  $('today').textContent = nowParts().date;
-  render();
-
-  var cl = window.claude;
-  if (cl && cl.use) {
-    cl.use('downloads').then(function (d) { dl = d || null; dlChecked = true; render(); },
-                             function () { dl = null; dlChecked = true; render(); });
-  } else { dlChecked = true; render(); }
-})();
 </script>
 
-</body></html>
+</body>
+</html>
