@@ -404,12 +404,7 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
             <div class="field">
               <label for="siteSelect">Provozovna</label>
               <select id="siteSelect" required>
-                <option value="">Vyber provozovnu...</option>
-                <option value="Bukovec">Bukovec</option>
-                <option value="Zájezdová">Zájezdová</option>
-                <option value="Nový Bor">Nový Bor</option>
-                <option value="Česká Lípa">Česká Lípa</option>
-                <option value="Kameniště">Kameniště</option>
+                <option value="">Načítám provozovny...</option>
               </select>
             </div>
             <div class="field">
@@ -481,6 +476,65 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
     <!-- 5. ADMIN PANEL (Pouze pro fifo1280) -->
     <div id="tab-admin" class="section">
       <h2 style="color: var(--err);">⚠️ Administrace majitele (fifo1280)</h2>
+
+      <!-- SPRÁVA VOZOVÉHO PARKU S PRESETY -->
+      <fieldset>
+        <legend>Správa vozového parku (Autobusy)</legend>
+        
+        <div style="background:#eef7ff; border:1px solid #9ec5fe; padding:12px; border-radius:6px; margin-bottom:14px;">
+          <label style="font-weight:700; color:#084298; display:block; margin-bottom:6px;">🛠️ Rychlý preset (předloha typu autobusu):</label>
+          <div style="display:flex; gap:10px;">
+            <select id="busPresetSelect">
+              <option value="">-- Vyber typ autobusu --</option>
+              <option value="SOR CN 12">SOR CN 12</option>
+              <option value="SOR CN 8.5">SOR CN 8.5</option>
+              <option value="IVECO URBANWAY 12M">IVECO URBANWAY 12M</option>
+              <option value="Irisbus Axer 12M">Irisbus Axer 12M</option>
+              <option value="Irisbus Crossway LE 12M">Irisbus Crossway LE 12M</option>
+              <option value="Solaris Urbino 9 Electric">Solaris Urbino 9 Electric</option>
+              <option value="Solaris Urbino 18 Hydrogen">Solaris Urbino 18 Hydrogen</option>
+              <option value="Setra S 415 LE">Setra S 415 LE</option>
+              <option value="MAN Lion's City 12M">MAN Lion's City 12M</option>
+            </select>
+            <button type="button" class="btn secondary" style="min-height:44px; width:auto; padding:0 15px;" onclick="applyBusPreset()">Použít preset</button>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-bottom: 12px;">
+          <div class="field">
+            <label for="adminBusEv">Evidenční číslo</label>
+            <input id="adminBusEv" type="text" placeholder="např. 1217">
+          </div>
+          <div class="field">
+            <label for="adminBusDesc">Popis / Typ a provozovna</label>
+            <input id="adminBusDesc" type="text" placeholder="např. 1217 - SOR CN 12 (Bukovec)">
+          </div>
+        </div>
+        <button type="button" class="btn admin-btn" style="margin-bottom: 16px;" onclick="addNewBus()">Přidat autobus do systému</button>
+        
+        <div style="margin-top: 10px;">
+          <label style="font-size:0.85rem; font-weight:700; color:#3c4756; display:block; margin-bottom:8px;">Seznam vozů v systému:</label>
+          <div id="adminFleetList" style="display: grid; gap: 8px; max-height: 250px; overflow-y: auto;">
+            <p style="color:var(--muted);">Načítám vozový park...</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SPRÁVA PROVOZOVEN (V ZAPADÁKOVĚ) -->
+      <fieldset style="opacity: 0.95;">
+        <legend>⚙️ Správa provozoven (Kategorie/Garáže)</legend>
+        <p style="color:var(--muted); font-size:0.83rem; margin-bottom:10px;">Přidej novou provozovnu. Ta se pak okamžitě objeví řidičům v rozbalovacím seznamu při odesílání výkazu.</p>
+        <div style="display:flex; gap:10px; margin-bottom:12px;">
+          <input id="adminNewSiteName" type="text" placeholder="Název nové provozovny (např. Děčín)">
+          <button type="button" class="btn admin-btn" style="width:180px; min-height:44px;" onclick="addNewSite()">Přidat provozovnu</button>
+        </div>
+        <div style="margin-top: 8px;">
+          <label style="font-size:0.82rem; font-weight:700; color:#3c4756; display:block; margin-bottom:6px;">Aktuální seznam provozoven:</label>
+          <div id="adminSitesList" style="display:flex; gap:8px; flex-wrap:wrap;">
+            <p style="color:var(--muted);">Načítám provozovny...</p>
+          </div>
+        </div>
+      </fieldset>
 
       <fieldset>
         <legend>Žádosti řidičů o přidělenky</legend>
@@ -695,28 +749,9 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
   const db = getDatabase(app);
 
   let currentUser = localStorage.getItem('fmo_user') || null;
-  let globalData = { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {} };
+  let globalData = { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {}, fleet: {}, sites: {} };
   let currentPeriod = 'all';
   let activeChatTarget = null;
-
-  const fleetBuses = [
-    { ev: "1201", desc: "1201 - SOR CN 12 (Bukovec)" },
-    { ev: "1202", desc: "1202 - SOR CN 8.5 (Bukovec)" },
-    { ev: "1203", desc: "1203 - IVECO URBANWAY 12M (Bukovec)" },
-    { ev: "1204", desc: "1204 - IVECO URBANWAY 12M (Bukovec)" },
-    { ev: "1205", desc: "1205 - Irisbus Axer 12M (Zájezdový)" },
-    { ev: "1206", desc: "1206 - Irisbus Axer 12M (Nový Bor)" },
-    { ev: "1207", desc: "1207 - IVECO URBANWAY 12M (Česká Lípa)" },
-    { ev: "1208", desc: "1208 - SOR CN 12 (Kameniště)" },
-    { ev: "1209", desc: "1209 - SOR CN 12 (Nový Bor)" },
-    { ev: "1210", desc: "1210 - SOR CN 12 (Kameniště)" },
-    { ev: "1211", desc: "1211 - Solaris Urbino 9 Electric (Kameniště)" },
-    { ev: "1212", desc: "1212 - Solaris Urbino 9 Electric (Bukovec)" },
-    { ev: "1213", desc: "1213 - Solaris Urbino 9 Electric (Kameniště)" },
-    { ev: "1214", desc: "1214 - Solaris Urbino 18 Hydrogen (Kameniště)" },
-    { ev: "1215", desc: "1215 - Irisbus Crossway LE 12M (Nový Bor)" },
-    { ev: "1216", desc: "1216 - Irisbus Crossway LE 12M (Nový Bor)" }
-  ];
 
   window.execCmd = function(editorId, command) {
     document.getElementById(editorId).focus();
@@ -728,14 +763,32 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
     const selectReq = document.getElementById('busSelectRequest');
     const selectAdmin = document.getElementById('adminAssignBusSelect');
 
+    const fleetObj = globalData.fleet || {};
+    const keys = Object.keys(fleetObj);
+
     let opts = '<option value="">Vyber vůz...</option>';
-    fleetBuses.forEach(b => {
+    keys.forEach(k => {
+      const b = fleetObj[k];
       opts += `<option value="${b.ev}">${b.desc}</option>`;
     });
 
     if(selectForm) selectForm.innerHTML = opts;
     if(selectReq) selectReq.innerHTML = opts;
     if(selectAdmin) selectAdmin.innerHTML = opts;
+  }
+
+  function populateSiteSelects() {
+    const selectForm = document.getElementById('siteSelect');
+    const sitesObj = globalData.sites || {};
+    const keys = Object.keys(sitesObj);
+
+    let opts = '<option value="">Vyber provozovnu...</option>';
+    keys.forEach(k => {
+      const name = sitesObj[k];
+      opts += `<option value="${name}">${name}</option>`;
+    });
+
+    if(selectForm) selectForm.innerHTML = opts;
   }
 
   function populateDriverSelects() {
@@ -754,11 +807,47 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
     if(selectEowNick) selectEowNick.innerHTML = opts;
   }
 
-  populateBusSelects();
-
   onValue(ref(db), (snapshot) => {
     const val = snapshot.val();
-    globalData = val || { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {} };
+    globalData = val || { shifts: {}, users: {}, employeeOfWeek: {}, disruptions: {}, docs: {}, repaints: {}, requests: {}, chats: {}, fleet: {}, sites: {} };
+    
+    // Výchozí vozy pokud je DB prázdná
+    if (!globalData.fleet || Object.keys(globalData.fleet).length === 0) {
+      const defaultFleet = {
+        "b1201": { ev: "1201", desc: "1201 - SOR CN 12 (Bukovec)" },
+        "b1202": { ev: "1202", desc: "1202 - SOR CN 8.5 (Bukovec)" },
+        "b1203": { ev: "1203", desc: "1203 - IVECO URBANWAY 12M (Bukovec)" },
+        "b1204": { ev: "1204", desc: "1204 - IVECO URBANWAY 12M (Bukovec)" },
+        "b1205": { ev: "1205", desc: "1205 - Irisbus Axer 12M (Zájezdový)" },
+        "b1206": { ev: "1206", desc: "1206 - Irisbus Axer 12M (Nový Bor)" },
+        "b1207": { ev: "1207", desc: "1207 - IVECO URBANWAY 12M (Česká Lípa)" },
+        "b1208": { ev: "1208", desc: "1208 - SOR CN 12 (Kameniště)" },
+        "b1209": { ev: "1209", desc: "1209 - SOR CN 12 (Nový Bor)" },
+        "b1210": { ev: "1210", desc: "1210 - SOR CN 12 (Kameniště)" },
+        "b1211": { ev: "1211", desc: "1211 - Solaris Urbino 9 Electric (Kameniště)" },
+        "b1212": { ev: "1212", desc: "1212 - Solaris Urbino 9 Electric (Bukovec)" },
+        "b1213": { ev: "1213", desc: "1213 - Solaris Urbino 9 Electric (Kameniště)" },
+        "b1214": { ev: "1214", desc: "1214 - Solaris Urbino 18 Hydrogen (Kameniště)" },
+        "b1215": { ev: "1215", desc: "1215 - Irisbus Crossway LE 12M (Nový Bor)" },
+        "b1216": { ev: "1216", desc: "1216 - Irisbus Crossway LE 12M (Nový Bor)" }
+      };
+      set(ref(db, 'fleet'), defaultFleet);
+    }
+
+    // Výchozí provozovny pokud je DB prázdná
+    if (!globalData.sites || Object.keys(globalData.sites).length === 0) {
+      const defaultSites = {
+        "s1": "Bukovec",
+        "s2": "Zájezdová",
+        "s3": "Nový Bor",
+        "s4": "Česká Lípa",
+        "s5": "Kameniště"
+      };
+      set(ref(db, 'sites'), defaultSites);
+    }
+
+    populateBusSelects();
+    populateSiteSelects();
     populateDriverSelects();
     updateUI();
   });
@@ -771,6 +860,8 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
     if(tabId === 'admin') {
       loadAdminRequests();
       loadAdminAssignedBuses();
+      loadAdminFleetList();
+      loadAdminSitesList();
       populateDriverSelects();
     }
   }
@@ -1095,6 +1186,8 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
     }
     if(document.getElementById('tab-admin').classList.contains('active')) {
       loadAdminAssignedBuses();
+      loadAdminFleetList();
+      loadAdminSitesList();
     }
   }
 
@@ -1282,6 +1375,113 @@ table.leaderboard tbody tr:hover { background: #f0f4f9; }
         alert('Položka byla úspěšně smazána.');
       });
     }
+  }
+
+  // APLIKACE PRESETU AUTOBUSU
+  window.applyBusPreset = function() {
+    const presetType = document.getElementById('busPresetSelect').value;
+    if (!presetType) return alert('Vyber nejprve typ autobusu z nabídky presetů.');
+
+    const evInput = document.getElementById('adminBusEv');
+    const descInput = document.getElementById('adminBusDesc');
+
+    let nextEv = "1217";
+    const fleet = globalData.fleet || {};
+    const existingEvs = Object.values(fleet).map(b => parseInt(b.ev)).filter(n => !isNaN(n));
+    if (existingEvs.length > 0) {
+      nextEv = (Math.max(...existingEvs) + 1).toString();
+    }
+
+    evInput.value = nextEv;
+    descInput.value = `${nextEv} - ${presetType} (Bukovec)`;
+  }
+
+  function loadAdminFleetList() {
+    const el = document.getElementById('adminFleetList');
+    const fleet = globalData.fleet || {};
+    const keys = Object.keys(fleet);
+
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádné vozy v systému.</p>';
+      return;
+    }
+
+    el.innerHTML = keys.map(k => {
+      const b = fleet[k];
+      return `
+        <div style="background:#fff; padding:8px 12px; border:1px solid var(--line); border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${b.ev}</b> — ${b.desc}</div>
+          <button type="button" class="btn danger-btn" style="min-height:28px; font-size:0.7rem; width:auto; padding:0 10px;" onclick="removeBusFromFleet('${k}')">🗑️ Smazat</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.addNewBus = function() {
+    const ev = document.getElementById('adminBusEv').value.trim();
+    const desc = document.getElementById('adminBusDesc').value.trim();
+
+    if (!ev || !desc) return alert('Vyplň evidenční číslo i popis.');
+
+    const busKey = 'b' + ev;
+    set(ref(db, 'fleet/' + busKey), { ev, desc }).then(() => {
+      alert('Autobus byl úspěšně přidán do systému!');
+      document.getElementById('adminBusEv').value = '';
+      document.getElementById('adminBusDesc').value = '';
+      loadAdminFleetList();
+    });
+  }
+
+  window.removeBusFromFleet = function(busKey) {
+    if (!currentUser || currentUser.toLowerCase() !== 'fifo1280') return;
+    if (!confirm('Opravdu chceš tento autobus smazat ze systému?')) return;
+
+    remove(ref(db, 'fleet/' + busKey)).then(() => {
+      alert('Autobus byl smazán.');
+      loadAdminFleetList();
+    });
+  }
+
+  // SPRÁVA PROVOZOVEN
+  function loadAdminSitesList() {
+    const el = document.getElementById('adminSitesList');
+    const sites = globalData.sites || {};
+    const keys = Object.keys(sites);
+
+    if (keys.length === 0) {
+      el.innerHTML = '<p style="color:var(--muted);">Žádné provozovny v systému.</p>';
+      return;
+    }
+
+    el.innerHTML = keys.map(k => {
+      const siteName = sites[k];
+      return `
+        <span style="background:#fff; border:1px solid var(--line); border-radius:6px; padding:4px 10px; display:inline-flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:600;">
+          🏢 ${siteName}
+          <button type="button" style="background:none; border:none; color:var(--err); cursor:pointer; font-weight:bold; font-size:0.9rem;" onclick="removeSite('${k}')" title="Smazat provozovnu">✕</button>
+        </span>
+      `;
+    }).join('');
+  }
+
+  window.addNewSite = function() {
+    const name = document.getElementById('adminNewSiteName').value.trim();
+    if (!name) return alert('Zadej název nové provozovny.');
+
+    push(ref(db, 'sites'), name).then(() => {
+      alert(`Provozovna "${name}" byla úspěšně přidána!`);
+      document.getElementById('adminNewSiteName').value = '';
+      loadAdminSitesList();
+    });
+  }
+
+  window.removeSite = function(siteKey) {
+    if (!currentUser || currentUser.toLowerCase() !== 'fifo1280') return;
+    if (!confirm('Opravdu chceš tuto provozovnu odebrat ze systému?')) return;
+
+    remove(ref(db, 'sites/' + siteKey)).then(() => {
+      loadAdminSitesList();
+    });
   }
 
   function loadAdminRequests() {
