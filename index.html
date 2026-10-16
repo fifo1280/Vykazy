@@ -798,6 +798,34 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
   .imgf-stage{max-width:100%}
 }
 .hero::before{opacity:.3;animation:none}
+.search .ic{z-index:2;pointer-events:none}
+.search input{padding-left:42px}
+.more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.more-tile{position:relative;display:grid;place-items:center;align-content:center;gap:8px;min-height:92px;padding:12px 6px;border:0;border-radius:20px;background:var(--card2);color:var(--ink);font:inherit;font-weight:700;font-size:.8rem;cursor:pointer;box-shadow:var(--rim);transition:transform .3s var(--spring),background .2s}
+.more-tile .ic{color:var(--brand)}
+.more-tile:active{transform:scale(.94)}
+.more-tile.on{background:rgba(33,102,200,.88);color:#fff}.more-tile.on .ic{color:#fff}
+.more-tile.admin-t .ic{color:var(--warn)}.more-tile.admin-t.on{background:rgba(250,185,42,.92);color:#2c1d00}.more-tile.admin-t.on .ic{color:#2c1d00}
+.more-tile .badge{position:absolute;top:8px;right:12px}
+.bus-card .chip{margin-top:6px}
+@media(max-width:760px){
+  /* dolní lišta: 5 stejných položek, bez posouvání a oříznutí */
+  .nav .nav-in{width:100%;max-width:460px;overflow:visible;display:flex;justify-content:space-between;gap:0;padding:5px}
+  .nav .tab{flex:1 1 0;min-width:0;padding:7px 2px 6px;overflow:visible}
+  .nav .tab .tl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav .tab .badge{right:calc(50% - 20px)}
+  /* filtry se zalomí do řádků místo ořezu */
+  .seg{flex-wrap:wrap;overflow:visible;border-radius:22px;width:100%}
+  .seg button{flex:1 1 auto;justify-content:center}
+  #fleetSeg,#periodSeg{width:100%}
+  #fleetSeg button,#periodSeg button{flex:1}
+  /* karty vozů */
+  .bus-card{gap:12px;padding:14px 16px}
+  .bus-no{min-width:60px;height:60px;font-size:1.1rem;border-radius:16px}
+  .bus-card h4{font-size:.98rem;line-height:1.3}
+  .vhead p{font-size:.88rem}
+  .more-grid{gap:8px}
+}
 @media(max-width:760px){
   .nav .nav-in{background:rgba(246,249,255,.84);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%)}
   [data-theme=dark] .nav .nav-in{background:rgba(18,28,52,.82)}
