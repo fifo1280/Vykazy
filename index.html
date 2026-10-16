@@ -1060,6 +1060,11 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
 <div class="foot">© FMO BUS · Všechna práva vyhrazena</div>
 
 <!-- ============ MODALY ============ -->
+<div class="modal" id="m-more"><div class="sheet">
+  <div class="sheet-head"><h3>Menu</h3><button type="button" class="icon-btn plain" data-act="close-modal" data-id="m-more" aria-label="Zavřít" id="moreClose"></button></div>
+  <div class="sheet-body"><div class="more-grid" id="moreGrid"></div></div>
+</div></div>
+
 <div class="modal" id="m-profile"><div class="sheet" style="text-align:center"><div class="sheet-body" id="profileModalBody"></div></div></div>
 
 <div class="modal" id="m-detail"><div class="sheet lg">
@@ -1207,6 +1212,7 @@ const ICONS = {
   clip:'<path d="M9 3h6v3H9z"/><path d="M7 5H5a1 1 0 00-1 1v14a1 1 0 001 1h14a1 1 0 001-1V6a1 1 0 00-1-1h-2M8 12h8M8 16h5"/>',
   map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
   building:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/>',
+  grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>',
   star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
 };
 const ic = (n, s = 18) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
@@ -1454,7 +1460,7 @@ function go(id) {
   if (id !== 'auth' && !t) id = 'home';
   if (t?.auth && !state.user) { toast('Pro tuto sekci se nejdřív přihlas.', 'warn'); id = 'auth'; }
   if (t?.admin && !isAdmin()) id = 'home';
-  state.view = id;
+  state.view = id; closeModal('m-more');
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
   const v = $('#view-' + id); v.classList.remove('enter'); void v.offsetWidth; v.classList.add('enter');
   clearTimeout(enterT); enterT = setTimeout(() => v.classList.remove('enter'), 1100);
@@ -1479,9 +1485,16 @@ function renderChrome() {
     ? `<div class="row" style="gap:8px;flex-wrap:nowrap"><button type="button" class="user-chip" data-act="go" data-id="profile">${avImg(state.user, '', u)}<span><b>${esc(state.user)}</b><small>${isAdmin() ? 'Majitel' : 'Řidič FMO BUS'}</small></span></button><button type="button" class="icon-btn" data-act="logout" title="Odhlásit se" aria-label="Odhlásit se">${ic('logout', 17)}</button></div>`
     : `<button type="button" class="btn amber sm" data-act="go" data-id="auth">${ic('login', 16)} Přihlásit se</button>`;
   const pending = Object.keys(D('requests')).length;
-  const nav = $('#navTabs');
-  nav.innerHTML = '<span class="nav-ind"></span>' + TABS.filter(t => (!t.admin || isAdmin()) && (!t.auth || state.user)).map(t =>
-    `<button type="button" class="tab ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 17)}${t.label}${t.admin && pending ? `<span class="badge">${pending}</span>` : ''}</button>`).join('');
+  const nav = $('#navTabs'), avail = TABS.filter(t => (!t.admin || isAdmin()) && (!t.auth || state.user));
+  const badge = t => t.admin && pending ? `<span class="badge">${pending}</span>` : '';
+  const tabBtn = t => `<button type="button" class="tab ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 17)}<span class="tl">${t.label}</span>${badge(t)}</button>`;
+  if (matchMedia('(max-width:760px)').matches) {
+    const prim = ['home', 'form', 'mods', 'fleet', 'stats'].map(id => avail.find(t => t.id === id)).filter(Boolean).slice(0, 4), ids = prim.map(t => t.id);
+    state.moreTabs = avail.filter(t => !ids.includes(t.id));
+    const moreOn = state.moreTabs.some(t => t.id === state.view) || state.view === 'auth';
+    nav.innerHTML = '<span class="nav-ind"></span>' + prim.map(tabBtn).join('') +
+      `<button type="button" class="tab ${moreOn ? 'on' : ''} ${state.view === 'admin' ? 'admin-t' : ''}" data-act="more">${ic('grid', 17)}<span class="tl">Více</span>${isAdmin() && pending ? `<span class="badge">${pending}</span>` : ''}</button>`;
+  } else nav.innerHTML = '<span class="nav-ind"></span>' + avail.map(tabBtn).join('');
   placeIndicator(nav);
 }
 let navPos = null;
@@ -1494,7 +1507,8 @@ function placeIndicator(nav = $('#navTabs')) {
   ind.style.left = x + 'px'; ind.style.width = w + 'px'; navPos = { x, w };
   nav.scrollTo({ left: x - nav.clientWidth / 2 + w / 2, behavior: 'smooth' });
 }
-addEventListener('resize', () => { navPos = null; placeIndicator(); });
+let lastMob = matchMedia('(max-width:760px)').matches;
+addEventListener('resize', () => { navPos = null; const m = matchMedia('(max-width:760px)').matches; if (m !== lastMob) { lastMob = m; renderChrome(); } else placeIndicator(); });
 document.fonts?.ready.then(() => { navPos = null; placeIndicator(); });
 
 function setOptions(sel, html) { if (!sel || sel._h === html) return; const v = sel.value; sel.innerHTML = html; sel._h = html; if ([...sel.options].some(o => o.value === v)) sel.value = v; }
@@ -1779,7 +1793,7 @@ $('#loginForm').addEventListener('submit', async e => {
 /* ================= Admin ================= */
 const ADMIN_SECS = [['overview', 'Přehled', 'home'], ['requests', 'Přidělenky', 'bus'], ['fleet', 'Vozový park', 'layers'], ['sites', 'Provozovny', 'building'], ['drivers', 'Řidiči', 'users'], ['shifts', 'Výkazy', 'clip'], ['content', 'Obsah', 'package'], ['eow', 'Pracovník týdne', 'star']];
 [['admIcReq', 'clip', 'Čekající žádosti'], ['admIcAsg', 'plus', 'Přiřadit vůz ručně'], ['admIcAssigned', 'bus', 'Aktuálně přidělené vozy'], ['admIcFleetAdd', 'bus', 'Přidat / upravit vůz'], ['admIcFleetList', 'layers', 'Vozy v systému'], ['admIcSites', 'building', 'Provozovny (garáže)'], ['admIcDrivers', 'users', 'Registrovaní řidiči'], ['admIcShifts', 'clip', 'Správa výkazů'], ['admIcEow', 'star', 'Pracovník týdne']].forEach(([id, i, t]) => $('#' + id).innerHTML = ic(i) + ' ' + t);
-$('#detailClose').innerHTML = ic('x', 18); $('#cfClose').innerHTML = ic('x', 18);
+$('#detailClose').innerHTML = ic('x', 18); $('#cfClose').innerHTML = ic('x', 18); $('#moreClose').innerHTML = ic('x', 18);
 $('#cfDcTitle').innerHTML = ic('chat', 18) + ' Načíst z Discordu (embed)';
 
 function nextEv() { const n = Object.values(D('fleet')).map(b => parseInt(b.ev)).filter(x => !isNaN(x)); return String(n.length ? Math.max(...n) + 1 : 1201); }
@@ -2031,6 +2045,12 @@ async function patchBuses(nick, fn) {
 /* ================= Akce (event delegation) ================= */
 const act = {
   go: d => go(d.id),
+  more: () => {
+    const pending = Object.keys(D('requests')).length;
+    $('#moreGrid').innerHTML = (state.moreTabs || []).map(t => `<button type="button" class="more-tile ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 26)}<span>${t.label}</span>${t.admin && pending ? `<i class="badge">${pending}</i>` : ''}</button>`).join('')
+      + (state.user ? '' : `<button type="button" class="more-tile" data-act="go" data-id="auth">${ic('login', 26)}<span>Přihlásit</span></button>`);
+    openModal('m-more');
+  },
   theme: () => {
     const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     const apply = () => { document.documentElement.dataset.theme = n; localStorage.setItem('fmo_theme', n); renderChrome(); };
