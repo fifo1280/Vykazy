@@ -655,6 +655,153 @@ input[type=text],input[type=password],input[type=url],input[type=search],input[t
   .item>.btn,.item>.btn:first-of-type{margin-left:0}
   .bus-no{min-width:56px;height:56px}
 }
+/* =====================================================
+   REAL LIQUID GLASS – klidné, čiré sklo bez zářivých efektů
+   ===================================================== */
+/* vypnutí svítivých efektů */
+#cursorGlow,.rip,.hero::after,.btn::after{display:none !important}
+.mcard::before,.pcard::before,.stat::before,.bus-card::before{display:none !important}
+.card::after,.mcard::after{display:none}
+.jelly{animation:none !important}
+.stat .si{animation:none}
+.hero h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#fff;animation:none}
+body::before{translate:calc(var(--px,0)*.5px) calc(var(--py,0)*.5px)}
+body::after{translate:calc(var(--px,0)*-.7px) calc(var(--py,0)*-.7px)}
+body::before{opacity:.38}body::after{opacity:.26}
+@media(hover:hover) and (pointer:fine){
+  .mcard:hover,.pcard:hover,.stat:hover,.bus-card:hover{transform:translateY(-3px);transition:transform .35s var(--smooth),box-shadow .35s var(--smooth)}
+}
+
+/* sklo: jemná hrana (světlo shora/zleva, stín zespodu/zprava), minimum lesku */
+:root{
+  --rim:inset 1px 1px 0 rgba(255,255,255,.75),inset -1px -1px 0 rgba(255,255,255,.28),inset 0 0 0 .5px rgba(255,255,255,.4);
+  --lift:0 1px 2px rgba(20,40,90,.06),0 8px 24px rgba(20,40,90,.08);
+}
+[data-theme=dark]{
+  --rim:inset 1px 1px 0 rgba(255,255,255,.22),inset -1px -1px 0 rgba(255,255,255,.06),inset 0 0 0 .5px rgba(255,255,255,.1);
+  --lift:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.32);
+}
+.card,.mcard,.item,.reqrow,.sheet,.anav,.stat{background:var(--card);box-shadow:var(--rim),var(--lift);border:0}
+.top{background:linear-gradient(120deg,rgba(12,36,72,.8),rgba(36,96,176,.7));box-shadow:var(--rim),0 12px 32px rgba(10,32,64,.28);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%)}
+.nav .nav-in{background:var(--card);border:0;box-shadow:var(--rim),0 8px 24px rgba(15,40,90,.14)}
+.hero{background:linear-gradient(125deg,rgba(12,37,71,.9),rgba(29,79,148,.84) 62%,rgba(58,127,208,.78));box-shadow:var(--rim),0 20px 44px rgba(10,32,70,.3)}
+
+/* tlačítka: čiré sklo, tónované jen barvou materiálu */
+.btn{text-shadow:none;border:0;overflow:hidden;
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:var(--rim),0 2px 8px var(--tint,rgba(20,40,90,.10))}
+.btn::before{display:none}
+.btn:hover{filter:none;box-shadow:var(--rim),0 4px 14px var(--tint,rgba(20,40,90,.16))}
+.btn:active{transform:scale(.965);filter:brightness(.96);transition-duration:.15s}
+.btn.ghost{background:rgba(255,255,255,.42);color:var(--ink);--tint:rgba(20,40,90,.10)}
+.btn.primary{background:rgba(33,102,200,.86);color:#fff;--tint:rgba(33,102,200,.30)}
+.btn.amber{background:rgba(250,185,42,.9);color:#2c1d00;--tint:rgba(220,150,0,.30)}
+.btn.danger{background:rgba(226,66,56,.86);color:#fff;--tint:rgba(208,58,49,.28)}
+.btn.glass{background:rgba(255,255,255,.16);color:#fff;--tint:rgba(0,0,0,.18)}
+[data-theme=dark] .btn.ghost{background:rgba(255,255,255,.10);color:var(--ink)}
+.icon-btn{border:0;background:rgba(255,255,255,.14);box-shadow:var(--rim),0 2px 8px rgba(0,0,0,.14)}
+.icon-btn.plain{background:rgba(255,255,255,.45);box-shadow:var(--rim),0 2px 8px rgba(20,40,90,.10)}
+[data-theme=dark] .icon-btn.plain{background:rgba(255,255,255,.10)}
+.icon-btn:hover{transform:scale(1.06)}
+.icon-btn::before,.tab::before,.seg button::before,.qa button::before,.anav button::before,.user-chip::before,.rte-bar button::before{display:none}
+.user-chip{border:0;box-shadow:var(--rim)}
+.tab:hover:not(.on){background:rgba(255,255,255,.14);box-shadow:none}
+.seg{border:0;background:rgba(120,140,190,.16);box-shadow:inset 0 1px 3px rgba(20,40,90,.10)}
+[data-theme=dark] .seg{background:rgba(255,255,255,.07)}
+.seg button.on{background:rgba(255,255,255,.88);color:var(--brand);box-shadow:0 1px 4px rgba(20,40,90,.16)}
+[data-theme=dark] .seg button.on{background:rgba(255,255,255,.2);color:#fff}
+.nav-ind{background:rgba(33,102,200,.88);box-shadow:0 2px 10px rgba(33,102,200,.30)}
+.nav-ind.admin{background:rgba(250,185,42,.92);box-shadow:0 2px 10px rgba(220,150,0,.30)}
+.qa button{border:0;box-shadow:var(--rim)}
+.anav button.on{background:rgba(250,185,42,.9);box-shadow:0 2px 10px rgba(220,150,0,.28)}
+.anav button:hover:not(.on){background:rgba(255,255,255,.35)}
+input[type=text],input[type=password],input[type=url],input[type=search],input[type=number],select,textarea,.rte{border:0;background:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(20,40,90,.10),inset 0 1px 2px rgba(20,40,90,.06)}
+[data-theme=dark] input[type=text],[data-theme=dark] input[type=password],[data-theme=dark] input[type=url],[data-theme=dark] input[type=search],[data-theme=dark] input[type=number],[data-theme=dark] select,[data-theme=dark] textarea,[data-theme=dark] .rte{background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+input:focus,select:focus,textarea:focus,.rte:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--brand2) 35%,transparent),inset 0 0 0 1px var(--brand2)}
+.toast{background:rgba(24,34,58,.82);box-shadow:var(--rim),0 10px 30px rgba(0,0,0,.3)}
+
+/* =====================================================
+   MOBIL / iPHONE
+   ===================================================== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;min-height:100vh;min-height:100dvh;overflow-x:hidden}
+button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
+.btn,.tab,.seg button,.icon-btn,.anav button,.qa button,.kinds button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.wrap{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+@media(hover:none){
+  .btn:hover,.icon-btn:hover,.item:hover,.mcard:hover,.pcard:hover,.stat:hover,.bus-card:hover,.qa button:hover,.chip:hover,.kinds button:hover,.user-chip:hover,.tab:hover:not(.on){transform:none}
+  .mcard:hover .mimg img{transform:none}
+  .btn:active,.tab:active,.seg button:active,.qa button:active,.mcard:active,.pcard:active{transform:scale(.97)}
+}
+@media(pointer:coarse){
+  input[type=text],input[type=password],input[type=url],input[type=search],input[type=number],select,textarea,.rte{font-size:16px;min-height:48px}
+  textarea,.rte{min-height:96px}
+  .btn{min-height:48px}.btn.sm{min-height:42px;padding:0 16px}
+  .icon-btn{width:44px;height:44px}
+  .seg button{min-height:40px;padding:8px 14px}
+  .checks input{width:22px;height:22px}.checks label{padding:6px 0}
+  .rte-bar button{min-height:38px;min-width:40px}
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes sheetDown{to{transform:translateY(100%)}}
+@media(max-width:760px){
+  body::before,body::after{filter:blur(44px)}
+  :root{--glass-blur:blur(12px) saturate(140%)}
+  .top{margin:calc(env(safe-area-inset-top,0px) + 8px) 10px 0;border-radius:22px}
+  .top-in{padding-block:12px;flex-wrap:nowrap;gap:10px}
+  .logo{font-size:1.6rem}.logo .tag{font-size:.9rem}
+  .top-right{gap:8px}
+  .user-chip{padding:4px}.user-chip span{display:none}
+  .page{padding-top:18px;padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+  .foot{padding-bottom:12px}
+  h2{font-size:1.3rem}
+  .card{padding:16px}
+  .vhead{margin-bottom:16px}
+  .vhead>.btn,.vhead>div:last-child:not(:first-child) .btn,#modsAdminBtns .btn{flex:1}
+  #modsAdminBtns,#disAdminBtn,#docAdminBtn{width:100%}
+  #disAdminBtn .btn,#docAdminBtn .btn{width:100%}
+  .search{max-width:none;min-width:0;width:100%;flex:1 1 100%}
+  .seg{max-width:100%;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .seg::-webkit-scrollbar{display:none}.seg button{flex:none}
+  .hero{padding:24px 20px;border-radius:26px}.hero h1{font-size:1.7rem}
+  .hero-cta .btn{flex:1 1 100%}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .stat{padding:14px;gap:10px}.stat .si{width:40px;height:40px}.stat b{font-size:1.2rem}
+  .eow{flex-wrap:wrap}
+  .row.nowrap{flex-wrap:wrap}.row.nowrap input{flex:1 1 100%}.row.nowrap .btn{flex:1}
+  .frame{height:70vh;height:70dvh}
+  .chat-box{height:48vh;height:48dvh}
+  .podium{gap:8px}.pod .av{width:52px;height:52px}.pod.p1 .av{width:64px;height:64px}
+  table.lb th,table.lb td{padding:10px 8px}
+  .auth-side h1{font-size:1.7rem}
+  .bus-card{padding:14px}
+  .item .btn{min-height:42px}
+  /* dolní navigační lišta */
+  .nav{position:fixed;left:0;right:0;top:auto;bottom:0;margin:0;padding:0 10px calc(10px + env(safe-area-inset-bottom));z-index:90}
+  .nav .nav-in{max-width:100%;width:fit-content;padding:5px;gap:2px;-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);box-shadow:var(--rim),0 10px 30px rgba(15,40,90,.22)}
+  .tab{flex-direction:column;gap:3px;padding:7px 10px 6px;min-width:64px;font-size:.64rem;font-weight:700;justify-content:center}
+  .tab .ic{width:22px;height:22px}
+  .tab .badge{position:absolute;top:2px;right:10px;min-width:16px;height:16px;font-size:.6rem}
+  .nav-ind{top:5px;bottom:5px}
+  #toasts{bottom:calc(100px + env(safe-area-inset-bottom))}
+  /* okna jako spodní panel */
+  .modal{align-items:flex-end;padding:0}
+  .sheet,.sheet.lg{max-width:100%;max-height:92vh;max-height:92dvh;border-radius:26px 26px 0 0;animation:sheetUp .45s var(--smooth) both}
+  .modal.closing .sheet{animation:sheetDown .25s ease forwards}
+  .sheet-head{padding:16px 18px}.sheet-body{padding:18px 16px}
+  .sheet-foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.sheet-foot .btn{flex:1}
+  #m-dlg{align-items:center;padding:16px}
+  #m-dlg .sheet{border-radius:26px;animation:sheetIn .4s var(--spring) both}
+  .detail-img{aspect-ratio:16/10}
+  .kinds button{padding:12px}
+  .qa{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .imgf-stage{max-width:100%}
+}
+.hero::before{opacity:.3;animation:none}
+@media(max-width:760px){
+  .nav .nav-in{background:rgba(246,249,255,.84);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%)}
+  [data-theme=dark] .nav .nav-in{background:rgba(18,28,52,.82)}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -931,13 +1078,12 @@ input[type=text],input[type=password],input[type=url],input[type=search],input[t
       </div></div>
     <div class="dcbox" id="cfDiscordWrap">
       <div class="dc-title" id="cfDcTitle"></div>
-      <div class="row nowrap"><input id="cfDcUrl" type="url" placeholder="Vlož odkaz na zprávu z Discordu (pravý klik na zprávu → Kopírovat odkaz na zprávu)" autocomplete="off"><button type="button" class="btn primary" data-act="dc-load">Načíst</button></div>
+      <div class="row nowrap"><input id="cfDcUrl" type="url" placeholder="Odkaz na zprávu (volitelné)" autocomplete="off"><button type="button" class="btn primary" data-act="dc-load">Načíst</button></div>
       <div class="status" id="cfDcStatus"></div>
-      <details id="cfDcManual"><summary>Vložit text zprávy ručně</summary>
-        <input id="cfDcAuthor" type="text" placeholder="Autor zprávy (jméno na Discordu)" maxlength="60">
-        <textarea id="cfDcText" placeholder="Zkopíruj sem text zprávy z Discordu…"></textarea>
-        <input id="cfDcImg" type="url" placeholder="Odkaz na obrázek ze zprávy (volitelné)">
-        <button type="button" class="btn ghost sm" data-act="dc-manual">Použít tuto zprávu</button>
+      <details id="cfDcManual"><summary>Vložit zprávu z Discordu</summary>
+        <textarea id="cfDcText" placeholder="V Discordu označ text zprávy, zkopíruj (Ctrl+C) a vlož sem (Ctrl+V). Embed se vytvoří sám. Obrázek můžeš vložit také (Ctrl+V) nebo přetáhnout do pole Náhledový obrázek."></textarea>
+        <div class="grid2"><input id="cfDcAuthor" type="text" placeholder="Autor (doplní se sám, když ho najde)" maxlength="60"><input id="cfDcImg" type="url" placeholder="Odkaz na obrázek (volitelné)"></div>
+        <button type="button" class="btn ghost sm" data-act="dc-manual">Vytvořit embed</button>
       </details>
       <div id="cfDcPreview"></div>
     </div>
@@ -1229,7 +1375,7 @@ function createImageField(host, { shape = 'circle' } = {}) {
   drop.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
   host.addEventListener('paste', e => { const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type)); if (f) { e.preventDefault(); loadFile(f); } });
   async function loadUrl(u) {
-    if (!/^https?:\/\//i.test(u || '')) return;
+    if (!/^(https?:|blob:)/i.test(u || '')) return;
     try {
       const r = await fetch(u, { mode: 'cors' }); if (!r.ok) throw 0;
       const b = await r.blob(); if (!/^image\//.test(b.type)) throw 0;
@@ -1775,7 +1921,7 @@ async function dcLoad() {
   if (!DISCORD_API) {
     state.edit.dc = { url: link.web, author: '', avatar: '', content: '', ts: 0, files: [] }; renderDcPreview();
     $('#cfDcManual').open = true; $('#cfDcText').focus();
-    return setStatus('cfDcStatus', 'Odkaz je uložen. Aby se ukázal i text zprávy, vlož ho níže (automatické načítání zapneš přes DISCORD_API).', 'ok');
+    return setStatus('cfDcStatus', 'Odkaz je uložen. Teď vlož text zprávy z Discordu (Ctrl+V) do pole níže.', 'ok');
   }
   setStatus('cfDcStatus', 'Načítám zprávu…', '');
   try {
@@ -1784,11 +1930,20 @@ async function dcLoad() {
   } catch (e) { setStatus('cfDcStatus', 'Načtení se nepovedlo: ' + e.message, 'err'); }
 }
 function dcManual() {
-  const text = $('#cfDcText').value.trim(), link = parseDiscordLink($('#cfDcUrl').value), img = $('#cfDcImg').value.trim();
-  if (!text && !link) return setStatus('cfDcStatus', 'Vlož text zprávy nebo odkaz na ni.', 'err');
-  const filled = discordFill({ url: link?.web || '', author: $('#cfDcAuthor').value.trim(), avatar: '', content: text, ts: Date.now(), files: [] }, img);
+  let text = $('#cfDcText').value.trim(), author = $('#cfDcAuthor').value.trim(), ts = Date.now();
+  const link = parseDiscordLink($('#cfDcUrl').value), img = $('#cfDcImg').value.trim();
+  if (!text && !link) return setStatus('cfDcStatus', 'Vlož text zprávy z Discordu (Ctrl+V).', 'err');
+  // Discord při kopírování přidává řádek "Autor — dnes v 10:21": rozpoznáme ho a odstraníme z textu
+  const lines = text.split('\n'), hdr = lines[0].match(/^(.{1,40}?)\s+[—–-]\s+(?:dnes|včera|today|yesterday|\d{1,2}[./]\s?\d{1,2}[./]\s?\d{2,4})/i);
+  if (hdr && lines.length > 1) { if (!author) author = hdr[1].trim(); text = lines.slice(1).join('\n').trim(); $('#cfDcText').value = text; $('#cfDcAuthor').value = author; }
+  const filled = discordFill({ url: link?.web || '', author, avatar: '', content: text, ts, files: [] }, img);
   setStatus('cfDcStatus', 'Embed vytvořen' + (filled.length ? ' · vyplněno: ' + filled.join(', ') : '') + '.', 'ok');
 }
+$('#cfDcText').addEventListener('paste', e => {
+  const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type));
+  if (f) { e.preventDefault(); $('#cfImage').loadUrl(URL.createObjectURL(f)); toast('Obrázek vložen do náhledu'); return; }
+  setTimeout(dcManual, 30);
+});
 function renderReqList(selected) {
   const sel = selected || new Set($$('#cfReqList input:checked').map(i => i.value));
   const all = { ...D('mods') }; (state.edit?.extras || []).forEach(x => { if (!all[x.key]) all[x.key] = x; });
@@ -1832,7 +1987,7 @@ function openContentEditor(type, key) {
   $('#cfUrl').value = it?.fileUrl || ''; $('#cfBody').innerHTML = sanitizeHtml(hasTags(it?.[BODY_FIELD[type]]) ? it[BODY_FIELD[type]] : esc(it?.[BODY_FIELD[type]] || '').replace(/\n/g, '<br>'));
   imgContent.setValue(it?.image || '');
   ['cfDcUrl', 'cfDcAuthor', 'cfDcText', 'cfDcImg', 'cfQDc', 'cfQTitle', 'cfQUrl'].forEach(i => $('#' + i).value = ''); $('#cfDcUrl').value = it?.discord?.url || '';
-  $('#cfDcManual').open = false; $('#cfQuick').open = false; setStatus('cfDcStatus', '', '');
+  $('#cfDcManual').open = !DISCORD_API; $('#cfQuick').open = false; setStatus('cfDcStatus', '', '');
   renderDcPreview();
   renderReqList(new Set(asArr(it?.requiredMods)));
   applyKind();
