@@ -277,7 +277,7 @@ table.lb tr:last-child td{border-bottom:0}
 
 /* ---------- Admin ---------- */
 .admin{display:grid;grid-template-columns:230px minmax(0,1fr);gap:20px;align-items:start}
-.anav{position:sticky;top:70px;display:grid;gap:4px;padding:10px}
+.anav{position:sticky;top:92px;display:grid;gap:4px;padding:10px}
 .anav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:11px 13px;border-radius:11px;font-weight:700;font-size:.86rem;color:var(--muted);cursor:pointer;text-align:left;transition:.2s}
 .anav button:hover{background:var(--card2);color:var(--ink)}
 .anav button.on{background:linear-gradient(135deg,var(--amber2),var(--amber));color:#2c1d00}
@@ -314,6 +314,249 @@ table.lb tr:last-child td{border-bottom:0}
 .sk{border-radius:var(--r);height:150px;background:linear-gradient(90deg,var(--card2) 25%,var(--line) 50%,var(--card2) 75%);background-size:200% 100%;animation:shine 1.3s linear infinite}
 @keyframes shine{to{background-position:-200% 0}}
 .foot{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 0 30px}
+/* =====================================================
+   LIQUID GLASS
+   ===================================================== */
+:root{
+  --bg:#dfe9fb; --card:rgba(255,255,255,.52); --card2:rgba(255,255,255,.40); --line:rgba(70,95,150,.20);
+  --glass-hi:rgba(255,255,255,.85); --glass-edge:rgba(255,255,255,.55);
+  --glass-blur:blur(26px) saturate(185%);
+  --spec:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.38);
+  --shadow:0 2px 6px rgba(20,45,100,.06),0 14px 40px rgba(20,45,100,.13);
+  --r:24px;
+}
+[data-theme=dark]{
+  --bg:#070d1c; --card:rgba(34,48,84,.46); --card2:rgba(60,80,130,.28); --line:rgba(150,175,235,.20);
+  --glass-hi:rgba(255,255,255,.32); --glass-edge:rgba(255,255,255,.16);
+  --spec:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.05),inset 0 0 0 1px rgba(255,255,255,.10);
+  --shadow:0 2px 6px rgba(0,0,0,.3),0 16px 44px rgba(0,0,0,.45);
+}
+body{background:var(--bg)}
+body::before,body::after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(70px);pointer-events:none;will-change:transform}
+body::before{width:60vmax;height:60vmax;left:-18vmax;top:-14vmax;background:radial-gradient(circle at 35% 35%,#5aa2ff,rgba(90,162,255,0) 68%);opacity:.75;animation:blob1 24s ease-in-out infinite alternate}
+body::after{width:55vmax;height:55vmax;right:-16vmax;bottom:-18vmax;background:radial-gradient(circle at 60% 60%,#ffb83d,rgba(255,184,61,0) 66%);opacity:.55;animation:blob2 28s ease-in-out infinite alternate}
+@keyframes blob1{to{transform:translate(14vmax,10vmax) scale(1.15)}}
+@keyframes blob2{to{transform:translate(-12vmax,-8vmax) scale(1.1)}}
+[data-theme=dark] body::before{opacity:.5}[data-theme=dark] body::after{opacity:.28}
+.page{position:relative}
+
+/* skleněné plochy */
+.card,.mcard,.item,.stat,.anav,.reqrow,.chat-box,.empty,.checks,.tut,.sheet,.dialog,.user-chip,.seg,.rte-bar{
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.card,.mcard,.item,.reqrow,.sheet,.anav{
+  background:linear-gradient(145deg,var(--glass-edge),transparent 42%),var(--card);
+  border:1px solid var(--glass-edge);box-shadow:var(--spec),var(--shadow);
+}
+.card{position:relative}
+.card::after,.mcard::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(120% 70% at 12% -10%,rgba(255,255,255,.35),transparent 55%);opacity:.7;mix-blend-mode:soft-light}
+.mcard{position:relative}
+.card:hover{border-color:rgba(255,255,255,.8)}
+.card h3 .ic{color:var(--brand)}
+.mcard:hover,.pcard:hover,.stat:hover{box-shadow:var(--spec),0 22px 54px rgba(20,45,100,.24)}
+.mcard{border-radius:26px}.mimg{border-radius:20px;margin:8px 8px 0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.item{border-radius:18px}
+.stat .si{border-radius:50%;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 8px 18px rgba(31,90,166,.35)}
+
+/* header – plovoucí sklo */
+.top{margin:12px 12px 0;border-radius:30px;box-shadow:var(--spec),0 18px 44px rgba(10,32,64,.35);
+  background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 45%),linear-gradient(120deg,rgba(10,32,64,.82),rgba(35,95,175,.72))}
+.top::before{border-radius:inherit}
+.user-chip{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.icon-btn{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.icon-btn.plain{background:var(--card2);border-color:var(--glass-edge);color:var(--ink)}
+
+/* navigace – plovoucí kapsle */
+.nav{background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;top:10px;margin-top:12px;pointer-events:none}
+.nav .nav-in{pointer-events:auto;width:fit-content;max-width:calc(100% - 24px);margin:0 auto;padding:6px;border-radius:999px;
+  background:linear-gradient(180deg,var(--glass-edge),transparent 60%),var(--card);border:1px solid var(--glass-edge);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--spec),0 12px 34px rgba(15,40,90,.22)}
+.tab{padding:9px 16px}
+.tab.on{background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 55%),linear-gradient(135deg,var(--brand2),var(--brand));box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 6px 16px rgba(31,90,166,.4)}
+.tab.admin-t.on{background:linear-gradient(180deg,rgba(255,255,255,.5),transparent 55%),linear-gradient(135deg,#ffc94a,#e29b00)}
+
+/* tlačítka – kapsle se skleněným leskem */
+.btn{border-radius:999px;position:relative;overflow:hidden}
+.btn::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 52%);pointer-events:none}
+.btn.primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -1px 0 rgba(0,0,0,.12),0 8px 20px rgba(31,90,166,.38)}
+.btn.amber{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(0,0,0,.1),0 8px 20px rgba(221,149,0,.38)}
+.btn.ghost{background:var(--card2);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border-color:var(--glass-edge);box-shadow:var(--spec)}
+.btn.danger{box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 18px rgba(208,58,49,.35)}
+.btn.sm{border-radius:999px}
+.seg{border-radius:999px;background:var(--card2);border-color:var(--glass-edge);box-shadow:inset 0 1px 3px rgba(20,45,100,.12)}
+.seg button{border-radius:999px}
+.seg button.on{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.7));color:var(--brand);box-shadow:0 2px 10px rgba(15,35,70,.2),inset 0 1px 0 #fff}
+[data-theme=dark] .seg button.on{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.12));color:#fff}
+
+/* formuláře */
+input[type=text],input[type=password],input[type=url],input[type=search],input[type=number],select,textarea,.rte{
+  background:var(--card2);border:1px solid var(--glass-edge);border-radius:16px;box-shadow:inset 0 2px 5px rgba(20,45,100,.10),inset 0 1px 0 rgba(255,255,255,.3);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+input:focus,select:focus,textarea:focus,.rte:focus{background:rgba(255,255,255,.75);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand2) 28%,transparent),inset 0 1px 3px rgba(20,45,100,.1)}
+[data-theme=dark] input:focus,[data-theme=dark] select:focus,[data-theme=dark] textarea:focus,[data-theme=dark] .rte:focus{background:rgba(40,58,100,.7)}
+select option,select optgroup{background:#fff;color:#14213a}
+[data-theme=dark] select option,[data-theme=dark] select optgroup{background:#16233f;color:#e8eefa}
+.rte-bar{border-radius:16px 16px 0 0;background:var(--card2);border:1px solid var(--glass-edge);border-bottom:0}
+.rte-bar button{background:var(--card);border-radius:10px}
+.rte{border-radius:0 0 16px 16px}
+.imgf-drop{border-radius:22px;background:var(--card2);border-color:rgba(255,255,255,.7)}
+.preview{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:11px 14px;border-radius:16px;background:var(--card2);border:1px dashed var(--line);font-size:.88rem}
+.preview .ic{color:var(--brand)}
+
+/* hero */
+.hero{border-radius:34px;box-shadow:var(--spec),0 28px 60px rgba(10,32,70,.4);
+  background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 40%),linear-gradient(125deg,rgba(12,37,71,.92),rgba(29,79,148,.85) 60%,rgba(58,127,208,.8))}
+.eow{background:linear-gradient(145deg,rgba(255,208,94,.5),rgba(255,255,255,.2)),var(--card)}
+
+/* podium, tabulky */
+table.lb th,table.lb td{border-color:var(--line)}
+.pbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+
+/* modály */
+.modal{background:rgba(8,18,40,.38);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
+.sheet{border-radius:32px;background:linear-gradient(145deg,rgba(255,255,255,.7),rgba(255,255,255,.32) 45%),var(--card);box-shadow:var(--spec),0 40px 90px rgba(5,15,40,.5)}
+[data-theme=dark] .sheet{background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.03) 45%),rgba(20,30,58,.72)}
+.sheet-head,.sheet-foot{background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+[data-theme=dark] .sheet-head,[data-theme=dark] .sheet-foot{background:rgba(20,30,58,.55)}
+.sheet-head{border-bottom:1px solid var(--line)}.sheet-foot{border-top:1px solid var(--line)}
+.detail-img{border-radius:22px}
+.toast{background:rgba(15,36,71,.78);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),var(--shadow-lg)}
+.chip{background:var(--card2);border-color:var(--glass-edge)}
+.chip.blue{background:linear-gradient(180deg,rgba(255,255,255,.3),transparent),var(--brand)}
+.msg.theirs{background:var(--card);border-color:var(--glass-edge)}
+.sitechip{background:var(--card2);border-color:var(--glass-edge)}
+.qa button{border-radius:22px;background:var(--card2);border-color:var(--glass-edge)}
+.anav button{border-radius:999px}
+.anav button.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 6px 16px rgba(213,141,0,.35)}
+.foot{position:relative}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root{--card:rgba(255,255,255,.92);--card2:#eef2f8}[data-theme=dark]{--card:#131f37;--card2:#192945}
+}
+@media(max-width:700px){.top{margin:8px 8px 0;border-radius:24px}.nav .nav-in{max-width:calc(100% - 16px)}.sheet{border-radius:26px}}
+/* =====================================================
+   SMOOTH MOTION
+   ===================================================== */
+:root{--spring:cubic-bezier(.34,1.56,.64,1);--smooth:cubic-bezier(.22,1,.36,1)}
+@keyframes riseIn{from{opacity:0;transform:translateY(22px) scale(.985);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes itemIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes sheetIn{from{opacity:0;transform:translateY(34px) scale(.93);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes sheetOut{to{opacity:0;transform:translateY(20px) scale(.96)}}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes toastIn{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes ripple{to{transform:scale(3.2);opacity:0}}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.view.enter .rise{animation:riseIn .7s var(--smooth) both;animation-delay:calc(var(--i,0)*60ms)}
+.view.enter .item,.view.enter .reqrow{animation:itemIn .5s var(--smooth) both}
+.asec.on{animation:riseIn .5s var(--smooth) both}
+.sheet{animation:sheetIn .5s var(--spring) both}
+.modal.open{animation:fade .25s ease both}
+.modal.closing{animation:fadeOut .2s ease forwards;pointer-events:none}
+.modal.closing .sheet{animation:sheetOut .2s ease forwards}
+.toast{animation:toastIn .5s var(--spring) both}
+.msg{animation:toastIn .4s var(--spring) both}
+
+/* sdílené plynulé přechody */
+.btn,.tab,.chip,.seg button,.icon-btn,.user-chip,.item,.mcard,.pcard,.stat,.bus-card,.qa button,.anav button,.card{
+  transition:transform .45s var(--spring),box-shadow .35s var(--smooth),background-color .3s,border-color .3s,color .25s,filter .3s}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn:active{transform:scale(.95);transition-duration:.12s}
+.icon-btn:hover{transform:rotate(14deg) scale(1.1)}
+.icon-btn:active{transform:scale(.9)}
+.user-chip:hover{transform:translateY(-2px)}
+.tab:active,.seg button:active,.anav button:active{transform:scale(.94)}
+.item:hover{transform:translateX(5px)}
+.qa button:hover{transform:translateY(-5px) scale(1.03)}
+.chip:hover{transform:translateY(-2px)}
+.stat .si{animation:bob 4.5s ease-in-out infinite}
+.stat:nth-child(2) .si{animation-delay:-1s}.stat:nth-child(3) .si{animation-delay:-2s}.stat:nth-child(4) .si{animation-delay:-3s}
+.hero h1{background:linear-gradient(90deg,#fff,#ffe29a,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmerText 7s ease-in-out infinite}
+@keyframes shimmerText{50%{background-position:100% 0}}
+.hero::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(420px circle at var(--mx,70%) var(--my,0%),rgba(255,255,255,.22),transparent 60%);opacity:var(--hov,0);transition:opacity .4s}
+.hero:hover{--hov:1}
+
+/* lesk přejíždějící přes tlačítko */
+.btn.amber::after,.btn.primary::after{content:"";position:absolute;top:0;bottom:0;width:45%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);pointer-events:none}
+.btn.amber:hover::after,.btn.primary:hover::after{left:130%;transition:left .8s var(--smooth)}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);width:20px;height:20px;margin:-10px 0 0 -10px;pointer-events:none;animation:ripple .65s ease-out forwards}
+
+/* posuvný indikátor v navigaci */
+.nav-in{position:relative}
+.nav-ind{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:999px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.4),transparent 55%),linear-gradient(135deg,var(--brand2),var(--brand));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 6px 18px rgba(31,90,166,.42);
+  transition:left .55s var(--spring),width .55s var(--spring),background .4s}
+.nav-ind.admin{background:linear-gradient(180deg,rgba(255,255,255,.5),transparent 55%),linear-gradient(135deg,#ffc94a,#e29b00);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 6px 18px rgba(213,141,0,.45)}
+.tab{z-index:1}
+.tab.on,.tab.admin-t.on{background:transparent;box-shadow:none}
+.tab:hover:not(.on){transform:translateY(-2px)}
+
+/* 3D náklon karet + odlesk podle kurzoru */
+@media(hover:hover) and (pointer:fine){
+  .mcard:hover,.pcard:hover,.stat:hover,.bus-card:hover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px) scale(1.012);transition:transform .18s ease-out,box-shadow .35s var(--smooth)}
+  .mcard::before,.pcard::before,.stat::before,.bus-card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+    background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.38),transparent 62%);opacity:0;transition:opacity .3s}
+  .mcard:hover::before,.pcard:hover::before,.stat:hover::before,.bus-card:hover::before{opacity:1}
+  .pcard,.stat,.bus-card{position:relative}
+}
+.mcard .mimg img{transition:transform .9s var(--smooth)}
+
+/* plynulý přechod motivu (View Transitions) */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.55s;animation-timing-function:var(--smooth)}
+
+/* pozadí reaguje na myš */
+body::before{translate:calc(var(--px,0)*1px) calc(var(--py,0)*1px)}
+body::after{translate:calc(var(--px,0)*-1.4px) calc(var(--py,0)*-1.4px)}
+/* =====================================================
+   LIQUID GLASS – TLAČÍTKA
+   ===================================================== */
+@keyframes jelly{0%{transform:scale(1)}22%{transform:scale(1.13,.84)}45%{transform:scale(.92,1.1)}68%{transform:scale(1.04,.97)}100%{transform:scale(1)}}
+.jelly{animation:jelly .65s var(--smooth) !important}
+.btn,.icon-btn,.tab,.seg button,.qa button,.anav button,.user-chip,.rte-bar button{position:relative;isolation:isolate}
+.btn::before,.icon-btn::before,.tab::before,.seg button::before,.qa button::before,.anav button::before,.user-chip::before,.rte-bar button::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;opacity:0;transition:opacity .35s var(--smooth);
+  background:radial-gradient(130px circle at var(--bx,50%) var(--by,0%),rgba(255,255,255,.85),rgba(255,255,255,0) 62%)}
+.btn::before{opacity:.55;background:radial-gradient(150px circle at var(--bx,50%) var(--by,-30%),rgba(255,255,255,.85),rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0) 52%)}
+.btn:hover::before{opacity:1}
+.icon-btn:hover::before,.tab:hover::before,.seg button:hover::before,.qa button:hover::before,.anav button:hover::before,.user-chip:hover::before,.rte-bar button:hover::before{opacity:1}
+.btn::after{content:none !important}
+
+.btn{border:1px solid rgba(255,255,255,.5);overflow:hidden;
+  -webkit-backdrop-filter:blur(16px) saturate(190%);backdrop-filter:blur(16px) saturate(190%);
+  text-shadow:0 1px 1px rgba(0,0,0,.18);
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -3px 8px rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.14),0 10px 26px var(--tint,rgba(20,45,100,.2)),0 2px 5px rgba(0,0,0,.1)}
+.btn:hover{filter:saturate(1.15) brightness(1.06);box-shadow:inset 0 1.5px 1px #fff,inset 0 -3px 10px rgba(255,255,255,.3),inset 0 0 0 1px rgba(255,255,255,.2),0 16px 34px var(--tint,rgba(20,45,100,.28)),0 3px 8px rgba(0,0,0,.1)}
+.btn:active{transform:scale(.94,.9);filter:brightness(.97)}
+.btn.primary{background:linear-gradient(135deg,rgba(92,160,240,.82),rgba(28,84,170,.78));--tint:rgba(31,90,166,.45)}
+.btn.amber{background:linear-gradient(135deg,rgba(255,216,110,.9),rgba(236,158,8,.8));color:#2c1d00;text-shadow:0 1px 0 rgba(255,255,255,.4);--tint:rgba(221,149,0,.45)}
+.btn.danger{background:linear-gradient(135deg,rgba(245,105,95,.85),rgba(198,48,40,.8));--tint:rgba(208,58,49,.4)}
+.btn.ghost{background:rgba(255,255,255,.38);color:var(--ink);text-shadow:none;--tint:rgba(20,45,100,.14)}
+.btn.glass{background:rgba(255,255,255,.18);--tint:rgba(0,0,0,.25)}
+[data-theme=dark] .btn.ghost{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)}
+
+.icon-btn{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.45);
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.8),inset 0 -2px 6px rgba(255,255,255,.12),0 6px 16px rgba(0,0,0,.2)}
+.icon-btn.plain{background:rgba(255,255,255,.4);box-shadow:inset 0 1.5px 1px #fff,0 6px 16px rgba(20,45,100,.14)}
+[data-theme=dark] .icon-btn.plain{background:rgba(255,255,255,.12)}
+.user-chip{box-shadow:inset 0 1.5px 1px rgba(255,255,255,.7),0 6px 16px rgba(0,0,0,.2)}
+.tab::before{border-radius:999px}
+.tab:hover:not(.on){background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.seg button.on{box-shadow:inset 0 1.5px 1px #fff,0 3px 12px rgba(15,35,70,.22)}
+.qa button{box-shadow:inset 0 1.5px 1px rgba(255,255,255,.8),0 8px 20px rgba(20,45,100,.1)}
+.rte-bar button{box-shadow:inset 0 1px 1px rgba(255,255,255,.9),0 2px 6px rgba(20,45,100,.12)}
+.rip{background:radial-gradient(circle,rgba(255,255,255,.9),rgba(255,255,255,.2) 70%)}
+
+/* světelná koule za kurzorem */
+#cursorGlow{position:fixed;left:0;top:0;width:640px;height:640px;margin:-320px 0 0 -320px;z-index:-1;pointer-events:none;border-radius:50%;
+  transform:translate(var(--cx,50vw),var(--cy,30vh));opacity:0;transition:opacity .6s;will-change:transform;
+  background:radial-gradient(circle,rgba(130,190,255,.55),rgba(255,205,110,.28) 42%,rgba(255,255,255,0) 70%);filter:blur(8px)}
+#cursorGlow.on{opacity:1}
+#cursorGlow i{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),transparent 68%);transition:transform .5s var(--spring)}
+#cursorGlow.pulse i{transform:scale(1.7)}
+[data-theme=dark] #cursorGlow{background:radial-gradient(circle,rgba(90,150,255,.42),rgba(255,180,80,.16) 42%,rgba(255,255,255,0) 70%)}
+[data-theme=dark] #cursorGlow i{background:radial-gradient(circle,rgba(160,200,255,.28),transparent 68%)}
+body::before{translate:calc(var(--px,0)*1.8px) calc(var(--py,0)*1.8px)}
+body::after{translate:calc(var(--px,0)*-2.6px) calc(var(--py,0)*-2.6px)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -522,14 +765,13 @@ table.lb tr:last-child td{border-bottom:0}
         <div class="asec" id="adm-fleet">
           <div class="stack">
             <div class="card"><h3 id="admIcFleetAdd"></h3>
-              <div class="grid3">
+              <div class="grid2">
                 <div class="field"><label for="fbEv">Evidenční číslo</label><input id="fbEv" type="text" placeholder="Další číslo"></div>
-                <div class="field"><label for="fbType">Typ autobusu</label><input id="fbType" type="text" list="busTypes" placeholder="Vyber nebo napiš typ"></div>
                 <div class="field"><label for="fbSite">Provozovna</label><select id="fbSite"></select></div>
               </div>
-              <datalist id="busTypes">
-                <option value="SOR CN 12"><option value="SOR CN 8.5"><option value="IVECO URBANWAY 12M"><option value="Irisbus Axer 12M"><option value="Irisbus Crossway LE 12M"><option value="Solaris Urbino 9 Electric"><option value="Solaris Urbino 18 Hydrogen"><option value="Setra S 415 LE"><option value="MAN Lion's City 12M">
-              </datalist>
+              <div class="field"><label for="fbPreset">Předvolba typu</label><select id="fbPreset"></select></div>
+              <div class="field"><label for="fbType">Typ autobusu</label><input id="fbType" type="text" placeholder="Vyber předvolbu výše, nebo napiš vlastní typ" autocomplete="off"></div>
+              <div class="preview" id="fbPreview"></div>
               <div class="row"><button type="button" class="btn amber" data-act="bus-save">Uložit vůz</button><button type="button" class="btn ghost" data-act="bus-reset">Vyčistit</button></div>
               <p class="hint" style="margin-top:8px">Pokud vůz se stejným číslem už existuje, bude upraven.</p>
             </div>
@@ -629,6 +871,13 @@ const db = getDatabase(initializeApp(firebaseConfig));
 const OWNER = 'fifo1280';
 const PATHS = ['shifts','users','fleet','sites','requests','docs','mods','repaints','disruptions','employeeOfWeek','meta'];
 const MOD_CATS = { required:'Potřebné mody', bus:'Modely autobusů', map:'Mapy a objekty', other:'Ostatní' };
+const BUS_PRESETS = {
+  'SOR': ['SOR CN 12', 'SOR CN 8.5', 'SOR NB 12', 'SOR NBG 12', 'SOR BN 12', 'SOR NS 12', 'SOR NS 18', 'SOR LH 12'],
+  'Iveco / Irisbus': ['IVECO URBANWAY 12M', 'IVECO URBANWAY 18M', 'Irisbus Axer 12M', 'Irisbus Crossway LE 12M', 'Irisbus Citelis 12M', 'Irisbus Crossway 12M'],
+  'Solaris': ['Solaris Urbino 12', 'Solaris Urbino 18', 'Solaris Urbino 9 Electric', 'Solaris Urbino 12 Electric', 'Solaris Urbino 18 Hydrogen'],
+  'MAN / Mercedes / Setra': ["MAN Lion's City 12M", "MAN Lion's City 18M", 'Mercedes-Benz Citaro', 'Mercedes-Benz Conecto', 'Setra S 415 LE'],
+  'Škoda / Karosa / Ostatní': ['Škoda 21 Tr', 'Škoda 30 Tr', 'Karosa C 954', 'Karosa B 951', 'Karsan e-JEST', 'Otokar Kent C']
+};
 const TYPE_LABEL = { mods:'Mod', repaints:'Repaint', docs:'Dokument', disruptions:'Výluka' };
 const state = {
   user: localStorage.getItem('fmo_user') || null,
@@ -749,12 +998,14 @@ function toast(msg, type = 'ok') {
 }
 function setStatus(id, msg, type) { const el = $('#' + id); el.textContent = msg; el.className = 'status ' + (type || ''); }
 const syncLock = () => document.body.classList.toggle('lock', !!$('.modal.open'));
-function openModal(id) { $('#' + id).classList.add('open'); syncLock(); }
+function openModal(id) { const m = $('#' + id); clearTimeout(m._t); m.classList.remove('closing'); m.classList.add('open'); syncLock(); }
 let dlgResolve = null;
 function closeModal(id) {
-  $('#' + id).classList.remove('open');
+  const m = $('#' + id);
   if (id === 'm-dlg' && dlgResolve) { const r = dlgResolve; dlgResolve = null; r(null); }
-  syncLock();
+  if (!m.classList.contains('open') || m.classList.contains('closing')) return;
+  m.classList.add('closing'); clearTimeout(m._t);
+  m._t = setTimeout(() => { m.classList.remove('open', 'closing'); syncLock(); }, 210);
 }
 function dialog({ title, text = '', input = null, ok = 'Potvrdit', danger = false }) {
   return new Promise(res => {
@@ -948,9 +1199,23 @@ function renderChrome() {
     ? `<div class="row" style="gap:8px;flex-wrap:nowrap"><button type="button" class="user-chip" data-act="go" data-id="profile">${avImg(state.user, '', u)}<span><b>${esc(state.user)}</b><small>${isAdmin() ? 'Majitel' : 'Řidič FMO BUS'}</small></span></button><button type="button" class="icon-btn" data-act="logout" title="Odhlásit se" aria-label="Odhlásit se">${ic('logout', 17)}</button></div>`
     : `<button type="button" class="btn amber sm" data-act="go" data-id="auth">${ic('login', 16)} Přihlásit se</button>`;
   const pending = Object.keys(D('requests')).length;
-  $('#navTabs').innerHTML = TABS.filter(t => (!t.admin || isAdmin()) && (!t.auth || state.user)).map(t =>
+  const nav = $('#navTabs');
+  nav.innerHTML = '<span class="nav-ind"></span>' + TABS.filter(t => (!t.admin || isAdmin()) && (!t.auth || state.user)).map(t =>
     `<button type="button" class="tab ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 17)}${t.label}${t.admin && pending ? `<span class="badge">${pending}</span>` : ''}</button>`).join('');
+  placeIndicator(nav);
 }
+let navPos = null;
+function placeIndicator(nav = $('#navTabs')) {
+  const ind = nav.firstElementChild, on = $('.tab.on', nav); if (!ind) return;
+  if (!on) { ind.style.opacity = 0; return; }
+  const x = on.offsetLeft, w = on.offsetWidth;
+  ind.classList.toggle('admin', on.classList.contains('admin-t'));
+  if (navPos) { ind.style.transition = 'none'; ind.style.left = navPos.x + 'px'; ind.style.width = navPos.w + 'px'; void ind.offsetWidth; ind.style.transition = ''; }
+  ind.style.left = x + 'px'; ind.style.width = w + 'px'; navPos = { x, w };
+  nav.scrollTo({ left: x - nav.clientWidth / 2 + w / 2, behavior: 'smooth' });
+}
+addEventListener('resize', () => { navPos = null; placeIndicator(); });
+document.fonts?.ready.then(() => { navPos = null; placeIndicator(); });
 
 function setOptions(sel, html) { if (!sel || sel._h === html) return; const v = sel.value; sel.innerHTML = html; sel._h = html; if ([...sel.options].some(o => o.value === v)) sel.value = v; }
 function fillSelects() {
@@ -963,6 +1228,8 @@ function fillSelects() {
   setOptions($('#busSelectRequest'), '<option value="">Vyber vůz…</option>' + fleet.map(busOpt).join(''));
   setOptions($('#asgBus'), '<option value="">Vyber vůz…</option>' + fleet.map(busOpt).join(''));
   setOptions($('#fbSite'), '<option value="">— bez provozovny —</option>' + sites.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join(''));
+  const known = new Set(Object.values(BUS_PRESETS).flat()), used = [...new Set(fleet.map(b => b.type).filter(t => t && !known.has(t)))];
+  setOptions($('#fbPreset'), '<option value="">Vyber typ z nabídky…</option>' + Object.entries(BUS_PRESETS).map(([g, a]) => `<optgroup label="${esc(g)}">${a.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('')}</optgroup>`).join('') + (used.length ? `<optgroup label="Už použité ve flotile">${used.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('')}</optgroup>` : ''));
   const drv = '<option value="">Vyber řidiče…</option>' + Object.values(D('users')).map(u => `<option value="${esc(u.nick)}">${esc(u.nick)}${u.driverId ? ' (' + esc(u.driverId) + ')' : ''}</option>`).join('');
   setOptions($('#asgDriver'), drv); setOptions($('#eowSelect'), drv);
 }
@@ -1263,7 +1530,7 @@ function renderAdmin() {
     $('#admAssigned').innerHTML = as.length ? as.map(([u, b]) => `<div class="item">${avImg(u.nick, 'av-sm', u)}<div class="grow"><b>${esc(u.nick)}</b><span class="muted sm">vůz ev. č. ${esc(b)}</span></div>${rowBtn('Odebrat', 'trash', 'unassign', `data-nick="${esc(u.nick)}" data-bus="${esc(b)}"`)}</div>`).join('') : '<span class="muted">Nikdo nemá přidělený vůz.</span>';
   }
   if (sec === 'fleet') {
-    $('#fbEv').placeholder = 'Další: ' + nextEv();
+    $('#fbEv').placeholder = 'Další: ' + nextEv(); busPreview();
     const fleet = Object.entries(D('fleet')).sort((a, b) => String(a[1].ev).localeCompare(String(b[1].ev), 'cs', { numeric: true }));
     $('#admFleetList').innerHTML = fleet.length ? fleet.map(([k, b]) => `<div class="item"><div class="bus-no" style="min-width:52px;height:40px;font-size:.95rem;border-radius:10px">${esc(b.ev)}</div><div class="grow"><b>${esc(String(b.desc || '').replace(/^\s*\S+\s*[-–—]\s*/, ''))}</b><span class="muted sm">${esc(b.site || '')}</span></div>${rowBtn('Upravit', 'edit', 'bus-edit', `data-key="${esc(k)}"`, 'ghost')}${rowBtn('', 'trash', 'bus-del', `data-key="${esc(k)}"`)}</div>`).join('') : '<span class="muted">Žádné vozy.</span>';
   }
@@ -1290,6 +1557,14 @@ function renderAdmin() {
     $('#admEowCurrent').innerHTML = e.name ? `<div class="card eow" style="box-shadow:none">${avImg(e.name, '', getUser(e.name))}<div><div class="lbl">Aktuálně</div><div class="nm">${esc(e.name)}</div><div class="muted sm">${esc(e.reason || '')}</div></div></div>` : '<p class="muted">Zatím není zvolen žádný pracovník týdne.</p>';
   }
 }
+
+function busPreview() {
+  const ev = $('#fbEv').value.trim() || nextEv(), t = $('#fbType').value.trim(), s = $('#fbSite').value;
+  $('#fbPreview').innerHTML = t ? `${ic('bus', 16)} <span>Zobrazí se jako:</span> <b>${esc(ev)} - ${esc(t)}${s ? ' (' + esc(s) + ')' : ''}</b>${state.busEditing ? ' <span class="chip amber">úprava</span>' : ''}` : `<span class="muted sm">Náhled se zobrazí po výběru typu.</span>`;
+}
+$('#fbPreset').addEventListener('change', e => { if (e.target.value) $('#fbType').value = e.target.value; busPreview(); });
+$('#fbType').addEventListener('input', () => { const p = $('#fbPreset'); p.value = [...p.options].some(o => o.value === $('#fbType').value) ? $('#fbType').value : ''; busPreview(); });
+$('#fbEv').addEventListener('input', busPreview); $('#fbSite').addEventListener('change', busPreview);
 
 /* ---- obsah: editor ---- */
 const BODY_FIELD = { mods:'htmlText', repaints:'changelog', docs:'htmlText', disruptions:'desc' };
@@ -1344,7 +1619,11 @@ async function patchBuses(nick, fn) {
 /* ================= Akce (event delegation) ================= */
 const act = {
   go: d => go(d.id),
-  theme: () => { const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = n; localStorage.setItem('fmo_theme', n); renderChrome(); },
+  theme: () => {
+    const n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    const apply = () => { document.documentElement.dataset.theme = n; localStorage.setItem('fmo_theme', n); renderChrome(); };
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(apply); else apply();
+  },
   logout: () => { state.user = null; localStorage.removeItem('fmo_user'); closeChat(); toast('Odhlášeno'); go('auth'); },
   'auth-tab': d => { $$('#authSeg button').forEach(b => b.classList.toggle('on', b.dataset.t === d.t)); $('#loginForm').hidden = d.t !== 'login'; $('#registerForm').hidden = d.t !== 'register'; },
   'close-modal': d => closeModal(d.id),
@@ -1378,12 +1657,18 @@ const act = {
     const ev = $('#fbEv').value.trim() || nextEv(), type = $('#fbType').value.trim(), site = $('#fbSite').value;
     if (!type) return toast('Vyplň typ autobusu.', 'err');
     if (!/^[\w\-]+$/.test(ev)) return toast('Evidenční číslo může obsahovat jen písmena, čísla a pomlčku.', 'err');
-    if (D('fleet')['b' + ev] && state.busEditing !== 'b' + ev && !await dialog({ title: 'Vůz už existuje', text: `Vůz ${ev} bude přepsán.`, ok: 'Přepsat' })) return;
-    await set(ref(db, 'fleet/b' + ev), { ev, type, site, desc: `${ev} - ${type}${site ? ` (${site})` : ''}` });
+    const key = 'b' + ev, editing = state.busEditing;
+    if (D('fleet')[key] && editing !== key && !await dialog({ title: 'Vůz už existuje', text: `Vůz ${ev} bude přepsán.`, ok: 'Přepsat' })) return;
+    await set(ref(db, 'fleet/' + key), { ev, type, site, desc: `${ev} - ${type}${site ? ` (${site})` : ''}` });
+    if (editing && editing !== key) { // změna evidenčního čísla = přesun vozu, přidělení řidičům se převedou
+      const upd = {}; Object.values(D('users')).forEach(u => { const a = busesOf(u); if (a.includes(String(D('fleet')[editing]?.ev))) upd['users/' + u.nick.toLowerCase() + '/buses'] = a.map(x => x === String(D('fleet')[editing]?.ev) ? ev : x); });
+      if (Object.keys(upd).length) await update(ref(db), upd);
+      await remove(ref(db, 'fleet/' + editing));
+    }
     act['bus-reset'](); toast(`Vůz ${ev} uložen`);
   },
-  'bus-reset': () => { state.busEditing = null; $('#fbEv').value = ''; $('#fbType').value = ''; $('#fbSite').value = ''; },
-  'bus-edit': d => { const b = D('fleet')[d.key]; if (!b) return; state.busEditing = d.key; $('#fbEv').value = b.ev; $('#fbType').value = b.type || String(b.desc || '').replace(/^\s*\S+\s*[-–—]\s*/, '').replace(/\s*\([^)]*\)\s*$/, ''); $('#fbSite').value = b.site || ''; $('#fbEv').scrollIntoView({ behavior: 'smooth', block: 'center' }); },
+  'bus-reset': () => { state.busEditing = null; $('#fbEv').value = ''; $('#fbType').value = ''; $('#fbSite').value = ''; $('#fbPreset').value = ''; busPreview(); },
+  'bus-edit': d => { const b = D('fleet')[d.key]; if (!b) return; state.busEditing = d.key; $('#fbEv').value = b.ev; $('#fbType').value = b.type || String(b.desc || '').replace(/^\s*\S+\s*[-–—]\s*/, '').replace(/\s*\([^)]*\)\s*$/, ''); $('#fbSite').value = b.site || ''; $('#fbPreset').value = [...$('#fbPreset').options].some(o => o.value === $('#fbType').value) ? $('#fbType').value : ''; busPreview(); $('#fbEv').scrollIntoView({ behavior: 'smooth', block: 'center' }); },
   'bus-del': async d => { if (await confirmBox('Smazat vůz?', 'Vůz bude odstraněn z vozového parku.')) { await remove(ref(db, 'fleet/' + d.key)); toast('Vůz smazán'); } },
   'site-add': async () => { const n = $('#newSite').value.trim(); if (!n) return toast('Zadej název provozovny.', 'err'); await push(ref(db, 'sites'), n); $('#newSite').value = ''; toast(`Provozovna „${n}“ přidána`); },
   'site-del': async d => { if (await confirmBox('Odebrat provozovnu?', 'Starší výkazy zůstanou zachované.', 'Odebrat')) { await remove(ref(db, 'sites/' + d.key)); toast('Provozovna odebrána'); } },
@@ -1401,6 +1686,47 @@ document.addEventListener('click', e => {
 });
 $('#detailBody').addEventListener('click', e => { if (e.target.closest('[data-act=detail]')) $('#m-detail .sheet').scrollTo({ top: 0, behavior: 'smooth' }); });
 $('#cfBody').addEventListener('paste', e => { e.preventDefault(); document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain')); });
+
+/* ================= Pohyb: náklon, ripple, paralax ================= */
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches, FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const BTN_SEL = '.btn,.icon-btn,.tab,.seg button,.qa button,.anav button,.user-chip,.rte-bar button';
+if (!REDUCE) {
+  const glow = document.createElement('div'); glow.id = 'cursorGlow'; glow.innerHTML = '<i></i>'; document.body.appendChild(glow);
+  const root = document.documentElement.style;
+  let card = null, raf = 0, cur = { x: innerWidth / 2, y: innerHeight / 3 }, goal = { ...cur };
+  const relax = el => { el.style.removeProperty('--rx'); el.style.removeProperty('--ry'); };
+  function aim(el, e, kx, ky) {
+    const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+    el.style.setProperty(kx, (px * 100) + '%'); el.style.setProperty(ky, (py * 100) + '%'); return [px, py];
+  }
+  addEventListener('pointermove', e => {
+    goal.x = e.clientX; goal.y = e.clientY; glow.classList.add('on');
+    const b = e.target.closest?.(BTN_SEL); if (b) aim(b, e, '--bx', '--by');
+    if (FINE) {
+      const t = e.target.closest?.('.mcard,.pcard,.stat,.bus-card,.hero');
+      if (card && card !== t) relax(card); card = t;
+      if (t) { const [px, py] = aim(t, e, '--mx', '--my'); if (!t.classList.contains('hero')) { t.style.setProperty('--ry', ((px - .5) * 9).toFixed(2) + 'deg'); t.style.setProperty('--rx', ((.5 - py) * 9).toFixed(2) + 'deg'); } }
+    }
+    if (!raf) raf = requestAnimationFrame(loop);
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => { if (card) { relax(card); card = null; } glow.classList.remove('on'); });
+  function loop() {
+    cur.x += (goal.x - cur.x) * .1; cur.y += (goal.y - cur.y) * .1;
+    root.setProperty('--cx', cur.x.toFixed(1) + 'px'); root.setProperty('--cy', cur.y.toFixed(1) + 'px');
+    root.setProperty('--px', ((cur.x / innerWidth - .5) * 60).toFixed(2)); root.setProperty('--py', ((cur.y / innerHeight - .5) * 60).toFixed(2));
+    raf = (Math.abs(goal.x - cur.x) + Math.abs(goal.y - cur.y) > .3) ? requestAnimationFrame(loop) : 0;
+  }
+  addEventListener('pointerdown', e => { goal.x = e.clientX; goal.y = e.clientY; glow.classList.add('on', 'pulse'); setTimeout(() => glow.classList.remove('pulse'), 260); if (!raf) raf = requestAnimationFrame(loop); }, { passive: true });
+}
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest(BTN_SEL); if (!b || b.disabled || REDUCE) return;
+  if (b.classList.contains('btn')) {
+    const r = b.getBoundingClientRect(), s = document.createElement('span'); s.className = 'rip';
+    s.style.left = (e.clientX - r.left) + 'px'; s.style.top = (e.clientY - r.top) + 'px'; b.appendChild(s); setTimeout(() => s.remove(), 700);
+  }
+  b.classList.remove('jelly'); void b.offsetWidth; b.classList.add('jelly');
+  b.addEventListener('animationend', ev => { if (ev.animationName === 'jelly') b.classList.remove('jelly'); }, { once: true });
+}, { passive: true });
 
 /* ================= Start ================= */
 document.documentElement.dataset.theme = localStorage.getItem('fmo_theme') || 'light';
