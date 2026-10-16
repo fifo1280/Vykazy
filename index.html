@@ -110,7 +110,7 @@ textarea{resize:vertical;min-height:90px}
 .rte-bar button:hover{background:var(--brand);color:#fff}
 .rte{border-radius:0 0 11px 11px;min-height:120px;max-height:260px;overflow:auto;background:var(--card)}
 .rte:empty::before{content:attr(data-ph);color:var(--muted)}
-.rich ul,.rich ol,.rte ul,.rte ol{margin:6px 0;padding-left:22px}
+.rich blockquote,.rte blockquote{margin:4px 0;padding-left:10px;border-left:3px solid var(--line)}.rich pre,.rte pre{background:var(--card2);border-radius:8px;padding:8px 10px;white-space:pre-wrap}.rich ul,.rich ol,.rte ul,.rte ol{margin:6px 0;padding-left:22px}
 .rich p+p{margin-top:8px}
 .status{min-height:1.3em;font-size:.85rem;font-weight:700;margin-top:10px}
 .status.ok{color:var(--ok)}.status.err{color:var(--err)}
@@ -557,6 +557,104 @@ body::after{translate:calc(var(--px,0)*-1.4px) calc(var(--py,0)*-1.4px)}
 [data-theme=dark] #cursorGlow i{background:radial-gradient(circle,rgba(160,200,255,.28),transparent 68%)}
 body::before{translate:calc(var(--px,0)*1.8px) calc(var(--py,0)*1.8px)}
 body::after{translate:calc(var(--px,0)*-2.6px) calc(var(--py,0)*-2.6px)}
+/* =====================================================
+   DISCORD EMBED + EDITOR
+   ===================================================== */
+.dc{background:#2b2d31;color:#dbdee1;border-radius:8px;border-left:4px solid #5865f2;padding:12px 16px 14px;max-width:540px;text-align:left;
+  font-family:"gg sans","Segoe UI",Helvetica,Arial,sans-serif;font-size:.92rem;line-height:1.45;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.dc-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.dc .dc-av{width:24px;height:24px}
+.dc-head b{color:#fff;font-weight:600}
+.dc-ts{color:#949ba4;font-size:.74rem}
+.dc-app{margin-left:auto;background:#5865f2;color:#fff;font-size:.62rem;font-weight:800;border-radius:4px;padding:1px 6px;letter-spacing:.05em}
+.dc-body{word-break:break-word}
+.dc-body a{color:#00a8fc}
+.dc-body code{background:#1e1f22;border-radius:4px;padding:0 5px;font-family:Consolas,monospace;font-size:.85em}
+.dc-body pre{background:#1e1f22;border:1px solid #1a1b1e;border-radius:6px;padding:8px 10px;margin:6px 0;white-space:pre-wrap;font-family:Consolas,monospace;font-size:.82em}
+.dc-body blockquote{margin:2px 0;padding-left:10px;border-left:4px solid #4e5058}
+.dc-h{font-size:1.15em}
+.dc-dim{color:#949ba4;font-style:italic}
+.dc-files{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dc-files span{background:#1e1f22;border-radius:4px;padding:3px 9px;font-size:.78rem;color:#00a8fc}
+.dc-open{display:inline-flex;margin-top:10px;background:#5865f2;color:#fff !important;border-radius:4px;padding:6px 14px;font-weight:600;font-size:.82rem;transition:background .2s}
+.dc-open:hover{background:#4752c4}
+.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kinds button{display:grid;gap:3px;text-align:left;padding:12px 14px;border-radius:16px;border:1.5px solid var(--line);background:var(--card2);color:var(--ink);cursor:pointer;font:inherit;transition:.25s var(--smooth)}
+.kinds button:hover{transform:translateY(-2px)}
+.kinds button b{font-size:.92rem}.kinds button span{font-size:.76rem;color:var(--muted)}
+.kinds button.on{border-color:var(--brand2);background:color-mix(in srgb,var(--brand2) 16%,var(--card2));box-shadow:0 0 0 3px color-mix(in srgb,var(--brand2) 22%,transparent)}
+@media(max-width:560px){.kinds{grid-template-columns:1fr}}
+.dcbox{border:1.5px solid rgba(88,101,242,.5);background:rgba(88,101,242,.08);border-radius:18px;padding:16px;margin-bottom:18px}
+.dcbox .dc-title{font-weight:800;display:flex;gap:8px;align-items:center;margin-bottom:10px;color:#5865f2}
+.dcbox .dc-title .ic{color:#5865f2}
+.row.nowrap{flex-wrap:nowrap}
+.dcbox details{margin-top:10px}
+.dcbox summary,.quick summary{cursor:pointer;font-weight:700;font-size:.82rem;color:var(--brand)}
+.dcbox details>*:not(summary),.quick>*:not(summary){margin-top:8px}
+.quick{margin-top:10px;border:1.5px dashed var(--line);border-radius:14px;padding:12px 14px}
+
+/* =====================================================
+   ZJEMNĚNÍ LIQUID GLASS (jemnější sklo, méně lesku)
+   ===================================================== */
+:root{
+  --glass-blur:blur(14px) saturate(125%);
+  --card:rgba(255,255,255,.74); --card2:rgba(255,255,255,.58); --glass-edge:rgba(255,255,255,.6);
+  --spec:inset 0 1px 0 rgba(255,255,255,.65),inset 0 0 0 1px rgba(255,255,255,.22);
+  --shadow:0 1px 3px rgba(20,45,100,.06),0 8px 24px rgba(20,45,100,.09);
+  --r:20px;
+}
+[data-theme=dark]{
+  --card:rgba(26,38,68,.7); --card2:rgba(54,74,122,.34); --glass-edge:rgba(255,255,255,.14);
+  --spec:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.06);
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.35);
+}
+body::before{opacity:.45}body::after{opacity:.32}
+[data-theme=dark] body::before{opacity:.32}[data-theme=dark] body::after{opacity:.18}
+.card::after,.mcard::after{opacity:.3}
+.mcard{border-radius:20px}.mimg{border-radius:14px;margin:7px 7px 0}
+.hero{border-radius:26px}.top{border-radius:22px}.sheet{border-radius:24px}.item{border-radius:14px}
+.mcard:hover,.pcard:hover,.stat:hover{box-shadow:var(--spec),0 14px 34px rgba(20,45,100,.16)}
+.nav .nav-in{box-shadow:var(--spec),0 8px 22px rgba(15,40,90,.14)}
+/* tlačítka: méně lesku, klidnější stín */
+.btn::before{opacity:.28}
+.btn:hover::before{opacity:.6}
+.btn{backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -2px 5px rgba(255,255,255,.1),0 6px 16px var(--tint,rgba(20,45,100,.16)),0 1px 3px rgba(0,0,0,.08)}
+.btn:hover{filter:brightness(1.04);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 9px 22px var(--tint,rgba(20,45,100,.2)),0 1px 3px rgba(0,0,0,.08)}
+.btn.primary{background:linear-gradient(135deg,rgba(80,150,232,.92),rgba(34,92,176,.9));--tint:rgba(31,90,166,.3)}
+.btn.amber{background:linear-gradient(135deg,rgba(255,212,100,.95),rgba(240,165,18,.9));--tint:rgba(221,149,0,.3)}
+.btn.danger{--tint:rgba(208,58,49,.28)}
+.btn.ghost{background:rgba(255,255,255,.55)}
+[data-theme=dark] .btn.ghost{background:rgba(255,255,255,.1)}
+.icon-btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 4px 10px rgba(0,0,0,.14)}
+.tab:hover:not(.on){background:rgba(255,255,255,.12)}
+.nav-ind{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 4px 12px rgba(31,90,166,.3)}
+.nav-ind.admin{box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 4px 12px rgba(213,141,0,.32)}
+@keyframes jelly{0%{transform:scale(1)}25%{transform:scale(1.07,.92)}50%{transform:scale(.97,1.04)}75%{transform:scale(1.015,.99)}100%{transform:scale(1)}}
+#cursorGlow{background:radial-gradient(circle,rgba(130,190,255,.3),rgba(255,205,110,.14) 42%,rgba(255,255,255,0) 70%)}
+[data-theme=dark] #cursorGlow{background:radial-gradient(circle,rgba(90,150,255,.24),rgba(255,180,80,.08) 42%,rgba(255,255,255,0) 70%)}
+input[type=text],input[type=password],input[type=url],input[type=search],input[type=number],select,textarea,.rte{border-radius:12px;box-shadow:inset 0 1px 3px rgba(20,45,100,.08)}
+/* =====================================================
+   OPRAVA PŘETÉKÁNÍ
+   ===================================================== */
+.admin>*,.cols>*,.grid>*,.grid2>*,.grid3>*,.stack>*{min-width:0}
+.card.anav{position:sticky;top:92px}
+@media(max-width:860px){.admin{grid-template-columns:minmax(0,1fr)}.card.anav{position:relative;top:0;max-width:100%;display:flex;overflow-x:auto;scrollbar-width:none}.anav::-webkit-scrollbar{display:none}}
+.item{flex-wrap:wrap;row-gap:8px;min-width:0}
+.item .grow{flex:1 1 150px;min-width:0}
+.item .btn{flex:none}
+.item>.btn:first-of-type{margin-left:auto}
+.bus-card{min-width:0}
+.bus-card>div:last-child{flex:1;min-width:0}
+.bus-card h4{overflow-wrap:anywhere}
+.list>*{max-width:100%}
+.btn{max-width:100%}
+@media(max-width:560px){
+  .item{padding:11px 12px}
+  .item .grow{flex-basis:100%}
+  .item>.btn,.item>.btn:first-of-type{margin-left:0}
+  .bus-no{min-width:56px;height:56px}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -825,12 +923,30 @@ body::after{translate:calc(var(--px,0)*-2.6px) calc(var(--py,0)*-2.6px)}
 <div class="modal" id="m-content"><div class="sheet lg">
   <div class="sheet-head"><h3 id="cfHeading"></h3><button type="button" class="icon-btn plain" data-act="close-modal" data-id="m-content" aria-label="Zavřít" id="cfClose"></button></div>
   <div class="sheet-body">
+    <div class="field" id="cfKindWrap"><label>Co přidáváš?</label>
+      <div class="kinds" id="cfKinds">
+        <button type="button" data-act="cf-kind" data-k="required"><b>Potřebný mod</b><span>Základ, který repainty vyžadují</span></button>
+        <button type="button" data-act="cf-kind" data-k="mod"><b>Mod / model</b><span>Autobus, mapa, objekt…</span></button>
+        <button type="button" data-act="cf-kind" data-k="repaint"><b>Repaint</b><span>Nátěr s vazbou na potřebné mody</span></button>
+      </div></div>
+    <div class="dcbox" id="cfDiscordWrap">
+      <div class="dc-title" id="cfDcTitle"></div>
+      <div class="row nowrap"><input id="cfDcUrl" type="url" placeholder="Vlož odkaz na zprávu z Discordu (pravý klik na zprávu → Kopírovat odkaz na zprávu)" autocomplete="off"><button type="button" class="btn primary" data-act="dc-load">Načíst</button></div>
+      <div class="status" id="cfDcStatus"></div>
+      <details id="cfDcManual"><summary>Vložit text zprávy ručně</summary>
+        <input id="cfDcAuthor" type="text" placeholder="Autor zprávy (jméno na Discordu)" maxlength="60">
+        <textarea id="cfDcText" placeholder="Zkopíruj sem text zprávy z Discordu…"></textarea>
+        <input id="cfDcImg" type="url" placeholder="Odkaz na obrázek ze zprávy (volitelné)">
+        <button type="button" class="btn ghost sm" data-act="dc-manual">Použít tuto zprávu</button>
+      </details>
+      <div id="cfDcPreview"></div>
+    </div>
     <div class="grid2">
       <div class="field"><label for="cfTitle">Název</label><input id="cfTitle" type="text" maxlength="120"></div>
       <div class="field" id="cfVerWrap"><label for="cfVersion">Verze</label><input id="cfVersion" type="text" placeholder="v1.0" maxlength="20"></div>
     </div>
     <div class="field" id="cfCatWrap"><label for="cfCat">Kategorie</label>
-      <select id="cfCat"><option value="required">Potřebné mody (k repaintům)</option><option value="bus">Modely autobusů</option><option value="map">Mapy a objekty</option><option value="other">Ostatní</option></select></div>
+      <select id="cfCat"><option value="bus">Modely autobusů</option><option value="map">Mapy a objekty</option><option value="other">Ostatní</option></select></div>
     <div class="field" id="cfImgWrap"><label>Náhledový obrázek</label><div id="cfImage"></div></div>
     <div class="field"><label id="cfBodyLabel">Popis</label>
       <div class="rte-bar"><button type="button" data-act="fmt" data-cmd="bold"><b>B</b></button><button type="button" data-act="fmt" data-cmd="italic"><i>I</i></button><button type="button" data-act="fmt" data-cmd="underline"><u>U</u></button><button type="button" data-act="fmt" data-cmd="insertUnorderedList">• Seznam</button><button type="button" data-act="fmt" data-cmd="insertOrderedList">1. Seznam</button><button type="button" data-act="fmt" data-cmd="removeFormat">Vyčistit</button></div>
@@ -838,7 +954,12 @@ body::after{translate:calc(var(--px,0)*-2.6px) calc(var(--py,0)*-2.6px)}
     <div class="field" id="cfUrlWrap"><label for="cfUrl">Odkaz ke stažení</label><input id="cfUrl" type="url" placeholder="https://files.catbox.moe/…">
       <div class="tut"><b>Jak nahrát soubor:</b> otevři <a href="https://catbox.moe/" target="_blank" rel="noopener">Catbox.moe</a>, nahraj ZIP/RAR soubor a zkopíruj vygenerovaný odkaz sem.</div></div>
     <div class="field" id="cfReqWrap"><label>Potřebné mody k tomuto repaintu</label><div class="checks" id="cfReqList"></div>
-      <span class="hint">Zaškrtnuté mody se řidičům zobrazí v detailu repaintu s tlačítkem ke stažení.</span></div>
+      <span class="hint">Zaškrtnuté mody se řidičům zobrazí v detailu repaintu s tlačítkem ke stažení.</span>
+      <details class="quick" id="cfQuick"><summary>＋ Přidat nový potřebný mod rovnou sem</summary>
+        <input id="cfQDc" type="url" placeholder="Odkaz na Discord zprávu s modem (volitelné)" autocomplete="off">
+        <div class="grid2"><input id="cfQTitle" type="text" placeholder="Název modu" maxlength="120"><input id="cfQUrl" type="url" placeholder="Odkaz ke stažení https://…"></div>
+        <button type="button" class="btn amber sm" data-act="cf-quick">Vytvořit mod a zaškrtnout</button>
+      </details></div>
   </div>
   <div class="sheet-foot"><button type="button" class="btn ghost" data-act="close-modal" data-id="m-content">Zrušit</button><button type="button" class="btn amber" data-act="content-save">Uložit</button></div>
 </div></div>
@@ -866,6 +987,10 @@ const firebaseConfig = {
   measurementId: "G-X8F6FG8G00"
 };
 const db = getDatabase(initializeApp(firebaseConfig));
+
+/* Automatické načítání Discord zpráv: sem vlož adresu svého Cloudflare Workeru (návod a kód: discord-worker.js).
+   Když je prázdné, zprávu z Discordu vložíš ručně (text + odkaz) a embed se zobrazí stejně. */
+const DISCORD_API = '';
 
 /* ================= Základ ================= */
 const OWNER = 'fifo1280';
@@ -955,7 +1080,7 @@ document.addEventListener('error', e => {
 }, true);
 
 /* ---- bezpečný rich text ---- */
-const ALLOWED = new Set(['B','STRONG','I','EM','U','UL','OL','LI','BR','P','DIV','SPAN','H3','H4']);
+const ALLOWED = new Set(['B','STRONG','I','EM','U','S','UL','OL','LI','BR','P','DIV','SPAN','H3','H4','BLOCKQUOTE','PRE','CODE']);
 function sanitizeHtml(html) {
   const t = document.createElement('template'); t.innerHTML = html || '';
   (function walk(node) {
@@ -1103,6 +1228,15 @@ function createImageField(host, { shape = 'circle' } = {}) {
   ['dragleave', 'drop'].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.remove('over'); }));
   drop.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
   host.addEventListener('paste', e => { const f = [...(e.clipboardData?.files || [])].find(x => /^image\//.test(x.type)); if (f) { e.preventDefault(); loadFile(f); } });
+  async function loadUrl(u) {
+    if (!/^https?:\/\//i.test(u || '')) return;
+    try {
+      const r = await fetch(u, { mode: 'cors' }); if (!r.ok) throw 0;
+      const b = await r.blob(); if (!/^image\//.test(b.type)) throw 0;
+      loadFile(new File([b], 'discord', { type: b.type }));
+    } catch { st = null; canvas = null; value = u; urlIn.value = u; stage.innerHTML = `<img alt="" src="${esc(u)}">`; sync(); fire(); toast('Obrázek se uložil jen jako odkaz. Discord odkazy po čase vyprší – nejlépe obrázek stáhni a nahraj ručně.', 'warn'); }
+  }
+  host.loadUrl = loadUrl;
   clearB.addEventListener('click', () => { setValue(''); fire(); });
   urlIn.addEventListener('change', () => {
     const v = urlIn.value.trim(); if (!v) return;
@@ -1335,6 +1469,7 @@ function openDetail(kind, key) {
     ${img ? `<img class="detail-img" src="${esc(img)}" alt="">` : ''}
     <div class="row" style="margin-bottom:14px"><span class="chip ${rep ? 'amber' : 'blue'}">${rep ? 'Repaint' : esc(MOD_CATS[it.category] || 'Mod')}</span>${it.version ? `<span class="chip">${esc(it.version)}</span>` : ''}${it.created ? `<span class="muted sm">přidáno ${new Date(it.created).toLocaleDateString('cs-CZ')}</span>` : ''}</div>
     <div class="rich" style="margin-bottom:18px"><b>${rep ? 'Co je nového' : 'Popis'}</b><div style="margin-top:6px">${body || '<span class="muted">Bez popisu.</span>'}</div></div>
+    ${it.discord ? `<div style="margin-bottom:18px">${renderDiscordEmbed(it.discord)}</div>` : ''}
     ${reqs.length ? `<h4 style="margin-bottom:10px">${ic('link', 17)} Potřebné mody k tomuto repaintu</h4><div class="list" style="margin-bottom:18px">${reqs.map(([k, m]) => `<div class="reqrow"><div class="grow"><b>${esc(m.title)}</b> ${m.version ? `<span class="chip">${esc(m.version)}</span>` : ''}</div>${safeUrl(m.fileUrl) ? `<a class="btn primary sm" href="${esc(safeUrl(m.fileUrl))}" target="_blank" rel="noopener">${ic('download', 15)} Stáhnout</a>` : ''}<button type="button" class="btn ghost sm" data-act="detail" data-kind="mods" data-key="${esc(k)}">Detail</button></div>`).join('')}</div>` : ''}
     ${usedBy.length ? `<h4 style="margin-bottom:10px">${ic('layers', 17)} Využívají ho repainty</h4><div class="list" style="margin-bottom:18px">${usedBy.map(([k, r]) => `<div class="reqrow"><div class="grow"><b>${esc(r.title)}</b></div><button type="button" class="btn ghost sm" data-act="detail" data-kind="repaints" data-key="${esc(k)}">Detail</button></div>`).join('')}</div>` : ''}
     <div class="row">${safeUrl(it.fileUrl) ? `<a class="btn primary" href="${esc(safeUrl(it.fileUrl))}" target="_blank" rel="noopener">${ic('download')} Stáhnout ${rep ? 'repaint' : 'mod'}</a>` : '<span class="muted">Odkaz ke stažení není k dispozici.</span>'}
@@ -1412,13 +1547,13 @@ function renderDisruptions() {
   $('#disAdminBtn').innerHTML = isAdmin() ? `<button type="button" class="btn amber" data-act="content-new" data-type="disruptions">${ic('plus')} Přidat výluku</button>` : '';
   if (!ready()) { $('#disList').innerHTML = skel(2); return; }
   const list = sortNew(E('disruptions'));
-  $('#disList').innerHTML = list.length ? list.map(([k, d], i) => `<div class="card alert-card rise" style="--i:${i}"><div class="row between"><h4>${ic('alert', 18)} ${esc(d.title)}</h4>${adminBtns('disruptions', k)}</div><div class="rich">${richHtml(d.desc)}</div>${d.created ? `<span class="muted sm">${fmtDate(d.created)}</span>` : ''}</div>`).join('') : emptyBox('alert', 'Žádné aktuální výluky nebo hlášení.');
+  $('#disList').innerHTML = list.length ? list.map(([k, d], i) => `<div class="card alert-card rise" style="--i:${i}"><div class="row between"><h4>${ic('alert', 18)} ${esc(d.title)}</h4>${adminBtns('disruptions', k)}</div><div class="rich">${richHtml(d.desc)}</div>${d.discord ? renderDiscordEmbed(d.discord) : ''}${d.created ? `<span class="muted sm">${fmtDate(d.created)}</span>` : ''}</div>`).join('') : emptyBox('alert', 'Žádné aktuální výluky nebo hlášení.');
 }
 function renderDocs() {
   $('#docAdminBtn').innerHTML = isAdmin() ? `<button type="button" class="btn amber" data-act="content-new" data-type="docs">${ic('plus')} Přidat dokument</button>` : '';
   if (!ready()) { $('#docList').innerHTML = skel(2); return; }
   const list = sortNew(E('docs'));
-  $('#docList').innerHTML = list.length ? list.map(([k, d], i) => `<div class="card doc-card rise" style="--i:${i}"><div class="row between"><h3 style="margin:0">${ic('file')} ${esc(d.title)}</h3>${adminBtns('docs', k)}</div>${d.htmlText ? `<div class="rich">${richHtml(d.htmlText)}</div>` : ''}${safeUrl(d.fileUrl) ? `<div><a class="btn primary sm" href="${esc(safeUrl(d.fileUrl))}" target="_blank" rel="noopener">${ic('download', 16)} Stáhnout přílohu</a></div>` : ''}</div>`).join('') : emptyBox('file', 'Žádné dokumenty ani oznámení.');
+  $('#docList').innerHTML = list.length ? list.map(([k, d], i) => `<div class="card doc-card rise" style="--i:${i}"><div class="row between"><h3 style="margin:0">${ic('file')} ${esc(d.title)}</h3>${adminBtns('docs', k)}</div>${d.htmlText ? `<div class="rich">${richHtml(d.htmlText)}</div>` : ''}${d.discord ? renderDiscordEmbed(d.discord) : ''}${safeUrl(d.fileUrl) ? `<div><a class="btn primary sm" href="${esc(safeUrl(d.fileUrl))}" target="_blank" rel="noopener">${ic('download', 16)} Stáhnout přílohu</a></div>` : ''}</div>`).join('') : emptyBox('file', 'Žádné dokumenty ani oznámení.');
 }
 
 /* ================= Profil ================= */
@@ -1499,6 +1634,7 @@ $('#loginForm').addEventListener('submit', async e => {
 const ADMIN_SECS = [['overview', 'Přehled', 'home'], ['requests', 'Přidělenky', 'bus'], ['fleet', 'Vozový park', 'layers'], ['sites', 'Provozovny', 'building'], ['drivers', 'Řidiči', 'users'], ['shifts', 'Výkazy', 'clip'], ['content', 'Obsah', 'package'], ['eow', 'Pracovník týdne', 'star']];
 [['admIcReq', 'clip', 'Čekající žádosti'], ['admIcAsg', 'plus', 'Přiřadit vůz ručně'], ['admIcAssigned', 'bus', 'Aktuálně přidělené vozy'], ['admIcFleetAdd', 'bus', 'Přidat / upravit vůz'], ['admIcFleetList', 'layers', 'Vozy v systému'], ['admIcSites', 'building', 'Provozovny (garáže)'], ['admIcDrivers', 'users', 'Registrovaní řidiči'], ['admIcShifts', 'clip', 'Správa výkazů'], ['admIcEow', 'star', 'Pracovník týdne']].forEach(([id, i, t]) => $('#' + id).innerHTML = ic(i) + ' ' + t);
 $('#detailClose').innerHTML = ic('x', 18); $('#cfClose').innerHTML = ic('x', 18);
+$('#cfDcTitle').innerHTML = ic('chat', 18) + ' Načíst z Discordu (embed)';
 
 function nextEv() { const n = Object.values(D('fleet')).map(b => parseInt(b.ev)).filter(x => !isNaN(x)); return String(n.length ? Math.max(...n) + 1 : 1201); }
 const shiftRow = ([k, s], del) => `<div class="item">${avImg(s.nick, 'av-sm')}<div class="grow"><b>${esc(s.nick)} · ${fmtKm(s.km)}</b><span class="muted sm">${esc(s.site)} · vůz ${esc(s.bus)} · ${fmtDate(s.date)}</span></div>${del ? `<button type="button" class="btn danger sm" data-act="shift-del" data-key="${esc(k)}">${ic('trash', 15)}</button>` : ''}</div>`;
@@ -1568,22 +1704,142 @@ $('#fbEv').addEventListener('input', busPreview); $('#fbSite').addEventListener(
 
 /* ---- obsah: editor ---- */
 const BODY_FIELD = { mods:'htmlText', repaints:'changelog', docs:'htmlText', disruptions:'desc' };
+/* ---- Discord embed ---- */
+function parseDiscordLink(u) {
+  const m = String(u || '').trim().match(/discord(?:app)?\.com\/channels\/(\d+|@me)\/(\d+)\/(\d+)/i);
+  return m ? { guild: m[1], channel: m[2], message: m[3], web: `https://discord.com/channels/${m[1]}/${m[2]}/${m[3]}` } : null;
+}
+async function fetchDiscord(link) {
+  if (!DISCORD_API) return null;
+  const r = await fetch(DISCORD_API + (DISCORD_API.includes('?') ? '&' : '?') + `channel=${link.channel}&message=${link.message}`);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) throw new Error(j.error || 'Discord vrátil chybu ' + r.status);
+  const emb = (j.embeds || []).map(e => [e.title && '**' + e.title + '**', e.description].filter(Boolean).join('\n')).filter(Boolean).join('\n\n');
+  const atts = j.attachments || [];
+  const img = atts.find(a => /^image\//.test(a.content_type || '') || /\.(png|jpe?g|webp|gif)$/i.test(a.filename || '')) ;
+  return {
+    draft: { url: link.web, author: j.author?.name || '', avatar: j.author?.avatar || '', content: [j.content, emb].filter(Boolean).join('\n\n'), ts: j.timestamp ? Date.parse(j.timestamp) : Date.now(), files: atts.filter(a => a !== img).map(a => a.filename).filter(Boolean) },
+    image: img?.url || (j.embeds || []).map(e => e.image?.url || e.thumbnail?.url).find(Boolean) || ''
+  };
+}
+function discordMd(src) {
+  const keep = [], hold = h => { keep.push(h); return '\u0001' + (keep.length - 1) + '\u0002'; };
+  let t = String(src || '').replace(/\r/g, '');
+  t = t.replace(/```(?:\w+\n)?([\s\S]*?)```/g, (_, c) => hold('<pre>' + esc(c.replace(/\n$/, '')) + '</pre>'));
+  t = t.replace(/`([^`\n]+)`/g, (_, c) => hold('<code>' + esc(c) + '</code>'));
+  t = t.replace(/https?:\/\/[^\s<>]+/g, u => { const s = safeUrl(u); return s ? hold(`<a href="${esc(s)}" target="_blank" rel="noopener">${esc(u)}</a>`) : u; });
+  t = esc(t)
+    .replace(/&lt;@[!&]?\d+&gt;/g, '@uživatel').replace(/&lt;#\d+&gt;/g, '#kanál').replace(/&lt;a?:(\w+):\d+&gt;/g, ':$1:')
+    .replace(/^\s*[-*]\s+/gm, '• ')
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<b><i>$1</i></b>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/__(.+?)__/g, '<u>$1</u>')
+    .replace(/\*(?!\s)(.+?)\*/g, '<i>$1</i>').replace(/~~(.+?)~~/g, '<s>$1</s>');
+  const lines = t.split('\n'); let out = '';
+  lines.forEach((ln, i) => {
+    let m;
+    if ((m = ln.match(/^&gt;\s?(.*)/))) { out += '<blockquote>' + m[1] + '</blockquote>'; return; }
+    if ((m = ln.match(/^#{1,3}\s+(.*)/))) ln = '<b class="dc-h">' + m[1] + '</b>';
+    out += ln + (i < lines.length - 1 ? '<br>' : '');
+  });
+  return out.replace(/\u0001(\d+)\u0002/g, (_, n) => keep[n]);
+}
+function renderDiscordEmbed(d) {
+  if (!d) return '';
+  const web = safeUrl(d.url), author = d.author || 'Discord', av = safeImg(d.avatar) || initialsAvatar(author);
+  return `<div class="dc"><div class="dc-head"><img class="av dc-av" alt="" src="${esc(av)}" data-nick="${esc(author)}"><b>${esc(author)}</b>${d.ts ? `<span class="dc-ts">${fmtDate(d.ts)}</span>` : ''}<span class="dc-app">DISCORD</span></div>
+    ${d.content ? `<div class="dc-body">${discordMd(d.content)}</div>` : '<div class="dc-body dc-dim">Zpráva z Discordu</div>'}
+    ${asArr(d.files).length ? `<div class="dc-files">${asArr(d.files).map(f => `<span>📎 ${esc(f)}</span>`).join('')}</div>` : ''}
+    ${web ? `<a class="dc-open" href="${esc(web)}" target="_blank" rel="noopener">Otevřít na Discordu</a>` : ''}</div>`;
+}
+const KIND_LABEL = { required:'potřebný mod', mod:'mod', repaint:'repaint', docs:'dokument', disruptions:'výluku' };
+function renderDcPreview() {
+  const d = state.edit?.dc;
+  $('#cfDcPreview').innerHTML = d ? `<div style="margin-top:12px">${renderDiscordEmbed(d)}</div><button type="button" class="btn ghost sm" style="margin-top:10px" data-act="dc-clear">${ic('trash', 15)} Odebrat embed</button>` : '';
+}
+function discordFill(draft, image) {
+  state.edit.dc = draft; renderDcPreview(); let filled = [];
+  const firstLine = (draft.content || '').split('\n').map(s => s.replace(/[*_~`>#]/g, '').trim()).find(s => s && !/^https?:\/\//.test(s));
+  if (!$('#cfTitle').value.trim() && firstLine) { $('#cfTitle').value = firstLine.slice(0, 80); filled.push('název'); }
+  if (!plainText($('#cfBody').innerHTML) && draft.content) { $('#cfBody').innerHTML = sanitizeHtml(discordMd(draft.content.split('\n').filter(s => s.trim()).slice(0, 4).join('\n'))); filled.push('popis'); }
+  if (!$('#cfUrl').value.trim() && draft.content) {
+    const urls = (draft.content.match(/https?:\/\/[^\s<>)]+/g) || []).filter(u => !/discord(app)?\.com\/channels/i.test(u));
+    const u = urls.find(x => /(catbox|mega\.nz|drive\.google|mediafire|dropbox|github\.com|gofile|\.zip|\.rar|\.7z)/i.test(x)) || urls[0];
+    if (u) { $('#cfUrl').value = u; filled.push('odkaz ke stažení'); }
+  }
+  if (image && !imgContent.getValue()) { $('#cfImage').loadUrl(image); filled.push('obrázek'); }
+  return filled;
+}
+async function dcLoad() {
+  if (!state.edit) return;
+  const link = parseDiscordLink($('#cfDcUrl').value);
+  if (!link) return setStatus('cfDcStatus', 'To není odkaz na zprávu z Discordu (https://discord.com/channels/…).', 'err');
+  if (!DISCORD_API) {
+    state.edit.dc = { url: link.web, author: '', avatar: '', content: '', ts: 0, files: [] }; renderDcPreview();
+    $('#cfDcManual').open = true; $('#cfDcText').focus();
+    return setStatus('cfDcStatus', 'Odkaz je uložen. Aby se ukázal i text zprávy, vlož ho níže (automatické načítání zapneš přes DISCORD_API).', 'ok');
+  }
+  setStatus('cfDcStatus', 'Načítám zprávu…', '');
+  try {
+    const r = await fetchDiscord(link), filled = discordFill(r.draft, r.image);
+    setStatus('cfDcStatus', 'Zpráva načtena' + (filled.length ? ' · vyplněno: ' + filled.join(', ') : '') + '.', 'ok');
+  } catch (e) { setStatus('cfDcStatus', 'Načtení se nepovedlo: ' + e.message, 'err'); }
+}
+function dcManual() {
+  const text = $('#cfDcText').value.trim(), link = parseDiscordLink($('#cfDcUrl').value), img = $('#cfDcImg').value.trim();
+  if (!text && !link) return setStatus('cfDcStatus', 'Vlož text zprávy nebo odkaz na ni.', 'err');
+  const filled = discordFill({ url: link?.web || '', author: $('#cfDcAuthor').value.trim(), avatar: '', content: text, ts: Date.now(), files: [] }, img);
+  setStatus('cfDcStatus', 'Embed vytvořen' + (filled.length ? ' · vyplněno: ' + filled.join(', ') : '') + '.', 'ok');
+}
+function renderReqList(selected) {
+  const sel = selected || new Set($$('#cfReqList input:checked').map(i => i.value));
+  const all = { ...D('mods') }; (state.edit?.extras || []).forEach(x => { if (!all[x.key]) all[x.key] = x; });
+  const rows = Object.entries(all).sort((a, b) => (b[1].category === 'required') - (a[1].category === 'required'));
+  $('#cfReqList').innerHTML = rows.map(([k, m]) => `<label><input type="checkbox" value="${esc(k)}" ${sel.has(k) ? 'checked' : ''}>${esc(m.title)} ${m.version ? `<span class="chip">${esc(m.version)}</span>` : ''}${m.category === 'required' ? '<span class="chip blue">potřebný</span>' : ''}</label>`).join('') || '<span class="muted sm">Zatím nemáš žádné mody. Přidej první pomocí „Přidat nový potřebný mod“ níže.</span>';
+}
+async function quickAddMod() {
+  let title = $('#cfQTitle').value.trim(), url = $('#cfQUrl').value.trim(), dc = null, image = '';
+  const link = parseDiscordLink($('#cfQDc').value);
+  if (link) {
+    dc = { url: link.web, author: '', avatar: '', content: '', ts: 0, files: [] };
+    try { const r = await fetchDiscord(link); if (r) { dc = r.draft; image = r.image; if (!title) title = (dc.content.split('\n').map(s => s.replace(/[*_~`>#]/g, '').trim()).find(Boolean) || '').slice(0, 80); if (!url) url = ((dc.content.match(/https?:\/\/[^\s<>)]+/g) || []).filter(u => !/discord(app)?\.com\/channels/i.test(u))[0]) || ''; } } catch (e) { toast('Discord zprávu se nepodařilo načíst: ' + e.message, 'warn'); }
+  }
+  if (!title) return toast('Zadej název modu (nebo načti Discord zprávu).', 'err');
+  if (url && !safeUrl(url)) return toast('Odkaz ke stažení musí začínat http:// nebo https://', 'err');
+  const obj = { title, version: 'v1.0', category: 'required', htmlText: '', fileUrl: url, image: '', discord: dc, created: Date.now() };
+  const r = push(ref(db, 'mods'), obj); await r;
+  const k = r.key || ('tmp' + Date.now());
+  state.edit.extras.push({ key: k, title, version: 'v1.0', category: 'required' });
+  const sel = new Set($$('#cfReqList input:checked').map(i => i.value)); sel.add(k); renderReqList(sel);
+  ['cfQDc', 'cfQTitle', 'cfQUrl'].forEach(i => $('#' + i).value = ''); $('#cfQuick').open = false;
+  toast(`Potřebný mod „${title}“ vytvořen a přidán k repaintu`);
+}
+function applyKind() {
+  const e = state.edit, k = e.kind, type = e.type;
+  $('#cfHeading').textContent = (e.key ? 'Upravit: ' : 'Přidat: ') + KIND_LABEL[k];
+  $$('#cfKinds button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
+  const modLike = type === 'mods' || type === 'repaints';
+  $('#cfKindWrap').hidden = !(modLike && !e.key);
+  $('#cfVerWrap').hidden = !modLike; $('#cfImgWrap').hidden = !modLike; $('#cfCatWrap').hidden = k !== 'mod';
+  $('#cfUrlWrap').hidden = type === 'disruptions'; $('#cfReqWrap').hidden = type !== 'repaints';
+  $('#cfBodyLabel').textContent = { required:'Popis modu', mod:'Popis modu', repaint:'Co je nového (changelog)', docs:'Text / popis', disruptions:'Podrobnosti' }[k];
+  if (type === 'repaints') renderReqList();
+}
 function openContentEditor(type, key) {
   if (!isAdmin()) return;
-  const it = key ? D(type)[key] : null; state.edit = { type, key: key || null };
-  $('#cfHeading').textContent = (key ? 'Upravit: ' : 'Přidat: ') + TYPE_LABEL[type].toLowerCase();
-  $('#cfTitle').value = it?.title || ''; $('#cfVersion').value = it?.version || ''; $('#cfCat').value = it?.category || (type === 'mods' ? 'required' : 'other');
+  const it = key ? D(type)[key] : null;
+  const kind = type === 'repaints' ? 'repaint' : type === 'mods' ? ((it?.category || 'required') === 'required' ? 'required' : 'mod') : type;
+  state.edit = { type, key: key || null, kind, dc: it?.discord || null, extras: [] };
+  $('#cfTitle').value = it?.title || ''; $('#cfVersion').value = it?.version || ''; $('#cfCat').value = ['bus', 'map', 'other'].includes(it?.category) ? it.category : 'bus';
   $('#cfUrl').value = it?.fileUrl || ''; $('#cfBody').innerHTML = sanitizeHtml(hasTags(it?.[BODY_FIELD[type]]) ? it[BODY_FIELD[type]] : esc(it?.[BODY_FIELD[type]] || '').replace(/\n/g, '<br>'));
-  $('#cfBodyLabel').textContent = { mods:'Popis modu', repaints:'Co je nového (changelog)', docs:'Text / popis', disruptions:'Podrobnosti' }[type];
-  $('#cfVerWrap').hidden = !(type === 'mods' || type === 'repaints'); $('#cfCatWrap').hidden = type !== 'mods';
-  $('#cfImgWrap').hidden = !(type === 'mods' || type === 'repaints'); $('#cfUrlWrap').hidden = type === 'disruptions'; $('#cfReqWrap').hidden = type !== 'repaints';
   imgContent.setValue(it?.image || '');
-  const sel = new Set(asArr(it?.requiredMods));
-  $('#cfReqList').innerHTML = Object.entries(D('mods')).map(([k, m]) => `<label><input type="checkbox" value="${esc(k)}" ${sel.has(k) ? 'checked' : ''}>${esc(m.title)} ${m.version ? `<span class="chip">${esc(m.version)}</span>` : ''}</label>`).join('') || '<span class="muted sm">Nejdřív přidej nějaké mody v kategorii „Mody“.</span>';
+  ['cfDcUrl', 'cfDcAuthor', 'cfDcText', 'cfDcImg', 'cfQDc', 'cfQTitle', 'cfQUrl'].forEach(i => $('#' + i).value = ''); $('#cfDcUrl').value = it?.discord?.url || '';
+  $('#cfDcManual').open = false; $('#cfQuick').open = false; setStatus('cfDcStatus', '', '');
+  renderDcPreview();
+  renderReqList(new Set(asArr(it?.requiredMods)));
+  applyKind();
   closeModal('m-detail'); openModal('m-content');
 }
 async function saveContent() {
-  const { type, key } = state.edit || {}; if (!type || !isAdmin()) return;
+  const { type, key, kind } = state.edit || {}; if (!type || !isAdmin()) return;
   const title = $('#cfTitle').value.trim(); if (!title) return toast('Název nesmí být prázdný.', 'err');
   const url = $('#cfUrl').value.trim();
   if (url && !safeUrl(url)) return toast('Odkaz ke stažení musí začínat http:// nebo https://', 'err');
@@ -1592,8 +1848,9 @@ async function saveContent() {
   obj[BODY_FIELD[type]] = plainText(body) ? body : '';
   if (type !== 'disruptions') obj.fileUrl = url;
   if (type === 'mods' || type === 'repaints') { obj.version = $('#cfVersion').value.trim() || 'v1.0'; obj.image = imgContent.getValue() || ''; }
-  if (type === 'mods') obj.category = $('#cfCat').value;
-  if (type === 'repaints') obj.requiredMods = $$('#cfReqList input:checked').map(i => i.value);
+  if (type === 'mods') obj.category = kind === 'required' ? 'required' : $('#cfCat').value;
+  if (type === 'repaints') obj.requiredMods = $$('#cfReqList input:checked').map(i => i.value).filter(k => !k.startsWith('tmp'));
+  obj.discord = state.edit.dc || null;
   try {
     if (key) await update(ref(db, type + '/' + key), obj); else await push(ref(db, type), { ...obj, created: Date.now() });
     closeModal('m-content'); toast(key ? 'Změny uloženy' : TYPE_LABEL[type] + ' byl zveřejněn');
@@ -1644,6 +1901,10 @@ const act = {
   'content-new': (d, el) => openContentEditor(d.type || el.dataset.type || state.adminContent),
   'content-edit': d => openContentEditor(d.type, d.key),
   'content-save': saveContent,
+  'cf-kind': d => { state.edit.kind = d.k; state.edit.type = d.k === 'repaint' ? 'repaints' : 'mods'; applyKind(); },
+  'dc-load': dcLoad, 'dc-manual': dcManual,
+  'dc-clear': () => { state.edit.dc = null; renderDcPreview(); setStatus('cfDcStatus', '', ''); },
+  'cf-quick': quickAddMod,
   'content-del': d => deleteContent(d.type, d.key),
   'shift-del': async d => { if (await confirmBox('Smazat výkaz?', 'Kilometry se odečtou ze žebříčku.')) { await remove(ref(db, 'shifts/' + d.key)); toast('Výkaz smazán'); } },
   'req-ok': async d => { await patchBuses(d.nick, a => a.includes(d.bus) ? a : [...a, d.bus]); await remove(ref(db, 'requests/' + d.key)); toast(`Vůz ${d.bus} přidělen řidiči ${d.nick}`); },
