@@ -113,7 +113,7 @@ textarea{resize:vertical;min-height:90px}
 .rich blockquote,.rte blockquote{margin:4px 0;padding-left:10px;border-left:3px solid var(--line)}.rich pre,.rte pre{background:var(--card2);border-radius:8px;padding:8px 10px;white-space:pre-wrap}.rich ul,.rich ol,.rte ul,.rte ol{margin:6px 0;padding-left:22px}
 .rich p+p{margin-top:8px}
 .status{min-height:1.3em;font-size:.85rem;font-weight:700;margin-top:10px}
-.status.ok{color:var(--ok)}.status.err{color:var(--err)}
+.status.ok{color:var(--ok)}.status.err{color:var(--err)}.status.warn{color:#b7791f}
 .hint{font-size:.8rem;color:var(--muted)}
 .tut{background:color-mix(in srgb,var(--brand2) 12%,transparent);border:1px solid color-mix(in srgb,var(--brand2) 35%,transparent);border-radius:11px;padding:11px 14px;font-size:.82rem;margin-top:8px}
 .tut ol{margin:6px 0 0;padding-left:18px}
@@ -889,6 +889,40 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
   .nav-ind{border-radius:18px}
   .cols{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
 }
+/* ---- grafy + live mapa ---- */
+.kpis .stat{display:block}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px}
+.cgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media(max-width:900px){.cgrid{grid-template-columns:minmax(0,1fr)}}
+.cgrid .card h3{margin-bottom:14px}
+.chsvg{width:100%;height:auto;display:block;overflow:visible}
+.chsvg text{fill:var(--muted);font:600 10px var(--font)}
+.chsvg .grid line{stroke:var(--line);stroke-width:1}
+.chsvg .bar{fill:var(--brand2);transition:opacity .2s,transform .5s var(--smooth);transform-origin:bottom;transform-box:fill-box;animation:barUp .7s var(--smooth) both}
+.chsvg .bar:hover{opacity:.7}
+.chsvg .bar.am{fill:var(--amber)}
+@keyframes barUp{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.hbars{display:grid;gap:10px}
+.hb{display:grid;grid-template-columns:minmax(70px,30%) 1fr auto;gap:10px;align-items:center;font-size:.84rem}
+.hb .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.hb .tr{height:10px;border-radius:99px;background:var(--card2);overflow:hidden}
+.hb .tr i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--brand2));animation:grow .8s var(--smooth) both;transform-origin:left}
+@keyframes grow{from{transform:scaleX(0)}to{transform:none}}
+.hb .v{font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.donutrow{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.donutrow svg{width:150px;height:150px;flex:none}
+.lg{display:grid;gap:6px;font-size:.84rem;min-width:0;flex:1}
+.lg div{display:flex;gap:8px;align-items:center}.lg i{width:10px;height:10px;border-radius:3px;flex:none}
+.lg b{margin-left:auto;font-variant-numeric:tabular-nums}
+.livewrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+@media(max-width:900px){.livewrap{grid-template-columns:minmax(0,1fr)}}
+.livebox{padding:0;overflow:hidden;position:relative;height:min(68vh,640px);min-height:340px}
+.livebox canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.livebox canvas:active{cursor:grabbing}
+.livehint{position:absolute;left:14px;bottom:10px;pointer-events:none}
+.livelist .item{cursor:pointer}.livelist .item.sel{box-shadow:inset 0 0 0 2px var(--brand2)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -949,6 +983,10 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
   <!-- ============ VÝKAZ ============ -->
   <section class="view" id="view-form">
     <div class="vhead rise" style="--i:0"><div><h2>Odeslat výkaz směny</h2><p>Vyber provozovnu, vůz a zadej najeté kilometry. Kilometry se okamžitě započtou do žebříčku.</p></div></div>
+    <div class="card rise" style="--i:1;margin-bottom:18px" id="gameCard" hidden>
+      <h3 id="gameIc"></h3><p class="muted sm" style="margin-bottom:12px">Jízdy zaznamenané pluginem z openOMSI. Vyber tu, kterou chceš odeslat, a formulář se vyplní sám. Cokoli můžeš přepsat ručně.</p>
+      <div class="list" id="gameList"></div>
+    </div>
     <div class="cols">
       <form class="card rise" style="--i:1" id="shiftForm">
         <h3 id="formIc"></h3>
@@ -1029,6 +1067,34 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
   </section>
 
   <!-- ============ DOKUMENTY ============ -->
+  <!-- ============ GRAFY ============ -->
+  <section class="view" id="view-charts">
+    <div class="vhead rise" style="--i:0">
+      <div><h2>Grafy &amp; statistiky</h2><p>Jak se jezdí: kilometry po dnech, nejlepší řidiči, vozy a provozovny.</p></div>
+      <div class="seg" id="chartSeg"></div>
+    </div>
+    <div class="grid kpis rise" style="--i:1" id="chartKpis"></div>
+    <div class="cgrid">
+      <div class="card rise" style="--i:2;grid-column:1/-1"><h3>Kilometry po dnech</h3><div id="chDays"></div></div>
+      <div class="card rise" style="--i:3"><h3>Nejlepší řidiči</h3><div id="chDrivers"></div></div>
+      <div class="card rise" style="--i:4"><h3>Nejjezdenější vozy</h3><div id="chBuses"></div></div>
+      <div class="card rise" style="--i:5"><h3>Podle provozoven</h3><div id="chSites"></div></div>
+      <div class="card rise" style="--i:6"><h3>Kdy se jezdí</h3><div id="chHours"></div><div id="chWeek" style="margin-top:14px"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ LIVE MAPA ============ -->
+  <section class="view" id="view-live">
+    <div class="vhead rise" style="--i:0">
+      <div><h2>Live mapa</h2><p>Řidiči, kteří právě jedou v openOMSI. Poloha se obnovuje každých pár sekund.</p></div>
+      <div class="row"><select id="liveMapSel" aria-label="Mapa"></select><button type="button" class="btn ghost sm" data-act="live-fit">Přizpůsobit</button></div>
+    </div>
+    <div class="livewrap rise" style="--i:1">
+      <div class="card livebox"><canvas id="liveCv"></canvas><div class="livehint muted sm" id="liveHint"></div></div>
+      <div class="card livelist"><h3 id="liveH">Online</h3><div class="list" id="liveList"></div></div>
+    </div>
+  </section>
+
   <section class="view" id="view-docs">
     <div class="vhead rise" style="--i:0"><div><h2>Dokumenty &amp; oznámení</h2><p>Provozní řády, textová oznámení a soubory ke stažení.</p></div><div id="docAdminBtn"></div></div>
     <div class="stack" id="docList"></div>
@@ -1323,6 +1389,7 @@ const ICONS = {
   grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>',
   star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
 };
+ICONS.chart = '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'; ICONS.map = '<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>';
 const ic = (n, s = 18) => `<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 
 /* ---- avatary ---- */
@@ -1557,6 +1624,8 @@ const TABS = [
   { id:'mods', label:'Mody', icon:'package' },
   { id:'fleet', label:'Vozový park', short:'Vozy', icon:'bus' },
   { id:'stats', label:'Žebříčky', icon:'trophy' },
+  { id:'charts', label:'Grafy', icon:'chart' },
+  { id:'live', label:'Live mapa', short:'Mapa', icon:'map' },
   { id:'drivers', label:'Řidiči', icon:'users' },
   { id:'disruptions', label:'Výluky', icon:'alert' },
   { id:'docs', label:'Dokumenty', icon:'file' },
@@ -1582,7 +1651,7 @@ function scheduleRender() { if (!rq) rq = requestAnimationFrame(() => { rq = 0; 
 function renderAll() {
   if (ready() && state.user && !getUser(state.user)) { state.user = null; localStorage.removeItem('fmo_user'); if (state.view !== 'auth') { state.view = 'auth'; $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-auth')); } }
   renderChrome(); fillSelects();
-  const r = { home:renderHome, form:renderForm, mods:renderMods, fleet:renderFleet, stats:renderStats, drivers:renderDrivers, disruptions:renderDisruptions, docs:renderDocs, profile:renderProfile, admin:renderAdmin }[state.view];
+  const r = { home:renderHome, form:renderForm, mods:renderMods, fleet:renderFleet, stats:renderStats, charts:renderCharts, live:renderLive, drivers:renderDrivers, disruptions:renderDisruptions, docs:renderDocs, profile:renderProfile, admin:renderAdmin }[state.view];
   if (r) r();
 }
 
@@ -1702,8 +1771,37 @@ function myShifts() {
   return Object.entries(D('shifts')).filter(([, s]) => (s.nick || '').toLowerCase() === k).sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
 }
 function renderForm() {
+  watchGame();
   const list = myShifts().slice(0, 8);
   $('#myRecent').innerHTML = !ready() ? skel(3) : list.length ? list.map(([, s]) => `<div class="item"><div class="grow"><b>${fmtKm(s.km)}</b><span class="muted sm">${esc(s.site)} · vůz ${esc(s.bus)}</span></div><span class="muted sm">${fmtDate(s.date)}</span></div>`).join('') : emptyBox('clip', 'Zatím jsi neodeslal žádný výkaz.');
+}
+
+/* ================= Jízdy z hry (openOMSI plugin → cloud) ================= */
+let gameWatch = { nick: null, off: null };
+state.game = {}; state.gamePick = null;
+function watchGame() {
+  const nick = state.user; if (gameWatch.nick === nick) return;
+  gameWatch.off?.(); gameWatch = { nick, off: null }; state.game = {};
+  if (!nick) return;
+  gameWatch.off = onValue(ref(db, 'gameTrips/' + nick.toLowerCase()), snap => { state.game = snap.val() || {}; renderGame(); }, () => {});
+}
+const normT = t => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+function matchBus(vehicle) {
+  const v = normT(vehicle); if (!v) return '';
+  const fleet = Object.values(D('fleet')), mine = new Set(busesOf(me()));
+  const hits = fleet.filter(b => { const t = normT(b.type); return t && (v.includes(t) || t.includes(v)); });
+  return (hits.find(b => mine.has(String(b.ev))) || hits[0] || {}).ev || '';
+}
+function matchSite(name) {
+  const n = normT(name); if (!n) return '';
+  return Object.values(D('sites')).find(x => { const t = normT(x); return t && (n.includes(t) || t.includes(n)); }) || '';
+}
+function renderGame() {
+  const card = $('#gameCard'); if (!card) return;
+  const list = Object.entries(state.game).filter(([, t]) => t && !t.used && t.km > 0).sort((a, b) => (b[1].endedAt || 0) - (a[1].endedAt || 0)).slice(0, 12);
+  card.hidden = !list.length; if (!list.length) return;
+  $('#gameIc').innerHTML = ic('bus', 20) + ' Jízdy z hry';
+  $('#gameList').innerHTML = list.map(([k, t]) => `<div class="item"><div class="grow"><b>${esc(t.line ? 'Linka ' + t.line : 'Jízda')}${t.tour ? ' · tour ' + esc(t.tour) : ''} · ${fmtKm(t.km)}</b><span class="muted sm">${esc([t.vehicle, t.firstStop && t.lastStop ? t.firstStop + ' → ' + t.lastStop : '', t.map].filter(Boolean).join(' · '))}</span></div><span class="muted sm">${fmtDate((t.endedAt || 0) * 1000)}</span><button type="button" class="btn amber sm" data-act="game-use" data-key="${esc(k)}">Použít</button><button type="button" class="btn ghost sm" data-act="game-skip" data-key="${esc(k)}">Skrýt</button></div>`).join('');
 }
 $('#shiftForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -1711,7 +1809,9 @@ $('#shiftForm').addEventListener('submit', e => {
   const site = $('#siteSelect').value, bus = $('#busSelect').value, km = parseFloat($('#kmDriven').value.replace(',', '.').replace(/\s/g, ''));
   if (!site || !bus || isNaN(km) || km <= 0) return setStatus('formStatus', 'Vyber provozovnu, vůz a zadej kladný počet kilometrů.', 'err');
   if (km > 3000) return setStatus('formStatus', 'Počet kilometrů vypadá příliš vysoký. Zkontroluj ho.', 'err');
-  push(ref(db, 'shifts'), { nick: state.user, site, bus, km, date: new Date().toISOString() }).then(() => {
+  const gk = state.gamePick; const rec = { nick: state.user, site, bus, km, date: new Date().toISOString() }; if (gk) rec.gameTrip = gk;
+  push(ref(db, 'shifts'), rec).then(() => {
+    if (gk) update(ref(db, 'gameTrips/' + state.user.toLowerCase() + '/' + gk), { used: true }).catch(() => {}); state.gamePick = null;
     setStatus('formStatus', '', ''); $('#kmDriven').value = ''; toast(`Výkaz uložen: +${fmtKm(km)}`);
   }).catch(err => setStatus('formStatus', 'Uložení selhalo: ' + err.message, 'err'));
 });
@@ -1778,6 +1878,139 @@ function renderStats() {
   $('#podium').innerHTML = `<div class="podium">${order.map(({ o, p }) => `<div class="pod p${p}" data-act="profile" data-nick="${esc(o.nick)}">${avImg(o.nick)}<div class="nm">${esc(o.nick)}</div><div class="km">${fmtKm(o[key])}</div><div class="pbar">${p}</div></div>`).join('')}</div>`;
   const rest = rows.slice(3);
   $('#lbWrap').innerHTML = rest.length ? `<table class="lb"><thead><tr><th>#</th><th>Řidič</th><th>Směn</th><th>Najeto</th></tr></thead><tbody>${rest.map((o, i) => `<tr data-act="profile" data-nick="${esc(o.nick)}"><td><b>${i + 4}</b></td><td><div class="who">${avImg(o.nick, 'av-sm')}${esc(o.nick)}${o.nick.toLowerCase() === OWNER ? ' <span class="owner">MAJITEL</span>' : ''}</div></td><td>${o.count}</td><td><b style="color:var(--ok)">${fmtKm(o[key])}</b></td></tr>`).join('')}</tbody></table>` : '';
+}
+
+
+/* ================= Grafy ================= */
+state.chartP = 30;
+const PAL = ['#4a90e2', '#f5b11a', '#1f9254', '#d03a31', '#8b5cf6', '#14b8a6', '#ec6d9b', '#94a3b8'];
+function shiftsIn(days) {
+  const from = Date.now() - days * 864e5;
+  return Object.values(D('shifts')).filter(s => { const t = new Date(s.date).getTime(); return t >= from && (parseFloat(s.km) || 0) > 0; });
+}
+function sumBy(list, f) { const m = {}; list.forEach(s => { const k = f(s); if (k) m[k] = (m[k] || 0) + (parseFloat(s.km) || 0); }); return Object.entries(m).sort((a, b) => b[1] - a[1]); }
+function hbars(rows, max = 8) {
+  rows = rows.slice(0, max); if (!rows.length) return '<p class="muted sm">Zatím žádná data.</p>';
+  const top = rows[0][1] || 1;
+  return `<div class="hbars">${rows.map(([n, v], i) => `<div class="hb"><span class="nm" title="${esc(n)}">${esc(n)}</span><span class="tr"><i style="width:${Math.max(3, v / top * 100)}%;animation-delay:${i * 60}ms"></i></span><span class="v">${fmtKm(v)}</span></div>`).join('')}</div>`;
+}
+function barSvg(vals, labels, opt = {}) {
+  const W = opt.W || 600, H = opt.h || 170, pl = 6, pb = 20, pt = 16, n = vals.length, max = Math.max(1, ...vals), bw = (W - pl * 2) / n;
+  const lines = [0, .5, 1].map(f => { const y = pt + (H - pb - pt) * (1 - f); return `<line x1="${pl}" x2="${W - pl}" y1="${y}" y2="${y}"/>`; }).join('');
+  const step = Math.ceil(n / (opt.maxLabels || 10));
+  const bars = vals.map((v, i) => { const h = v / max * (H - pb - pt), x = pl + i * bw + bw * .14; return `<rect class="bar ${opt.cls?.(i) || ''}" x="${x}" y="${H - pb - h}" width="${bw * .72}" height="${Math.max(v > 0 ? 2 : 0, h)}" rx="3" style="animation-delay:${i * 12}ms"><title>${esc(labels[i])}: ${fmtKm(v)}</title></rect>`; }).join('');
+  const lab = labels.map((l, i) => i % step === 0 ? `<text x="${pl + i * bw + bw / 2}" y="${H - 5}" text-anchor="middle">${esc(l)}</text>` : '').join('');
+  return `<svg class="chsvg" viewBox="0 0 ${W} ${H}" role="img"><g class="grid">${lines}</g>${bars}${lab}<text x="${pl}" y="9">max ${fmtKm(max)}</text></svg>`;
+}
+function donut(rows) {
+  rows = rows.slice(0, 7); const tot = rows.reduce((a, r) => a + r[1], 0); if (!tot) return '<p class="muted sm">Zatím žádná data.</p>';
+  const R = 52, C = 2 * Math.PI * R; let off = 0;
+  const seg = rows.map(([, v], i) => { const len = v / tot * C, el = `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${PAL[i % PAL.length]}" stroke-width="22" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 70 70)"/>`; off += len; return el; }).join('');
+  return `<div class="donutrow"><svg viewBox="0 0 140 140" role="img">${seg}<text x="70" y="68" text-anchor="middle" style="font-size:15px;fill:var(--ink);font-weight:800">${Math.round(tot).toLocaleString('cs-CZ')}</text><text x="70" y="82" text-anchor="middle">km</text></svg><div class="lg">${rows.map(([n, v], i) => `<div><i style="background:${PAL[i % PAL.length]}"></i><span>${esc(n)}</span><b>${Math.round(v / tot * 100)} %</b></div>`).join('')}</div></div>`;
+}
+function renderCharts() {
+  $('#chartSeg').innerHTML = [[7, '7 dní'], [30, '30 dní'], [90, '90 dní']].map(([d, l]) => `<button type="button" class="${state.chartP === d ? 'on' : ''}" data-act="chart-p" data-p="${d}">${l}</button>`).join('');
+  if (!ready()) { $('#chartKpis').innerHTML = skel(4); return; }
+  const days = state.chartP, list = shiftsIn(days), total = list.reduce((a, s) => a + (parseFloat(s.km) || 0), 0);
+  const drivers = sumBy(list, s => s.nick), nd = drivers.length;
+  $('#chartKpis').innerHTML = [['Najeto', fmtKm(total)], ['Výkazů', list.length.toLocaleString('cs-CZ')], ['Aktivních řidičů', nd], ['Průměr na výkaz', list.length ? fmtKm(total / list.length) : '–']].map(([l, v]) => `<div class="card stat"><div class="muted sm">${l}</div><div style="font-size:1.5rem;font-weight:800;margin-top:4px">${v}</div></div>`).join('');
+  const dkey = d => new Date(d).toDateString(), perDay = {};
+  list.forEach(s => { perDay[dkey(s.date)] = (perDay[dkey(s.date)] || 0) + (parseFloat(s.km) || 0); });
+  const vals = [], labs = [];
+  for (let i = days - 1; i >= 0; i--) { const d = new Date(Date.now() - i * 864e5); vals.push(perDay[d.toDateString()] || 0); labs.push(d.getDate() + '. ' + (d.getMonth() + 1) + '.'); }
+  $('#chDays').innerHTML = total ? barSvg(vals, labs, { W: 1000, h: 230, maxLabels: days <= 7 ? 7 : 8 }) : '<p class="muted sm">V tomto období nejsou žádné výkazy.</p>';
+  $('#chDrivers').innerHTML = hbars(drivers);
+  $('#chBuses').innerHTML = hbars(sumBy(list, s => s.bus ? 'Vůz ' + s.bus : ''));
+  $('#chSites').innerHTML = donut(sumBy(list, s => s.site));
+  const hrs = Array(24).fill(0), wk = Array(7).fill(0);
+  list.forEach(s => { const d = new Date(s.date), km = parseFloat(s.km) || 0; hrs[d.getHours()] += km; wk[(d.getDay() + 6) % 7] += km; });
+  $('#chHours').innerHTML = barSvg(hrs, hrs.map((_, i) => i + 'h'), { h: 120, maxLabels: 8, cls: i => i >= 8 && i < 20 ? '' : 'am' });
+  $('#chWeek').innerHTML = barSvg(wk, ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'], { h: 110, maxLabels: 7 });
+}
+
+/* ================= Live mapa ================= */
+state.live = {}; let liveOff = 0;
+const LV = { cx: 0, cy: 0, sc: 1, map: '', sel: null, trails: {}, built: false, fitted: {}, follow: false, raf: 0, timer: 0 };
+onValue(ref(db, '.info/serverTimeOffset'), s => { liveOff = s.val() || 0; }, () => {});
+onValue(ref(db, 'live'), snap => {
+  const v = snap.val() || {}; state.live = v;
+  Object.entries(v).forEach(([k, p]) => {
+    if (typeof p?.x !== 'number' || typeof p?.y !== 'number') return;
+    const tr = LV.trails[k] || (LV.trails[k] = []), l = tr[tr.length - 1];
+    if (!l || Math.hypot(l[0] - p.x, l[1] - p.y) > 3) { tr.push([p.x, p.y]); if (tr.length > 60) tr.shift(); }
+  });
+  if (state.view === 'live') renderLive();
+}, () => {});
+const liveNow = () => Date.now() + liveOff;
+function livePlayers() { return Object.entries(state.live).filter(([, p]) => p && typeof p.x === 'number' && liveNow() - (p.ts || 0) < 45000).map(([k, p]) => ({ k, ...p })); }
+function liveFit() {
+  const ps = livePlayers().filter(p => (p.map || '') === LV.map); if (!ps.length) return;
+  const xs = ps.map(p => p.x), ys = ps.map(p => p.y), cv = $('#liveCv'), w = cv.clientWidth || 600, h = cv.clientHeight || 400;
+  const dx = Math.max(200, Math.max(...xs) - Math.min(...xs)), dy = Math.max(200, Math.max(...ys) - Math.min(...ys));
+  LV.cx = (Math.max(...xs) + Math.min(...xs)) / 2; LV.cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+  LV.sc = Math.min(w / (dx * 1.4), h / (dy * 1.4)); LV.fitted[LV.map] = 1;
+}
+function buildLive() {
+  LV.built = true; const cv = $('#liveCv'), ptr = new Map(); let pinch = 0, moved = 0;
+  cv.addEventListener('wheel', e => { e.preventDefault(); const f = Math.exp(-e.deltaY * .0015); zoomAt(e.offsetX, e.offsetY, f); }, { passive: false });
+  cv.addEventListener('pointerdown', e => { cv.setPointerCapture(e.pointerId); ptr.set(e.pointerId, [e.offsetX, e.offsetY]); moved = 0; pinch = 0; });
+  cv.addEventListener('pointermove', e => {
+    if (!ptr.has(e.pointerId)) return; const o = ptr.get(e.pointerId); ptr.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (ptr.size === 2) { const [a, b] = [...ptr.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (pinch) zoomAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, d / pinch); pinch = d; moved = 9; }
+    else { LV.cx -= (e.offsetX - o[0]) / LV.sc; LV.cy += (e.offsetY - o[1]) / LV.sc; moved += Math.abs(e.offsetX - o[0]) + Math.abs(e.offsetY - o[1]); LV.follow = false; }
+    drawLive();
+  });
+  cv.addEventListener('pointerup', e => {
+    ptr.delete(e.pointerId); pinch = 0;
+    if (moved < 6) { const hit = livePlayers().filter(p => (p.map || '') === LV.map).map(p => [p, Math.hypot(w2s(p.x, p.y)[0] - e.offsetX, w2s(p.x, p.y)[1] - e.offsetY)]).sort((a, b) => a[1] - b[1])[0]; if (hit && hit[1] < 24) { LV.sel = hit[0].k; LV.follow = true; renderLive(); } }
+  });
+  $('#liveMapSel').addEventListener('change', e => { LV.map = e.target.value; if (!LV.fitted[LV.map]) liveFit(); renderLive(); });
+  new ResizeObserver(() => drawLive()).observe(cv);
+}
+function zoomAt(x, y, f) { const [wx, wy] = s2w(x, y); LV.sc = Math.min(40, Math.max(.0005, LV.sc * f)); const [nx, ny] = s2w(x, y); LV.cx += wx - nx; LV.cy += wy - ny; drawLive(); }
+function w2s(x, y) { const cv = $('#liveCv'); return [(x - LV.cx) * LV.sc + cv.clientWidth / 2, -(y - LV.cy) * LV.sc + cv.clientHeight / 2]; }
+function s2w(x, y) { const cv = $('#liveCv'); return [(x - cv.clientWidth / 2) / LV.sc + LV.cx, -(y - cv.clientHeight / 2) / LV.sc + LV.cy]; }
+function drawLive() {
+  if (LV.raf) return; LV.raf = requestAnimationFrame(() => {
+    LV.raf = 0; const cv = $('#liveCv'); if (!cv || state.view !== 'live') return;
+    const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w) return;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    const css = getComputedStyle(document.documentElement), ink = css.getPropertyValue('--ink').trim() || '#14213a', line = css.getPropertyValue('--line').trim() || '#ccd', brand = css.getPropertyValue('--brand2').trim() || '#3f86d8', amber = css.getPropertyValue('--amber').trim() || '#f5b11a';
+    // mřížka
+    const raw = 80 / LV.sc, pw = Math.pow(10, Math.floor(Math.log10(raw))), step = [1, 2, 5, 10].map(m => m * pw).find(s => s >= raw) || pw * 10;
+    const [x0, y1] = s2w(0, 0), [x1, y0] = s2w(w, h); g.lineWidth = 1; g.strokeStyle = line; g.fillStyle = ink; g.globalAlpha = .9; g.font = '600 10px sans-serif';
+    g.beginPath(); for (let x = Math.floor(x0 / step) * step; x <= x1; x += step) { const sx = Math.round(w2s(x, 0)[0]) + .5; g.moveTo(sx, 0); g.lineTo(sx, h); }
+    for (let y = Math.floor(y0 / step) * step; y <= y1; y += step) { const sy = Math.round(w2s(0, y)[1]) + .5; g.moveTo(0, sy); g.lineTo(w, sy); } g.stroke(); g.globalAlpha = .55;
+    g.fillText(step >= 1000 ? step / 1000 + ' km' : step + ' m', 12, 18); g.globalAlpha = 1;
+    const ps = livePlayers().filter(p => (p.map || '') === LV.map);
+    ps.forEach(p => { // stopy
+      const tr = LV.trails[p.k] || []; if (tr.length < 2) return;
+      for (let i = 1; i < tr.length; i++) { const a = w2s(...tr[i - 1]), b = w2s(...tr[i]); g.strokeStyle = brand; g.globalAlpha = i / tr.length * .6; g.lineWidth = 3; g.lineCap = 'round'; g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke(); } g.globalAlpha = 1;
+    });
+    ps.forEach(p => {
+      const [sx, sy] = w2s(p.x, p.y), me_ = p.k === LV.sel, ang = -(p.h || 0) * Math.PI / 180;
+      g.save(); g.translate(sx, sy); g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 8; g.fillStyle = me_ ? amber : brand;
+      g.beginPath(); g.arc(0, 0, 9, 0, 7); g.fill(); g.shadowBlur = 0; g.strokeStyle = '#fff'; g.lineWidth = 2.5; g.stroke();
+      g.rotate(ang); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(5.5, 0); g.lineTo(-3, 3.6); g.lineTo(-3, -3.6); g.closePath(); g.fill(); g.restore();
+      const t = (p.nick || p.k) + (p.line ? ' · ' + p.line : ''); g.font = '700 12px sans-serif'; const tw = g.measureText(t).width + 14;
+      g.fillStyle = 'rgba(12,37,71,.78)'; g.beginPath(); g.roundRect(sx - tw / 2, sy - 36, tw, 20, 10); g.fill(); g.fillStyle = '#fff'; g.textAlign = 'center'; g.fillText(t, sx, sy - 22); g.textAlign = 'left';
+    });
+  });
+}
+function renderLive() {
+  if (!LV.built) buildLive();
+  const all = livePlayers(), maps = [...new Set(all.map(p => p.map || ''))];
+  if (!maps.includes(LV.map)) { LV.map = maps.includes('') && maps.length === 1 ? '' : (maps.sort((a, b) => all.filter(p => (p.map || '') === b).length - all.filter(p => (p.map || '') === a).length)[0] ?? ''); }
+  const sel = $('#liveMapSel'); sel.innerHTML = maps.length ? maps.map(m => `<option value="${esc(m)}" ${m === LV.map ? 'selected' : ''}>${esc(m || 'Neznámá mapa')} (${all.filter(p => (p.map || '') === m).length})</option>`).join('') : '<option>Nikdo nejede</option>'; sel.disabled = maps.length < 2;
+  const ps = all.filter(p => (p.map || '') === LV.map);
+  if (ps.length && !LV.fitted[LV.map]) { const cv = $('#liveCv'); if (cv.clientWidth) liveFit(); }
+  const f = ps.find(p => p.k === LV.sel); if (LV.follow && f) { LV.cx = f.x; LV.cy = f.y; }
+  $('#liveH').innerHTML = `<span class="dot" style="display:inline-block;margin-right:8px"></span>Online (${all.length})`;
+  $('#liveList').innerHTML = all.length ? all.sort((a, b) => (a.nick || '').localeCompare(b.nick || '')).map(p => `<div class="item ${p.k === LV.sel ? 'sel' : ''}" data-act="live-sel" data-k="${esc(p.k)}">${avImg(p.nick || p.k, 'av-sm')}<div class="grow"><b>${esc(p.nick || p.k)}</b><span class="muted sm">${esc([p.line ? 'Linka ' + p.line : '', p.vehicle, p.next ? '→ ' + p.next : ''].filter(Boolean).join(' · ') || 'Bez služby')}</span></div><span class="sm" style="font-weight:700">${Math.round(p.spd || 0)} km/h</span></div>`).join('') : emptyBox('map', 'Právě nikdo nejede. Spusť openOMSI s pluginem a objevíš se tady.');
+  $('#liveHint').textContent = ps.length ? 'Tažením posouvej, kolečkem nebo štípnutím přibližuj. Klikni na řidiče pro sledování.' : '';
+  if (!LV.timer) LV.timer = setInterval(() => { if (state.view === 'live') renderLive(); else { clearInterval(LV.timer); LV.timer = 0; } }, 5000);
+  drawLive();
 }
 
 /* ================= Řidiči & chat ================= */
@@ -2241,6 +2474,20 @@ const act = {
     toast('Soubor vybrán: ' + d.name);
   },
   
+  'chart-p': d => { state.chartP = +d.p; renderCharts(); },
+  'live-fit': () => { liveFit(); renderLive(); },
+  'live-sel': d => { LV.sel = d.k; LV.follow = true; renderLive(); },
+  'game-use': d => {
+    const t = state.game[d.key]; if (!t) return;
+    state.gamePick = d.key;
+    const bus = matchBus(t.vehicle), site = matchSite(t.map) || matchSite(t.firstStop) || '';
+    if (bus) $('#busSelect').value = bus; if (site) $('#siteSelect').value = site;
+    $('#kmDriven').value = String(Math.round(t.km * 10) / 10).replace('.', ',');
+    const miss = [!bus && 'vůz', !site && 'provozovnu'].filter(Boolean);
+    setStatus('formStatus', miss.length ? 'Doplněno z hry. ' + (miss.length === 2 ? 'Vůz a provozovnu' : miss[0] === 'vůz' ? 'Vůz' : 'Provozovnu') + ' vyber ručně.' : 'Doplněno z hry. Zkontroluj údaje a odešli.', miss.length ? 'warn' : 'ok');
+    $('#shiftForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  },
+  'game-skip': d => update(ref(db, 'gameTrips/' + state.user.toLowerCase() + '/' + d.key), { used: true }).catch(e => toast('Chyba: ' + e.message, 'err')),
   'up-remove': () => { state.edit.up = null; $('#cfUrl').value = ''; renderUp(); },
   'dc-load': dcLoad, 'dc-manual': dcManual,
   'dc-clear': () => { state.edit.dc = null; renderDcPreview(); setStatus('cfDcStatus', '', ''); },
