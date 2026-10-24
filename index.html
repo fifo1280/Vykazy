@@ -798,6 +798,23 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
   .imgf-stage{max-width:100%}
 }
 .hero::before{opacity:.3;animation:none}
+.admin .stats{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.admin .qa{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.ghbox{cursor:default;display:grid;gap:12px}
+.ghbox:hover{box-shadow:inset 0 0 0 1.5px var(--line);background:var(--card2)}
+.ghsteps ol{margin:6px 0 0;padding-left:20px;font-size:.84rem;color:var(--muted)}
+.ghsteps li{margin:3px 0}
+/* nahrávání souboru */
+.updrop{border-radius:20px;background:var(--card2);box-shadow:inset 0 0 0 1.5px var(--line);padding:18px;cursor:pointer;transition:box-shadow .25s,background .25s}
+.updrop:hover,.updrop.over,.updrop:focus-visible{box-shadow:inset 0 0 0 2px var(--brand2);background:color-mix(in srgb,var(--brand2) 10%,var(--card2));outline:none}
+.upidle{display:grid;gap:6px;justify-items:center;text-align:center}
+.upidle .ic{color:var(--brand)}
+.upprog,.updone{display:grid;gap:10px;cursor:default}
+.updone{display:flex;align-items:center;gap:12px}
+.updone .ic{color:var(--ok)}.updone .grow{flex:1;min-width:0}
+.updone b,.upname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;min-width:0}
+.upbar{height:10px;border-radius:999px;background:rgba(120,140,190,.22);overflow:hidden}
+.upbar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--brand2),var(--brand));transition:width .35s var(--smooth)}
 .search .ic{z-index:2;pointer-events:none}
 .search input{padding-left:42px}
 .more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -829,6 +846,48 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
 @media(max-width:760px){
   .nav .nav-in{background:rgba(246,249,255,.84);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%)}
   [data-theme=dark] .nav .nav-in{background:rgba(18,28,52,.82)}
+}
+/* =====================================================
+   TABLET / APP LAYOUT – boční lišta jako v iPadOS
+   ===================================================== */
+@media(max-width:1100px){
+  .admin{grid-template-columns:minmax(0,1fr)}
+  .card.anav{position:relative;top:0;max-width:100%;display:flex;overflow-x:auto;scrollbar-width:none}
+  .anav::-webkit-scrollbar{display:none}.anav button{white-space:nowrap;flex:none}
+}
+@media(min-width:761px){
+  :root{--rail:108px}
+  body{padding-left:var(--rail)}
+  .top{margin:14px 16px 0 6px}
+  .nav{position:fixed;left:12px;top:14px;bottom:14px;margin:0;width:calc(var(--rail) - 24px);padding:0;z-index:70}
+  .nav .nav-in{display:flex;flex-direction:column;gap:4px;width:100%;height:100%;max-width:none;margin:0;padding:10px 6px;border-radius:32px;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;justify-content:flex-start}
+  .nav .nav-in::-webkit-scrollbar{display:none}
+  .nav .tab{flex-direction:column;justify-content:center;gap:5px;width:100%;padding:11px 4px 9px;border-radius:22px;font-size:.68rem;font-weight:700;flex:none}
+  .nav .tab .ic{width:24px;height:24px}
+  .nav .tab .badge{position:absolute;top:5px;right:12px}
+  .nav-ind{left:6px;right:6px;width:auto;top:0;height:0;bottom:auto;border-radius:22px;transition:top .55s var(--spring),height .55s var(--spring),background .4s}
+  .page{padding-right:4px}
+  .wrap{padding-left:6px;padding-right:16px}
+  .top .wrap{padding-left:20px;padding-right:20px}
+  .foot{padding-left:6px}
+  .toast{max-width:420px}
+  #toasts{left:calc(50% + var(--rail) / 2)}
+}
+@media(min-width:761px) and (max-width:1099px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .hero{padding:30px}
+}
+@media(min-width:1100px){
+  :root{--rail:248px}
+  .nav{width:calc(var(--rail) - 28px)}
+  .nav .nav-in{padding:12px 10px;gap:3px}
+  .nav .tab{flex-direction:row;justify-content:flex-start;gap:13px;padding:13px 16px;font-size:.9rem;border-radius:18px}
+  .nav .tab .ic{width:20px;height:20px}
+  .nav .tab .badge{position:static;margin-left:auto}
+  .nav-ind{border-radius:18px}
+  .cols{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
@@ -1088,6 +1147,16 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
 <div class="foot">© FMO BUS · Všechna práva vyhrazena</div>
 
 <!-- ============ MODALY ============ -->
+<div class="modal" id="m-gh"><div class="sheet">
+  <div class="sheet-head"><h3>Repozitář pro soubory</h3><button type="button" class="icon-btn plain" data-act="close-modal" data-id="m-gh" aria-label="Zavřít" id="ghClose"></button></div>
+  <div class="sheet-body">
+    <p class="muted sm" style="margin-bottom:14px">Soubory se berou z GitHub Releases tohoto repozitáře. Musí být <b>veřejný</b>. Adresa se normálně zjistí sama z adresy webu, tady ji můžeš změnit.</p>
+    <div class="field"><label for="ghRepo">Repozitář</label><input id="ghRepo" type="text" placeholder="fifo1280/Vykazy" autocomplete="off" autocapitalize="off"></div>
+    <div class="status" id="ghStatus"></div>
+  </div>
+  <div class="sheet-foot"><button type="button" class="btn ghost" data-act="gh-clear">Výchozí</button><button type="button" class="btn amber" data-act="gh-save">Uložit a otestovat</button></div>
+</div></div>
+
 <div class="modal" id="m-more"><div class="sheet">
   <div class="sheet-head"><h3>Menu</h3><button type="button" class="icon-btn plain" data-act="close-modal" data-id="m-more" aria-label="Zavřít" id="moreClose"></button></div>
   <div class="sheet-body"><div class="more-grid" id="moreGrid"></div></div>
@@ -1130,8 +1199,17 @@ button,.btn,.tab,.seg button,a.btn,select,summary{touch-action:manipulation}
     <div class="field"><label id="cfBodyLabel">Popis</label>
       <div class="rte-bar"><button type="button" data-act="fmt" data-cmd="bold"><b>B</b></button><button type="button" data-act="fmt" data-cmd="italic"><i>I</i></button><button type="button" data-act="fmt" data-cmd="underline"><u>U</u></button><button type="button" data-act="fmt" data-cmd="insertUnorderedList">• Seznam</button><button type="button" data-act="fmt" data-cmd="insertOrderedList">1. Seznam</button><button type="button" data-act="fmt" data-cmd="removeFormat">Vyčistit</button></div>
       <div id="cfBody" class="rte" contenteditable="true" data-ph="Napiš text…"></div></div>
-    <div class="field" id="cfUrlWrap"><label for="cfUrl">Odkaz ke stažení</label><input id="cfUrl" type="url" placeholder="https://files.catbox.moe/…">
-      <div class="tut"><b>Jak nahrát soubor:</b> otevři <a href="https://catbox.moe/" target="_blank" rel="noopener">Catbox.moe</a>, nahraj ZIP/RAR soubor a zkopíruj vygenerovaný odkaz sem.</div></div>
+    <div class="field" id="cfUrlWrap"><label>Soubor ke stažení</label>
+      <div class="updrop ghbox">
+        <div class="updone" id="cfUpDone" hidden><span id="cfUpOk"></span><div class="grow"><b id="cfUpDoneName"></b><div class="hint" id="cfUpDoneSize"></div></div><button type="button" class="btn ghost sm" data-act="up-remove">Odebrat</button></div>
+        <div class="ghsteps"><b>Nahrání až 2 GB</b>
+          <ol><li>Klikni na „Otevřít GitHub Releases“, přetáhni tam soubor a dej <b>Publish release</b>.</li><li>Vrať se sem a klikni na „Načíst nahrané soubory“. Vyber soubor a odkaz se doplní sám.</li></ol></div>
+        <div class="row"><a class="btn primary sm" id="cfGhNew" href="#" target="_blank" rel="noopener">Otevřít GitHub Releases ↗</a><button type="button" class="btn ghost sm" data-act="gh-list">Načíst nahrané soubory</button><button type="button" class="btn ghost sm" data-act="gh-setup">Repozitář</button></div>
+        <div class="list" id="cfGhList"></div>
+      </div>
+      <details class="quick"><summary>Nebo vložit odkaz ručně</summary>
+        <input id="cfUrl" type="url" placeholder="https://github.com/…/releases/download/…">
+        <div class="hint">Funguje i odkaz z Mega, Google Drive nebo Catbox (do 200 MB).</div></details></div>
     <div class="field" id="cfReqWrap"><label>Potřebné mody k tomuto repaintu</label><div class="checks" id="cfReqList"></div>
       <span class="hint">Zaškrtnuté mody se řidičům zobrazí v detailu repaintu s tlačítkem ke stažení.</span>
       <details class="quick" id="cfQuick"><summary>＋ Přidat nový potřebný mod rovnou sem</summary>
@@ -1165,11 +1243,13 @@ const firebaseConfig = {
   appId: "1:814172121825:web:d334ca11a4b69186da25a0",
   measurementId: "G-X8F6FG8G00"
 };
-const db = getDatabase(initializeApp(firebaseConfig));
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
 
 /* Automatické načítání Discord zpráv: sem vlož adresu svého Cloudflare Workeru (návod a kód: discord-worker.js).
    Když je prázdné, zprávu z Discordu vložíš ručně (text + odkaz) a embed se zobrazí stejně. */
 const DISCORD_API = '';
+
 
 /* ================= Základ ================= */
 const OWNER = 'fifo1280';
@@ -1307,6 +1387,7 @@ function openModal(id) { const m = $('#' + id); clearTimeout(m._t); m.classList.
 let dlgResolve = null;
 function closeModal(id) {
   const m = $('#' + id);
+  if (id === 'm-content' && typeof upTask !== 'undefined' && upTask) upTask.cancel();
   if (id === 'm-dlg' && dlgResolve) { const r = dlgResolve; dlgResolve = null; r(null); }
   if (!m.classList.contains('open') || m.classList.contains('closing')) return;
   m.classList.add('closing'); clearTimeout(m._t);
@@ -1474,7 +1555,7 @@ const TABS = [
   { id:'home', label:'Přehled', icon:'home' },
   { id:'form', label:'Výkaz', icon:'edit', auth:true },
   { id:'mods', label:'Mody', icon:'package' },
-  { id:'fleet', label:'Vozový park', icon:'bus' },
+  { id:'fleet', label:'Vozový park', short:'Vozy', icon:'bus' },
   { id:'stats', label:'Žebříčky', icon:'trophy' },
   { id:'drivers', label:'Řidiči', icon:'users' },
   { id:'disruptions', label:'Výluky', icon:'alert' },
@@ -1515,8 +1596,9 @@ function renderChrome() {
   const pending = Object.keys(D('requests')).length;
   const nav = $('#navTabs'), avail = TABS.filter(t => (!t.admin || isAdmin()) && (!t.auth || state.user));
   const badge = t => t.admin && pending ? `<span class="badge">${pending}</span>` : '';
-  const tabBtn = t => `<button type="button" class="tab ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 17)}<span class="tl">${t.label}</span>${badge(t)}</button>`;
-  if (matchMedia('(max-width:760px)').matches) {
+  const mobile = matchMedia('(max-width:760px)').matches;
+  const tabBtn = t => `<button type="button" class="tab ${t.admin ? 'admin-t' : ''} ${state.view === t.id ? 'on' : ''}" data-act="go" data-id="${t.id}">${ic(t.icon, 17)}<span class="tl">${(mobile && t.short) || t.label}</span>${badge(t)}</button>`;
+  if (mobile) {
     const prim = ['home', 'form', 'mods', 'fleet', 'stats'].map(id => avail.find(t => t.id === id)).filter(Boolean).slice(0, 4), ids = prim.map(t => t.id);
     state.moreTabs = avail.filter(t => !ids.includes(t.id));
     const moreOn = state.moreTabs.some(t => t.id === state.view) || state.view === 'auth';
@@ -1529,11 +1611,12 @@ let navPos = null;
 function placeIndicator(nav = $('#navTabs')) {
   const ind = nav.firstElementChild, on = $('.tab.on', nav); if (!ind) return;
   if (!on) { ind.style.opacity = 0; return; }
-  const x = on.offsetLeft, w = on.offsetWidth;
+  const vert = getComputedStyle(nav).flexDirection === 'column';
+  const a = vert ? on.offsetTop : on.offsetLeft, s = vert ? on.offsetHeight : on.offsetWidth, P = vert ? ['top', 'height'] : ['left', 'width'];
   ind.classList.toggle('admin', on.classList.contains('admin-t'));
-  if (navPos) { ind.style.transition = 'none'; ind.style.left = navPos.x + 'px'; ind.style.width = navPos.w + 'px'; void ind.offsetWidth; ind.style.transition = ''; }
-  ind.style.left = x + 'px'; ind.style.width = w + 'px'; navPos = { x, w };
-  nav.scrollTo({ left: x - nav.clientWidth / 2 + w / 2, behavior: 'smooth' });
+  if (navPos && navPos.v === vert) { ind.style.transition = 'none'; ind.style[P[0]] = navPos.a + 'px'; ind.style[P[1]] = navPos.s + 'px'; void ind.offsetWidth; ind.style.transition = ''; }
+  ind.style[P[0]] = a + 'px'; ind.style[P[1]] = s + 'px'; navPos = { a, s, v: vert };
+  nav.scrollTo(vert ? { top: a - nav.clientHeight / 2 + s / 2, behavior: 'smooth' } : { left: a - nav.clientWidth / 2 + s / 2, behavior: 'smooth' });
 }
 let lastMob = matchMedia('(max-width:760px)').matches;
 addEventListener('resize', () => { navPos = null; const m = matchMedia('(max-width:760px)').matches; if (m !== lastMob) { lastMob = m; renderChrome(); } else placeIndicator(); });
@@ -1660,7 +1743,7 @@ function openDetail(kind, key) {
     ${it.discord ? `<div style="margin-bottom:18px">${renderDiscordEmbed(it.discord)}</div>` : ''}
     ${reqs.length ? `<h4 style="margin-bottom:10px">${ic('link', 17)} Potřebné mody k tomuto repaintu</h4><div class="list" style="margin-bottom:18px">${reqs.map(([k, m]) => `<div class="reqrow"><div class="grow"><b>${esc(m.title)}</b> ${m.version ? `<span class="chip">${esc(m.version)}</span>` : ''}</div>${safeUrl(m.fileUrl) ? `<a class="btn primary sm" href="${esc(safeUrl(m.fileUrl))}" target="_blank" rel="noopener">${ic('download', 15)} Stáhnout</a>` : ''}<button type="button" class="btn ghost sm" data-act="detail" data-kind="mods" data-key="${esc(k)}">Detail</button></div>`).join('')}</div>` : ''}
     ${usedBy.length ? `<h4 style="margin-bottom:10px">${ic('layers', 17)} Využívají ho repainty</h4><div class="list" style="margin-bottom:18px">${usedBy.map(([k, r]) => `<div class="reqrow"><div class="grow"><b>${esc(r.title)}</b></div><button type="button" class="btn ghost sm" data-act="detail" data-kind="repaints" data-key="${esc(k)}">Detail</button></div>`).join('')}</div>` : ''}
-    <div class="row">${safeUrl(it.fileUrl) ? `<a class="btn primary" href="${esc(safeUrl(it.fileUrl))}" target="_blank" rel="noopener">${ic('download')} Stáhnout ${rep ? 'repaint' : 'mod'}</a>` : '<span class="muted">Odkaz ke stažení není k dispozici.</span>'}
+    <div class="row">${safeUrl(it.fileUrl) ? `<a class="btn primary" href="${esc(safeUrl(it.fileUrl))}" target="_blank" rel="noopener">${ic('download')} Stáhnout ${rep ? 'repaint' : 'mod'}${it.fileSize ? ' · ' + fmtSize(it.fileSize) : ''}</a>` : '<span class="muted">Odkaz ke stažení není k dispozici.</span>'}
     ${isAdmin() ? `<button type="button" class="btn ghost" data-act="content-edit" data-type="${kind}" data-key="${esc(key)}">${ic('edit', 16)} Upravit</button><button type="button" class="btn danger" data-act="content-del" data-type="${kind}" data-key="${esc(key)}">${ic('trash', 16)} Smazat</button>` : ''}</div>`;
   openModal('m-detail');
 }
@@ -1821,7 +1904,7 @@ $('#loginForm').addEventListener('submit', async e => {
 /* ================= Admin ================= */
 const ADMIN_SECS = [['overview', 'Přehled', 'home'], ['requests', 'Přidělenky', 'bus'], ['fleet', 'Vozový park', 'layers'], ['sites', 'Provozovny', 'building'], ['drivers', 'Řidiči', 'users'], ['shifts', 'Výkazy', 'clip'], ['content', 'Obsah', 'package'], ['eow', 'Pracovník týdne', 'star']];
 [['admIcReq', 'clip', 'Čekající žádosti'], ['admIcAsg', 'plus', 'Přiřadit vůz ručně'], ['admIcAssigned', 'bus', 'Aktuálně přidělené vozy'], ['admIcFleetAdd', 'bus', 'Přidat / upravit vůz'], ['admIcFleetList', 'layers', 'Vozy v systému'], ['admIcSites', 'building', 'Provozovny (garáže)'], ['admIcDrivers', 'users', 'Registrovaní řidiči'], ['admIcShifts', 'clip', 'Správa výkazů'], ['admIcEow', 'star', 'Pracovník týdne']].forEach(([id, i, t]) => $('#' + id).innerHTML = ic(i) + ' ' + t);
-$('#detailClose').innerHTML = ic('x', 18); $('#cfClose').innerHTML = ic('x', 18); $('#moreClose').innerHTML = ic('x', 18);
+$('#detailClose').innerHTML = ic('x', 18); $('#cfClose').innerHTML = ic('x', 18); $('#moreClose').innerHTML = ic('x', 18); $('#ghClose').innerHTML = ic('x', 18);
 $('#cfDcTitle').innerHTML = ic('chat', 18) + ' Načíst z Discordu (embed)';
 
 function nextEv() { const n = Object.values(D('fleet')).map(b => parseInt(b.ev)).filter(x => !isNaN(x)); return String(n.length ? Math.max(...n) + 1 : 1201); }
@@ -1844,7 +1927,8 @@ function renderAdmin() {
         <button type="button" data-act="content-new" data-type="mods">${ic('package', 26)}Nový mod</button>
         <button type="button" data-act="content-new" data-type="repaints">${ic('layers', 26)}Nový repaint</button>
         <button type="button" data-act="content-new" data-type="docs">${ic('file', 26)}Nový dokument</button>
-        <button type="button" data-act="content-new" data-type="disruptions">${ic('alert', 26)}Nová výluka</button></div></div>
+        <button type="button" data-act="content-new" data-type="disruptions">${ic('alert', 26)}Nová výluka</button>
+        <button type="button" data-act="gh-setup">${ic('upload', 26)}Nahrávání souborů</button></div></div>
       <div class="card"><h3>${ic('clip')} Poslední výkazy</h3><div class="list">${recent.length ? recent.map(r => shiftRow(r, false)).join('') : '<span class="muted">Zatím žádné výkazy.</span>'}</div></div></div>`;
     countUp($('#adm-overview'));
   }
@@ -1938,6 +2022,38 @@ function renderDiscordEmbed(d) {
     ${asArr(d.files).length ? `<div class="dc-files">${asArr(d.files).map(f => `<span>📎 ${esc(f)}</span>`).join('')}</div>` : ''}
     ${web ? `<a class="dc-open" href="${esc(web)}" target="_blank" rel="noopener">Otevřít na Discordu</a>` : ''}</div>`;
 }
+/* ---- soubory z GitHub Releases (nahrání na GitHubu, web si je načte) ---- */
+const GH_KEY = 'fmo_gh';
+let upTask = null;
+const fmtSize = b => b >= 1073741824 ? (b / 1073741824).toFixed(2).replace('.', ',') + ' GB' : b >= 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' kB';
+function ghRepo() {
+  try { const c = JSON.parse(localStorage.getItem(GH_KEY) || 'null'); if (c?.repo) return c.repo; } catch {}
+  const h = location.hostname;
+  if (h.endsWith('.github.io')) { const seg = location.pathname.split('/')[1]; return h.split('.')[0] + '/' + (seg && !/\.html?$/i.test(seg) ? seg : h); }
+  return 'fifo1280/Vykazy';
+}
+async function ghGet(path) {
+  let r; try { r = await fetch('https://api.github.com' + path, { headers: { Accept: 'application/vnd.github+json' } }); } catch { throw new Error('Nepodařilo se spojit s GitHubem.'); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(r.status === 404 ? 'Repozitář nenalezen, nebo je soukromý (musí být veřejný).' : r.status === 403 ? 'GitHub dočasně omezil dotazy, zkus to za chvíli.' : (j.message || 'GitHub vrátil chybu ' + r.status));
+  return j;
+}
+function renderUp() {
+  const up = state.edit?.up;
+  $('#cfUpDone').hidden = !up; $('#cfUpOk').innerHTML = ic('check', 26);
+  if (up) { $('#cfUpDoneName').textContent = up.name; $('#cfUpDoneSize').textContent = (up.size ? fmtSize(up.size) + ' · ' : '') + 'z GitHub Releases'; }
+  $('#cfGhNew').href = `https://github.com/${ghRepo()}/releases/new`;
+}
+async function ghList() {
+  const box = $('#cfGhList'); box.innerHTML = '<span class="muted sm">Načítám…</span>';
+  try {
+    const rels = await ghGet(`/repos/${ghRepo()}/releases?per_page=12`);
+    const rows = [];
+    rels.filter(r => !r.draft).forEach(r => (r.assets || []).forEach(a => rows.push({ ...a, rel: r })));
+    box.innerHTML = rows.length ? rows.slice(0, 15).map(a => `<div class="item"><div class="grow"><b>${esc(a.name)}</b><span class="muted sm">${fmtSize(a.size)} · ${new Date(a.created_at).toLocaleDateString('cs-CZ')}</span></div><button type="button" class="btn amber sm" data-act="gh-use" data-url="${esc(a.browser_download_url)}" data-name="${esc(a.name)}" data-size="${a.size}">Použít</button></div>`).join('')
+      : `<span class="muted sm">V repozitáři ${esc(ghRepo())} zatím nejsou žádné nahrané soubory. Nahraj je přes „Otevřít GitHub Releases“.</span>`;
+  } catch (e) { box.innerHTML = `<span class="status err">${esc(e.message)}</span>`; }
+}
 const KIND_LABEL = { required:'potřebný mod', mod:'mod', repaint:'repaint', docs:'dokument', disruptions:'výluku' };
 function renderDcPreview() {
   const d = state.edit?.dc;
@@ -2026,6 +2142,8 @@ function openContentEditor(type, key) {
   const kind = type === 'repaints' ? 'repaint' : type === 'mods' ? ((it?.category || 'required') === 'required' ? 'required' : 'mod') : type;
   state.edit = { type, key: key || null, kind, dc: it?.discord || null, extras: [] };
   $('#cfTitle').value = it?.title || ''; $('#cfVersion').value = it?.version || ''; $('#cfCat').value = ['bus', 'map', 'other'].includes(it?.category) ? it.category : 'bus';
+  state.edit.up = it?.fileName && it?.fileUrl ? { name: it.fileName, size: it.fileSize || 0, url: it.fileUrl } : null; renderUp();
+  { $('#cfGhList').innerHTML = ''; }
   $('#cfUrl').value = it?.fileUrl || ''; $('#cfBody').innerHTML = sanitizeHtml(hasTags(it?.[BODY_FIELD[type]]) ? it[BODY_FIELD[type]] : esc(it?.[BODY_FIELD[type]] || '').replace(/\n/g, '<br>'));
   imgContent.setValue(it?.image || '');
   ['cfDcUrl', 'cfDcAuthor', 'cfDcText', 'cfDcImg', 'cfQDc', 'cfQTitle', 'cfQUrl'].forEach(i => $('#' + i).value = ''); $('#cfDcUrl').value = it?.discord?.url || '';
@@ -2037,6 +2155,7 @@ function openContentEditor(type, key) {
 }
 async function saveContent() {
   const { type, key, kind } = state.edit || {}; if (!type || !isAdmin()) return;
+  if (upTask) return toast('Počkej, soubor se ještě nahrává.', 'warn');
   const title = $('#cfTitle').value.trim(); if (!title) return toast('Název nesmí být prázdný.', 'err');
   const url = $('#cfUrl').value.trim();
   if (url && !safeUrl(url)) return toast('Odkaz ke stažení musí začínat http:// nebo https://', 'err');
@@ -2044,6 +2163,7 @@ async function saveContent() {
   const body = sanitizeHtml($('#cfBody').innerHTML).trim(), obj = { title };
   obj[BODY_FIELD[type]] = plainText(body) ? body : '';
   if (type !== 'disruptions') obj.fileUrl = url;
+  { const up = state.edit.up; obj.fileName = up && up.url === url ? up.name : null; obj.fileSize = up && up.url === url ? up.size : null; }
   if (type === 'mods' || type === 'repaints') { obj.version = $('#cfVersion').value.trim() || 'v1.0'; obj.image = imgContent.getValue() || ''; }
   if (type === 'mods') obj.category = kind === 'required' ? 'required' : $('#cfCat').value;
   if (type === 'repaints') obj.requiredMods = $$('#cfReqList input:checked').map(i => i.value).filter(k => !k.startsWith('tmp'));
@@ -2105,6 +2225,23 @@ const act = {
   'content-edit': d => openContentEditor(d.type, d.key),
   'content-save': saveContent,
   'cf-kind': d => { state.edit.kind = d.k; state.edit.type = d.k === 'repaint' ? 'repaints' : 'mods'; applyKind(); },
+  'gh-setup': () => { $('#ghRepo').value = ghRepo(); setStatus('ghStatus', '', ''); openModal('m-gh'); },
+  'gh-save': async () => {
+    const repo = $('#ghRepo').value.trim().replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/, '').replace(/\/$/, '');
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) return setStatus('ghStatus', 'Zadej ve tvaru uživatel/repozitář.', 'err');
+    setStatus('ghStatus', 'Testuji…', '');
+    try { const j = await ghGet('/repos/' + repo); if (j.private) return setStatus('ghStatus', 'Repozitář je soukromý, musí být veřejný.', 'err');
+      localStorage.setItem(GH_KEY, JSON.stringify({ repo })); setStatus('ghStatus', 'Hotovo, používá se ' + j.full_name + '.', 'ok'); renderUp(); } catch (e) { setStatus('ghStatus', e.message, 'err'); }
+  },
+  'gh-clear': () => { localStorage.removeItem(GH_KEY); $('#ghRepo').value = ghRepo(); setStatus('ghStatus', 'Vráceno na automatické zjištění.', 'ok'); renderUp(); },
+  'gh-list': ghList,
+  'gh-use': d => {
+    $('#cfUrl').value = d.url; state.edit.up = { name: d.name, size: +d.size || 0, url: d.url }; renderUp(); $('#cfGhList').innerHTML = '';
+    if (!$('#cfTitle').value.trim()) $('#cfTitle').value = d.name.replace(/\.[^.]+$/, '').replace(/[_]+/g, ' ');
+    toast('Soubor vybrán: ' + d.name);
+  },
+  
+  'up-remove': () => { state.edit.up = null; $('#cfUrl').value = ''; renderUp(); },
   'dc-load': dcLoad, 'dc-manual': dcManual,
   'dc-clear': () => { state.edit.dc = null; renderDcPreview(); setStatus('cfDcStatus', '', ''); },
   'cf-quick': quickAddMod,
